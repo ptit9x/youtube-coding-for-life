@@ -1,205 +1,431 @@
-# Series Plan — "Học NestJS bằng AI" (30 tập, lane: Học lập trình bằng LLM)
+# Series Plan — "Học NestJS bằng AI" (46 tập chính + bonus, lane: Học lập trình bằng LLM)
 
-- **Format:** 30 video × 8–10 phút. Host tự quay màn hình + tự thoại âm.
+- **Format:** 38 tập xây modular monolith, 8 tập Microservices và các tập bonus rẽ sang stack khác. Host tự quay màn hình + tự thoại âm.
+- **Thời lượng:** Phần lớn 10–15 phút. Tập concept 8–11 phút; tập implementation phức tạp 14–18 phút. Không kéo dài chỉ để chạm mốc thời lượng.
+- **Nguyên tắc tách tập:** Mỗi tập có một outcome chính và một pain nối sang tập sau. Nếu cần quá 18 phút để hoàn thành hai outcome độc lập, tách thành hai tập.
+- **Technical baseline mở màn:** NestJS 12, Node.js Active LTS tương thích với Nest CLI generator, npm, CommonJS. Khi setup, luôn hiện phiên bản thực tế trên màn hình.
 - **AI tool:** **Opus trong IDE Antigravity** (agent panel đọc codebase thật). Pattern: hỏi – đọc – chất vấn – verify.
-- **Spine:** build MỘT project thật từ đầu đến cuối — **TaskFlow**, task manager API — từ folder rỗng đến hệ thống production có realtime, queue, CI/CD. Hết series = 1 project "điệu nghệ" + Fresher hiểu từng dòng.
+- **Spine:** build MỘT project thật từ đầu đến cuối — **TaskFlow**, task manager API — từ folder rỗng đến modular monolith production, rồi tách sang Microservices có chủ đích. Phần nền tảng hoàn thiện User–Role–Permission trước khi đưa Tasks vào làm business feature đầu tiên.
 - **Chain rule:** tập sau mở bằng NỖI ĐAU tập trước tạo ra (không phải "hôm nay ta học X"). Dưới đây mỗi tập ghi rõ "← pain" kế thừa.
-- **Differentiator:** mỗi tập đúng MỘT "Khoảnh khắc AI" — theo **AI-Driven Development Workflow 6 bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng**. Không bao giờ copy-blind.
+- **Differentiator:** mỗi tập đúng MỘT AI sequence liền mạch — theo **AI-Driven Development Workflow 6 bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng**. Không bao giờ copy-blind.
 
-## SEASON 1 — NỀN TẢNG (EP 01–10): từ số 0 đến API công khai
+## Kiến trúc đích và luật dependency
 
-### EP 01 — Học NestJS từ số 0 cùng AI ✅ (kịch bản đã có)
+Series xây một modular monolith theo business domain. `modules/` chứa nghiệp vụ; `common/`, `config/` và `database/` chứa các năng lực cross-cutting có thể tái sử dụng. Không tạo folder rỗng từ EP01: mỗi nhánh chỉ xuất hiện khi series thật sự cần đến nó.
+
+```text
+src/
+├── main.ts
+├── app.module.ts
+├── common/
+│   ├── decorators/
+│   ├── filters/
+│   ├── guards/
+│   ├── interceptors/
+│   ├── pipes/
+│   ├── constants/
+│   └── utils/
+├── config/
+│   ├── app.config.ts
+│   ├── database.config.ts
+│   └── env.validation.ts
+├── database/
+│   ├── database.module.ts
+│   ├── prisma.service.ts
+│   └── repositories/
+└── modules/
+    ├── users/
+    ├── auth/
+    ├── access-control/
+    │   ├── roles/
+    │   ├── permissions/
+    │   ├── assignments/
+    │   ├── decorators/
+    │   ├── guards/
+    │   └── types/
+    └── tasks/
+```
+
+Với Prisma, `schema.prisma`, migration history và seed giữ trong `prisma/` ở project root để đi đúng convention của Prisma CLI; `src/database/` chỉ chứa integration code dùng lúc runtime.
+
+Luật bắt buộc:
+
+1. Chia module theo business domain, không chia toàn project theo loại file.
+2. Dependency đi một chiều: controller → service/use-case → repository contract; database adapter implement contract và được nối trong module.
+3. Controller chỉ xử lý transport; business rule nằm ở service/use-case hoặc domain object.
+4. `common/` không được import từ `modules/`, `config/` hay implementation database. Code thuộc riêng Auth, Users, Access Control hoặc Tasks phải ở lại module đó.
+5. Chỉ đưa code vào `common/` khi nó có từ hai consumer trở lên, hoặc là boundary áp dụng cho toàn app như global pipe/filter/interceptor. Code phải độc lập với business domain. Khi cần dùng qua nhiều repo, nâng phần ổn định thành workspace library hoặc package riêng thay vì copy thủ công vô hạn.
+6. `PermissionGuard`, `@RequirePermissions()` và cách tính quyền hiệu lực nằm trong `modules/access-control`, không đặt trong `common/`. Chúng là business policy, không phải utility dùng chung cho mọi dự án.
+7. Business service của User, Role và Permission luôn explicit. Không tạo `CommonService<T>` chỉ vì các method CRUD có tên giống nhau; chỉ cân nhắc abstraction nhẹ ở persistence layer sau khi có duplication thật và test bảo vệ.
+
+Lộ trình hình thành skeleton: EP01 tạo `modules/users`; EP02 bắt đầu boundary validation; EP03 thêm `database/` và `prisma/`; EP04 thêm filter; EP05 thêm `modules/auth`; EP06 đóng gói convention thành Agent Skill; EP08–10 hoàn thiện `modules/access-control`; EP11 tạo `modules/tasks`; EP14 nâng phần portable khỏi `common`; EP15 hoàn thiện `config/`; EP16 thêm interceptor/pipe cross-cutting.
+
+## SEASON 1 — NỀN TẢNG (EP 01–17): từ số 0 đến API có xác thực và phân quyền
+
+### Quy ước đóng gói để tăng click và giữ retention
+
+- Tiêu đề mặc định nói rõ công nghệ và kết quả để người mới hiểu ngay nội dung sẽ học.
+- Mỗi script có ba hướng A/B rõ ràng: keyword/search, outcome thực tế và insight/curiosity dễ hiểu.
+- Số EP và branding đứng cuối để không che mất chủ đề trên màn hình nhỏ.
+- Thumbnail chỉ dùng 2–4 từ lớn và bổ sung cho tiêu đề, không chép lại toàn bộ tiêu đề.
+- 30 giây đầu phải chiếu đúng bằng chứng đã hứa: response sai, test xanh giả, dữ liệu mất hoặc deploy thất bại.
+- Nhịp nội dung ưu tiên: lỗi thật → AI đề xuất → host bắt lỗi → sửa → kiểm chứng bằng request/test/diff.
+- Không kéo video tới 15–20 phút bằng lý thuyết. Chỉ giữ cảnh giúp hiểu quyết định hoặc chứng minh code hoạt động.
+
+### Visual identity thumbnail của series NestJS
+
+- Ảnh chuẩn tham chiếu: `01-hoc-nestjs-voi-ai/thumbnail-01-hoc-nestjs-cung-ai.png`.
+- Bố cục cố định: headline lớn bên trái, developer chiếm khoảng 35–40% bên phải, monitor code là lớp nền phụ.
+- Màu chủ đạo: NEST RED `#E0234E`, WHITE `#FFFFFF`, đen và navy đậm. Không dùng xanh lá hoặc cyan cho headline và ánh sáng chính.
+- Headline chính chỉ 3–5 từ; số EP và badge phụ phải nhỏ hơn rõ rệt.
+- Font condensed đậm, stroke đen và shadow gọn; không dùng neon glow dày.
+- Mỗi EP chỉ thay nội dung headline, biểu cảm nhẹ và chi tiết trên monitor. Không thay visual grammar của cả series.
+- Trước khi chốt, kiểm tra ảnh full-size và bản thu nhỏ `320×180`; dấu tiếng Việt phải chính xác.
+
+### EP 01 — Học NestJS với AI: Xây Users API đầu tiên ✅
 - ← pain: repo công ty lạ hoắc, tutorial 3h lỗi thời.
-- Học: Nest CLI, cấu trúc src, Module/Controller/Service (metaphor bữa tiệc), `nest g resource`, DTO, DI cơ bản, Postman 201.
-- AI moment: prompt "giải thích project THẬT của tao cho fresher" + hỏi ngược "bỏ DTO thì sao?"
-- Thành quả: CRUD /tasks với mảng in-memory. → **pain mới: restart là mất sạch.**
+- Học: Nest CLI, luồng `main.ts → module → controller → service`, decorator, DI cơ bản và nguyên tắc module theo business domain.
+- Cấu trúc đầu tiên: tạo `src/modules/users` bằng `nest g resource modules/users`; chưa tạo sẵn `common/`, `config/`, `database/` khi chưa có code thật.
+- AI sequence: yêu cầu Users API in-memory → AI trình plan → host review/chất vấn → approve → AI thực hiện → host kiểm tra diff và chạy app.
+- Host tự gõ: endpoint `GET /users/count`, đặt trước route động `GET /users/:id`.
+- Thành quả: `POST /users` trả 201, `GET /users` thấy dữ liệu, `GET /users/count` trả đúng số lượng.
+- → **pain mới:** gửi `{ "name": "Richard", "email": 123 }` vẫn được chấp nhận vì DTO chưa có validation runtime.
 - File: `01-hoc-nestjs-voi-ai/01-nestjs-tu-0-cung-ai.md`
 
-### EP 02 — Validation: đơn đặt món không cho khách viết bậy
-- ← pain: EP01 nhận payload gì cũng ok — gửi title là số 5 vẫn thành task.
-- Học: class-validator, ValidationPipe toàn cục (whitelist, transform), custom message tiếng Việt.
-- AI moment: AI sinh rule validation → host fuzz test bằng payload bậy AI generate → thấy chặn được cái nào, lọt cái nào.
+### EP 02 — ValidationPipe: Chặn dữ liệu sai từ DTO ✅
+- ← pain: EP01 nhận payload gì cũng được — `email` là số hoặc sai định dạng vẫn thành user.
+- Học: compile-time type khác runtime validation; class-validator, ValidationPipe toàn cục (`whitelist`, `forbidNonWhitelisted`, `transform`), `@IsString`, `@IsNotEmpty`, `@IsEmail`, custom message tiếng Việt.
+- Cấu trúc mới: thêm `src/common/pipes/app-validation.pipe.ts`; pipe chỉ phụ thuộc Nest/class-validator, không import Users hay business domain.
+- AI sequence: AI đề xuất rule + bộ payload fuzz → host review/approve → chạy từng payload → phát hiện chuỗi toàn dấu cách vẫn lọt → host tự thêm bước trim rồi kiểm chứng lại.
 - Thành quả: POST bậy → 400 rõ ràng. → **pain: dù sao data vẫn nằm trong RAM.**
+- File: `02-validation-nestjs/02-dto-validationpipe-nestjs.md`
 
-### EP 03 — Prisma + PostgreSQL: bộ nhớ thật
+### EP 03 — Kết nối PostgreSQL bằng Prisma ✅
 - ← pain: EP02 xong, restart server, dữ liệu bốc hơi.
-- Học: schema.prisma, migration (metaphor bản vẽ thi công), PrismaService, thay in-memory bằng DB, quan hệ User–Task.
-- AI moment: AI sinh schema → host chất vấn "một task thuộc về bao nhiêu user?" TRƯỚC khi migrate.
+- Học: `prisma/` ở project root, `DatabaseModule`, `PrismaService`, repository contract và Prisma repository adapter; thay Users in-memory bằng database. Chỉ persist User, chưa tạo Tasks hay Access Control trong tập này.
+- Dependency đích: `UsersController → UsersService/use-case → UsersRepository contract ← PrismaUsersRepository`; business module không phụ thuộc trực tiếp Prisma Client.
+- Cấu hình tối thiểu: `DATABASE_URL` đi qua biến môi trường và không commit secret. Phần tổ chức config đầy đủ được xử lý ở EP15.
+- AI moment: AI sinh schema + repository plan → host chất vấn vì sao UsersService không nên gọi Prisma trực tiếp và kiểm tra chiều dependency TRƯỚC khi migrate.
 - Thành quả: restart, data còn nguyên. → **pain: trùng email → crash 500 xấu xí.**
+- File: `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md`
 
-### EP 04 — Error handling: API phải biết nói "tôi sai"
+### EP 04 — Error Handling: Trả đúng lỗi 400, 404 và 409 ✅
 - ← pain: EP03 unique constraint vi phạm → 500 stacktrace bắn ra client.
 - Học: HttpException, NotFoundException/BadRequestException/ConflictException, 404 vs 400 vs 409, custom ExceptionFilter.
 - AI moment: bảo AI liệt kê MỌI chỗ service có thể fail → học tư duy defensive.
 - Thành quả: mọi lỗi trả JSON sạch, đúng status. → **pain: API ai gọi cũng được, không có cửa.**
+- File: `04-error-handling-nestjs/04-error-handling-nestjs.md`
 
-### EP 05 — JWT Auth: cánh cửa kiểm soát ai được vào
-- ← pain: EP04 xong nhưng bất kỳ ai cũng GET được task của người khác.
-- Học: register/login, bcrypt hash (tại sao không plaintext), JwtModule, AuthGuard, @CurrentUser, protect /tasks.
+### EP 05 — JWT Authentication: Register, Login và AuthGuard ✅
+- ← pain: EP04 xong nhưng bất kỳ ai cũng đọc và sửa dữ liệu user.
+- Học: register/login, bcrypt hash (tại sao không plaintext), JwtModule, AuthGuard, @CurrentUser, bảo vệ `/users/me`.
 - AI moment: tranh luận với AI "tại sao không lưu JWT trong localStorage?" — security thinking.
-- Thành quả: không token → 401; có token → chỉ thấy task mình. → **pain: token 15 phút là bị đá ra giữa chừng.**
+- Thành quả: không token → 401; có token → đọc đúng hồ sơ của mình. → **pain: sắp tạo thêm Role và Permission, nhưng mỗi lần lại phải nhắc AI cùng convention.**
+- File: `05-jwt-auth-nestjs/05-jwt-auth-nestjs.md`
 
-### EP 06 — Refresh token & Roles: chìa khóa có hạn sử dụng
-- ← pain: EP05 đang làm dở thì token hết hạn, logout mất phiên.
-- Học: access/refresh flow, tự động gia hạn, @Roles + RolesGuard, user/admin.
-- AI moment: host REVIEW code AI viết, bắt được lỗ hổng có thật (AI cố ý để) — "đừng tin AI mù quáng".
-- Thành quả: hết hạn tự refresh; admin xóa được task người khác. → **pain: sửa code security mà run sợ — không có gì đảm bảo không vỡ.**
+### EP 06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án ✅
+- ← pain: chuẩn bị tạo thêm Role và Permission, nhưng mỗi feature lại phải nhắc AI cùng một cấu trúc module/controller/service/repository/DTO.
+- Học: cấu trúc `.agents/skills/<name>/SKILL.md`, YAML frontmatter, project-scoped skill và progressive disclosure.
+- AI sequence: AI đọc Users/Auth đã hoàn thiện → đề xuất convention scaffold → host loại business rule khỏi template → approve tạo skill.
+- Kiểm chứng: mở conversation mới, yêu cầu scaffold Role và Permission; skill phải trình plan trước, chờ approve, sinh đúng folder và chạy lint/test.
+- Thành quả: AI chịu phần boilerplate; service vẫn explicit để người maintain nhìn thấy business semantics. → **pain: access token ngắn hạn làm phiên đăng nhập liên tục bị ngắt.**
+- File: `06-agent-skill-nestjs/06-agent-skill-nestjs.md`
 
-### EP 07 — Testing: viết test như dev đi làm thật
-- ← pain: EP06 đổi guard, không biết vỡ chỗ nào ngoài việc... thử tay từng route.
-- Học: Jest unit test service với mock, e2e supertest, đỏ→xanh, coverage là gì và KHÔNG phải là gì.
-- AI moment: AI sinh test → host phát hiện test "vô nghĩa" (assert gì cũng pass) → tự viết lại test có giá trị.
-- Thành quả: `test` + `test:e2e` xanh, refactor hết sợ. → **pain: mỗi máy chạy một kết quả, DB config cá nhân khác nhau.**
+### EP 07 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên ✅
+- ← pain: access token ngắn hạn an toàn hơn, nhưng người dùng bị yêu cầu đăng nhập lại liên tục.
+- Học: access/refresh flow, hash refresh token, rotation, reuse detection, revoke session và logout.
+- AI moment: AI đề xuất lưu refresh token nguyên văn → host threat-model database leak rồi sửa thiết kế trước khi code.
+- Thành quả: phiên có thể gia hạn, xoay vòng và thu hồi. → **pain: xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.**
+- File: `07-refresh-token-nestjs/07-refresh-token-rotation-nestjs.md`
 
-### EP 08 — Config & môi trường: code một chỗ chạy đâu cũng được
-- ← pain: EP07 e2e cần DB test, mọi người trong team cấu hình mỗi kiểu; SQL password nằm trong code.
-- Học: .env, ConfigModule, env validation schema, dev/prod, gitignore secrets — vì sao lộ key là tai họa.
-- AI moment: nhờ AI AUDIT repo như senior review PR — scan secret, review config.
-- Thành quả: đổi PORT/DATABASE_URL không sửa code; repo sạch key. → **pain: không hiểu request chảy qua những lớp nào để debug.**
+### EP 08 — Role và Permission khác nhau thế nào? ✅
+- ← pain: EP07 xác định được người gọi và phiên, nhưng chưa mô tả được họ được phép làm gì.
+- Học: tạo `RolesModule` và `PermissionsModule`, DTO, repository contract/adapter, CRUD đầy đủ; `Role.name` và `Permission.code` là duy nhất.
+- Permission code theo resource/action: `users.read`, `roles.assign`, `permissions.manage`, `tasks.create`.
+- AI moment: dùng Agent Skill scaffold hai feature → AI đề xuất `CommonService<T>` → host từ chối sau khi so sánh business rule create/delete của Role và Permission.
+- Thành quả: quản lý được danh mục Role và Permission. → **pain: chúng vẫn là ba bảng rời, chưa ai được gán quyền.**
+- File: `08-role-permission-nestjs/08-role-permission-crud-nestjs.md`
 
-### EP 09 — Vòng đời request: Middleware, Guard, Interceptor, Pipe
-- ← pain: EP08 thêm auth + pipe + guard, một request lỗi — không biết lớp nào chặn.
+### EP 09 — Quan hệ User, Role và Permission với Prisma ✅
+- ← pain: Role và Permission đã tồn tại nhưng chưa gắn được cho user hay cho nhau.
+- Học: explicit many-to-many với `UserRole` và `RolePermission`; composite key; `assignedAt`, `assignedBy`; seed `admin`, `member` và permission mẫu.
+- API: assign/revoke role cho user; attach/detach permission cho role; dùng transaction khi cập nhật nhiều quan hệ.
+- Quyết định thiết kế: mặc định permission của user được suy ra qua Role. Chỉ thêm `UserPermission` khi cần cấp quyền ngoại lệ trực tiếp.
+- Nếu có `UserPermission`: bắt buộc có `effect: ALLOW | DENY`; quyền hiệu lực = quyền qua Role + direct ALLOW − direct DENY.
+- AI moment: AI đề xuất implicit many-to-many cho code ngắn → host yêu cầu lưu audit metadata và chuyển sang explicit join model trước khi migrate.
+- Thành quả: database biểu diễn được toàn bộ chính sách truy cập. → **pain: có dữ liệu quyền nhưng API vẫn chưa thực thi nó.**
+- File: `09-user-role-permission-nestjs/09-user-role-permission-many-to-many.md`
+
+### EP 10 — PermissionGuard: Phân biệt lỗi 401 và 403 ✅
+- ← pain: EP09 có chính sách trong database nhưng route nào cũng chỉ kiểm tra đăng nhập.
+- Học: authentication khác authorization; `@RequirePermissions()`; `PermissionGuard`; tính effective permissions theo user.
+- JWT chỉ giữ `sub` và thông tin phiên cơ bản. Không nhét toàn bộ permission vào token vì quyền bị thu hồi sẽ không có hiệu lực tới khi token hết hạn.
+- `PermissionGuard` và decorator nằm trong `modules/access-control`, không nằm trong `common/`.
+- AI moment: AI dùng `@Roles('admin')` trực tiếp trên mọi route → host đổi sang permission claim để role có thể thay đổi mà không sửa controller.
+- Thành quả: thiếu quyền → 403; có đúng permission → request đi tiếp. → **pain: kiến trúc đã có quyền nhưng chưa có business feature thật để chứng minh nó dùng lại được.**
+- File: `10-permission-guard-nestjs/10-permission-guard-nestjs.md`
+
+### EP 11 — RBAC và Ownership: Không cho sửa task người khác ✅
+- ← pain: Access Control chạy được trên endpoint quản trị, nhưng chưa chứng minh được trên nghiệp vụ TaskFlow.
+- Học: tạo TasksModule theo convention; task có owner; controller mỏng; service giữ business rule; repository tách Prisma.
+- Áp dụng permission `tasks.create`, `tasks.read`, `tasks.update`, `tasks.delete`; phân biệt có permission với có quyền trên đúng resource của mình.
+- AI moment: AI chỉ kiểm tra `tasks.update` rồi cho sửa mọi task → host bổ sung ownership rule và test thủ công bằng hai user.
+- Thành quả: user chỉ thao tác task được phép và thuộc phạm vi của mình. → **pain: nhiều nhánh auth/permission/ownership quá, thử tay không còn đáng tin.**
+- File: `11-tasksmodule-nestjs/11-tasksmodule-rbac-ownership.md`
+
+### EP 12 — Testing phân quyền bằng Jest và Supertest ✅
+- ← pain: EP11 thay guard hoặc ownership rule là phải thử tay hàng loạt tài khoản và route.
+- Học: Jest unit test service/guard với mock, e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì.
+- Ma trận bắt buộc: user không role; nhiều role; permission trùng qua hai role; revoke role; revoke permission; thiếu permission; ownership sai; direct ALLOW/DENY nếu bật override.
+- AI moment: AI sinh test chỉ assert status chung chung → host mutation nhỏ vào guard để chứng minh test vẫn xanh, rồi viết lại assertion có giá trị.
+- Thành quả: `test` và `test:e2e` bảo vệ luồng auth/RBAC/ownership. → **pain: duplication giữa ba feature bắt đầu rõ, rất dễ refactor quá tay.**
+- File: `12-testing-rbac-nestjs/12-testing-ma-tran-rbac-ownership.md`
+
+### EP 13 — DRY: Khi nào không nên dùng BaseCrudService ✅
+- ← pain: UsersService, RolesService và PermissionsService có nhiều method cùng tên, nhìn rất muốn gom thành `CommonService<T>`.
+- Học: duplicate code khác duplicate knowledge; YAGNI; abstraction boundary; khi nào repository generic nhẹ có ích và khi nào nó che business semantics.
+- AI sequence: yêu cầu AI giảm tối đa code duplicate → AI tạo BaseCrudService → host dùng test chứng minh `register user`, `create role` và `delete system permission` thay đổi vì lý do khác nhau.
+- Kết luận: không tạo generic business service; chỉ abstract persistence mechanics khi duplication đã ổn định và abstraction làm code dễ hiểu hơn.
+- File: `13-dry-abstraction-nestjs/13-generic-crud-abstraction-trap.md`
+
+### BONUS 13.5 — Prisma và TypeORM: Có nên dùng BaseEntity? ✅
+- ← pain: Prisma schema phải lặp `id`, `createdAt`, `updatedAt`, nhưng tạo table inheritance chỉ để né ba dòng là quá nặng.
+- Học: Prisma schema DSL so với TypeORM class/decorator; TypeORM `AbstractEntity`; concrete table inheritance; phân biệt entity reuse với service inheritance.
+- Demo lại User, Role, Permission và explicit join entities bằng TypeORM; `AbstractEntity` nằm ở infrastructure/database, không đặt trong `common/` portable.
+- AI moment: entity inheritance chạy đẹp nên AI tiếp tục tạo CrudService inheritance → host dùng business rule để chỉ ra abstraction không phù hợp.
+- Thành quả: chọn abstraction theo programming model của tool, không theo số dòng code.
+- File: `bonus-13-5-typeorm-nestjs/bonus-13-5-prisma-vs-typeorm-inheritance.md`
+
+### EP 14 — Tách common thành thư viện dùng cho nhiều dự án ✅
+- ← pain: EP13 giữ được business service explicit, nhưng copy nguyên `common/` sang repo khác sẽ tạo nhiều bản lệch nhau.
+- Học: project-local common khác reusable library; chọn public API, peer dependencies, semantic versioning và migration note.
+- AI sequence: AI audit `common/` → lọc phần không phụ thuộc domain/config/database → host duyệt public exports → tách workspace library hoặc private package.
+- Kiểm chứng: dùng library trong TaskFlow và một Nest app sạch; consumer build được, không import ngược vào TaskFlow.
+- Thành quả: cross-cutting code ổn định có phiên bản; business policy vẫn thuộc project. → **pain: library dùng được nhưng config từng môi trường vẫn rải rác.**
+- File: `14-common-library-nestjs/14-tach-common-thanh-library.md`
+
+### EP 15 — Config: Quản lý ENV an toàn cho mọi môi trường ✅
+- ← pain: EP14 có hai consumer, nhưng DB test, JWT secret và port của mỗi môi trường vẫn cấu hình một kiểu.
+- Học: `.env`, ConfigModule, config factory, env validation, dev/test/prod, gitignore secrets.
+- AI moment: nhờ AI audit repo như senior review PR — scan secret, tìm config đọc trực tiếp từ `process.env`, review giá trị bắt buộc.
+- Thành quả: đổi PORT/DATABASE_URL/JWT config không sửa business code; repo sạch key. → **pain: auth + pipe + guard + interceptor cùng chạy, request lỗi không biết lớp nào chặn.**
+- File: `15-config-nestjs/15-config-env-validation-nestjs.md`
+
+### EP 16 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào? ✅
+- ← pain: EP15 đã có auth, validation và config nhưng debug request vẫn như lần trong mê cung.
 - Học: thứ tự middleware → guard → interceptor → pipe → handler, logging interceptor, transform response.
-- AI moment: AI vẽ sequence diagram lifecycle → host đối chiếu TỪNG bước với code thật đang chạy.
-- Thành quả: mọi request có log rõ lớp đi qua. → **pain: "máy tôi chạy được" — giờ cần cả thế giới gọi được.**
+- AI moment: AI vẽ sequence diagram lifecycle → host đối chiếu từng bước với log từ code thật.
+- Thành quả: nhìn log biết request dừng ở đâu. → **pain: "máy tôi chạy được" — giờ cần người khác chạy được.**
+- File: `16-request-lifecycle-nestjs/16-request-lifecycle-nestjs.md`
 
-### EP 10 — Docker + Deploy: đưa TaskFlow ra thế giới
-- ← pain: cả 9 tập chạy localhost — bạn bè không test được, máy thiếu Node cũng chết.
-- Học: Dockerfile multi-stage, docker-compose kèm Postgres, env production, deploy Render/Railway.
+### EP 17 — Docker và Deploy NestJS lên Production ✅
+- ← pain: cả 16 tập chạy localhost — máy thiếu Node/PostgreSQL là không chạy được.
+- Học: Dockerfile multi-stage, docker-compose kèm Postgres, migration khi deploy, env production, deploy Render/Railway.
 - AI moment: AI review Dockerfile từng layer — host giải thích lại được tại sao layer nào tồn tại. Recap Season 1.
-- Thành quả: public URL. → **pain: API công khai mà không có tài liệu — ai mà biết gọi thế nào.**
+- Thành quả: public URL. → **pain: API công khai mà không có tài liệu — ai biết gọi thế nào.**
+- File: `17-docker-deploy-nestjs/17-docker-deploy-taskflow.md`
 
-## SEASON 2 — CỨNG CÁP (EP 11–20): production thật sự
+## SEASON 2 — CỨNG CÁP (EP 18–27): production thật sự
 
-### EP 11 — Swagger docs: API tự viết hồ sơ
-- ← pain: EP10 public xong, bạn bè (và bot) cứ hỏi "endpoint này nhận gì trả gì".
-- Học: @nestjs/swagger, @ApiTags/@ApiOperation, tự sinh trang /docs từ decorator, annotate DTO.
-- AI moment: nhờ AI annotate toàn bộ controller bằng swagger decorator — rồi host rà xem annotation nào nói LẠC với code.
-- Thành quả: /docs đẹp, thử API ngay trên trình duyệt. → **pain: docs công khai = bản đồ cho bot spam.**
+### EP 18 — Swagger docs: API tự viết hồ sơ
+- ← pain: EP17 public xong, người dùng cứ hỏi endpoint nhận gì và cần permission nào.
+- Học: `@nestjs/swagger`, `@ApiTags`, `@ApiOperation`, bearer auth, response/error schema, annotate DTO.
+- AI moment: nhờ AI annotate toàn bộ controller → host rà annotation nào nói khác code và permission nào bị bỏ sót.
+- Thành quả: `/docs` mô tả được cả auth và RBAC. → **pain: REST client phải gọi nhiều endpoint để ghép một màn hình.**
 
-### EP 12 — Rate limiting & Helmet: dạy API tự vệ
-- ← pain: EP11 xong, log thấy một IP gọi 500 lần/phút theo đúng… tài liệu.
-- Học: @nestjs/throttler, giới hạn theo IP/user, helmet security headers, vì sao cần cả hai lớp.
-- AI moment: AI viết script spam chính API mình — host quan sát throttler chặn, rồi hỏi AI cách vượt qua để hiểu giới hạn của nó.
-- Thành quả: spam → 429, headers an toàn bật đủ. → **pain: bị spam nhưng log rời rạc — không truy nổi một request cụ thể.**
+### BONUS 18.5 — Cùng một Service, hai API: REST vs GraphQL
+- ← pain: dashboard cần user, tasks và permissions; REST client phải tự ghép nhiều response.
+- Học: `@nestjs/graphql` code-first, resolver là transport boundary, reuse Users/Tasks/AccessControl service; guard với GraphQL execution context.
+- AI moment: AI copy business logic sang resolver → host kéo logic về service và chứng minh REST/GraphQL dùng chung một use case.
+- Thành quả: hiểu GraphQL mà không biến series thành một course GraphQL khác.
 
-### EP 13 — Structured logging + Correlation ID
-- ← pain: EP12 xảy ra lỗi lúc 2h sáng — hàng nghìn dòng log không biết dòng nào của request nào.
-- Học: pino structured logging, correlation ID đi suốt request (middleware), log level, log gì và không log gì (không log password!).
-- AI moment: cho AI đọc 200 dòng log rối và tóm tắt "chuyện gì đã xảy ra" — học đọc log như senior đọc.
-- Thành quả: 1 request → 1 ID truy vết đầu cuối. → **pain: log nằm trong server — không ai đọc, lỗi im lặng.**
+### EP 19 — Rate limiting & Helmet: dạy API tự vệ
+- ← pain: docs công khai trở thành bản đồ cho bot spam login và API quản trị.
+- Học: `@nestjs/throttler`, giới hạn theo IP/user/route, Helmet, bảo vệ login khác endpoint thường.
+- AI moment: AI viết script spam chính API → host quan sát 429 rồi chất vấn cách attacker đổi IP hoặc tài khoản.
+- Thành quả: spam bị giới hạn, security headers bật đủ. → **pain: bị spam nhưng log rời rạc, không truy nổi một request.**
 
-### EP 14 — Monitoring: lỗi tự bay về tìm mình (Sentry)
-- ← pain: EP13 log đẹp nhưng user mới báo — mình biết sau cùng.
-- Học: Sentry (hoặc GlitchTip), catch toàn cục, lỗi production tự gửi alert kèm stack + user context, release tracking.
-- AI moment: host cố tình deploy 1 bug → xem AI (assistant) phân tích alert và đoán nguyên nhân — so với chẩn đoán thật.
-- Thành quả: lỗi production → notification trong vài giây. → **pain: report lỗi thì có — mà cầu thủ cần gắn ảnh mô tả.**
+### EP 20 — Structured logging + Correlation ID
+- ← pain: EP19 xảy ra lỗi lúc 2h sáng — hàng nghìn dòng log không biết dòng nào cùng request.
+- Học: pino structured logging, correlation ID đi suốt request, log level, redaction; tuyệt đối không log password/token.
+- AI moment: cho AI đọc log rối và tóm tắt sự cố → host kiểm tra lại theo correlation ID thay vì tin bản tóm tắt.
+- Thành quả: một request có một dấu vết đầu cuối. → **pain: log cho biết có lỗi nhưng không chỉ ra method nào đang chậm.**
 
-### EP 15 — File upload: avatar và attachment cho task
-- ← pain: EP14 xong, user than "task của em cần hình chụp lỗi cơ mà".
-- Học: Multer, @UploadedFile, validate loại/dung lượng, lưu ở đâu (local vs S3/Cloudinary), serve file tĩnh.
-- AI moment: hỏi AI "nếu người dùng upload file giả danh .jpg thì sao?" → học magic bytes, không tin extension.
-- Thành quả: gắn ảnh vào task, hiển thị được. → **pain: có ảnh, data phình — GET /tasks trả cả nghìn dòng một phát.**
+### EP 21 — NestJS Observe: nhìn xuyên request production
+- ← pain: EP20 có log nhưng vẫn phải đoán request chậm ở Guard, Service, Prisma hay queue.
+- Học: `@nestjs/observe`, auto-instrument request/job/error/trace, trace waterfall, latency p95, release và error context.
+- AI moment: tạo một endpoint chậm → đưa telemetry thật cho AI phân tích → host verify span gây chậm trước khi sửa.
+- Không biến MCP thành điều kiện bắt buộc: flow chính dùng dashboard/copy agent prompt; MCP read-only chỉ là nhánh tùy gói dịch vụ.
+- Thành quả: chẩn đoán dựa trên telemetry, không đoán từ code. → **pain: user báo lỗi task nhưng không gắn được ảnh minh họa.**
 
-### EP 16 — Pagination, filtering, sorting
-- ← pain: EP15 xong, task 5 nghìn dòng — response cỡ MB, client treo.
-- Học: pagination offset vs cursor, query param filter, sort, metadata page, Prisma skip/take/orderBy.
-- AI moment: chất vấn AI "offset pagination hỏng ở đâu khi dữ liệu chèn liên tục?" → hiểu vì sao cursor.
-- Thành quả: GET /tasks?page=2 nhanh nhẹn. → **pain: task dâng cao không nhóm theo dự án được.**
+### BONUS 21.5 — Observe vs Sentry/OpenTelemetry: chọn công cụ theo nhu cầu
+- So sánh Nest-aware instrumentation, error tracking, open standard, self-hosting, chi phí và vendor lock-in.
+- Không cài ba stack vào cùng project; dùng decision matrix và một trace/error giống nhau để so sánh.
 
-### EP 17 — Quan hệ dữ liệu: Project, Label và many-to-many
-- ← pain: EP16 xong nhưng task là 1 danh sách phẳng — không biết cái nào thuộc dự án nào.
-- Học: quan hệ 1-n, n-n trong Prisma, migration an toàn khi đã có data, include vs select, NestJS module cho Project.
-- AI moment: AI thiết kế schema — host chất vấn "xóa project thì task thuộc về ai?" (cascade vs restrict) trước khi migrate.
-- Thành quả: task thuộc project, gắn nhiều label. → **pain: tạo task + label + counter — hỏng giữa chừng, data lệch.**
+### EP 22 — File upload: avatar và attachment cho task
+- ← pain: EP21 thấy lỗi rõ rồi, nhưng task vẫn không đính kèm được ảnh hoặc file.
+- Học: Multer, `@UploadedFile`, validate loại/dung lượng, local vs object storage, serve file an toàn.
+- AI moment: hỏi AI nếu file giả danh `.jpg` thì sao → học magic bytes, không tin extension.
+- Thành quả: task có attachment hợp lệ. → **pain: dữ liệu và file tăng, GET `/tasks` trả hàng nghìn dòng.**
 
-### EP 18 — Transactions: làm trọn vẹn hoặc không làm
-- ← pain: EP17 xong, tạo task kèm label: task tạo xong, label fail — bụi luôn nửa chừng.
-- Học: Prisma $transaction, rollback, khi nào cần transaction (và khi nào KHÔNG), idempotency cơ bản.
-- AI moment: nhờ AI dựng kịch bản race condition thật (2 request cùng lúc) — host chạy demo thấy data lệch bằng mắt.
-- Thành quả: hoặc tất cả thành công, hoặc quay về như chưa có gì. → **pain: dashboard đếm task join 5 bảng — mỗi lần load là một lần nặng.**
+### EP 23 — Pagination, filtering, sorting
+- ← pain: EP22 xong, task 5 nghìn dòng làm response lớn và client treo.
+- Học: offset vs cursor, query filter, sort, metadata page, Prisma `skip/take/orderBy`.
+- AI moment: chất vấn offset pagination khi dữ liệu chèn liên tục → hiểu vì sao cursor.
+- Thành quả: danh sách task tải theo phần. → **pain: task vẫn là danh sách phẳng, chưa nhóm theo dự án.**
 
-### EP 19 — Caching với Redis: học cách quên
-- ← pain: EP18 chuẩn chỉnh nhưng dashboard query nặng, gọi liên tục, DB đổ mồ hôi.
-- Học: Redis là gì (metaphor tủ ghi nhớ cạnh bàn làm việc), cache-aside, invalidate khi data đổi, TTL.
-- AI moment: hỏi AI "khi nào cache là kẻ thù?" — học stale data, bug khó nhất của caching là dữ liệu CŨ.
-- Thành quả: dashboard nhanh gấp nhiều lần, DB nhẹ topo. → **pain: gửi mail nhắc deadline trong request — user chờ, mail server trễ.**
+### EP 24 — Quan hệ dữ liệu: Project, Label và many-to-many
+- ← pain: EP23 xong nhưng task chưa thuộc project và chưa có label.
+- Học: quan hệ 1–N, N–N trong Prisma, migration khi đã có data, `include` vs `select`, module Project/Label.
+- AI moment: AI thiết kế schema → host chất vấn cascade hay restrict trước khi migrate.
+- Thành quả: task thuộc project và gắn nhiều label. → **pain: tạo task kèm label hỏng giữa chừng làm data lệch.**
 
-### EP 20 — Background jobs với BullMQ: việc nặng để sau
-- ← pain: EP19 xong, tính năng "mail nhắc việc" làm response /tasks chậm đi rõ rệt.
-- Học: queue là gì (metaphor quầy nhận đơn — khoá xe xong về trước), BullMQ + Redis, retry, dead letter, job failed.
-- AI moment: host tắt mail server giữa chừng — xem job retry như thế nào, rồi hỏi AI "khi nào nên bỏ cuộc?".
-- Thành quả: response về ngay, mail xếp hàng gửi ngầm. Recap Season 2. → **pain: queue có mail nhắc — nhưng ai tạo job hằng đêm?**
+### EP 25 — Transactions: làm trọn vẹn hoặc không làm
+- ← pain: EP24 tạo task xong nhưng attach label fail, hệ thống còn nửa trạng thái.
+- Học: Prisma `$transaction`, rollback, transaction boundary, race condition, khi nào không nên giữ transaction lâu.
+- AI moment: AI dựng hai request chạy đồng thời → host chạy demo và quan sát dữ liệu lệch trước khi sửa.
+- Thành quả: hoặc toàn bộ thành công, hoặc quay về như chưa có gì. → **pain: dashboard join nhiều bảng, gọi liên tục làm DB nặng.**
 
-## SEASON 3 — CHUYÊN SÂU (EP 21–30): hệ thống thực thụ
+### EP 26 — Caching với Redis: học cách quên
+- ← pain: EP25 đúng dữ liệu nhưng dashboard query nặng và lặp lại.
+- Học: cache-aside, key design, invalidate khi data/quyền đổi, TTL và stale data.
+- AI moment: hỏi AI khi nào cache là kẻ thù → cố tình tạo bug quyền cũ còn trong cache rồi sửa invalidation.
+- Thành quả: dashboard nhanh hơn mà revoke permission vẫn có hiệu lực. → **pain: gửi mail nhắc deadline ngay trong request làm user chờ.**
 
-### EP 21 — Cron job: robot làm ca đêm
-- ← pain: EP20 queue chỉ gửi khi có người làm gì đó — nhắc deadline cần quét mỗi sáng 6h.
-- Học: @nestjs/schedule, @Cron, @Interval, job định kỳ quét task sắp due, chống chạy trùng nhiều instance.
-- AI moment: hỏi AI "nếu có 3 server cùng chạy cron này thì sao?" → học distributed lock ở mức khái niệm.
-- Thành quả: 6h sáng, mail nhắc việc tự bay. → **pain: bạn cùng team thêm task — phải F5 mới thấy.**
+### EP 27 — Background jobs với BullMQ: việc nặng để sau
+- ← pain: EP26 xong, gửi mail trong request vẫn bị phụ thuộc mail server.
+- Học: BullMQ + Redis, retry/backoff, failed job, dead-letter strategy, idempotent job cơ bản.
+- AI moment: host tắt mail server giữa chừng → quan sát retry rồi quyết định khi nào bỏ cuộc.
+- Thành quả: response về ngay, mail chạy nền. Recap Season 2. → **pain: queue có worker nhưng chưa ai tạo job nhắc việc mỗi sáng.**
 
-### EP 22 — Realtime WebSocket: dữ liệu tự đi đến
-- ← pain: EP21 xong — mọi thứ "sống" phía server rồi nhưng trình duyệt vẫn phải refresh.
-- Học: Socket.IO gateway, @WebSocketServer, emit sự kiện "task:create", client subscribe, khác biệt HTTP vs WebSocket (metaphor gọi điện vs nhắn tin).
-- AI moment: AI sinh gateway — host chất vấn "emit xong client mất mạng thì sao?" → học ACK và reconnect cơ bản.
-- Thành quả: task mới hiện tức thì trên tab khác. → **pain: socket ai cũng kết nối được — notify bay nhầm người.**
+## SEASON 3 — CHUYÊN SÂU (EP 28–38): modular monolith thực thụ
 
-### EP 23 — Socket auth & rooms: phòng riêng cho mỗi người
-- ← pain: EP22 mọi client nhận mọi sự kiện — riêng tư đâu mất rồi.
-- Học: auth handshake cho WebSocket bằng JWT, room per user, join/leave, emit có chủ đích.
-- AI moment: host cố kết nối bằng token hết hạn — xem chặn ở đâu; AI review flow và chỉ ra 1 chỗ sót.
-- Thành quả: mỗi người chỉ nhận thông báo của mình. → **pain: user lỡ tay xóa task — mất trắng, không ai biết ai xóa.**
+### EP 28 — Cron job: robot làm ca đêm
+- ← pain: EP27 queue chỉ chạy khi có producer; nhắc deadline cần quét mỗi sáng.
+- Học: `@nestjs/schedule`, `@Cron`, job định kỳ, chống chạy trùng nhiều instance.
+- AI moment: hỏi AI nếu ba server cùng chạy cron → học distributed lock ở mức ứng dụng.
+- Thành quả: lịch nhắc việc tự tạo job. → **pain: teammate thêm task nhưng màn hình phải F5.**
 
-### EP 24 — Soft delete & Audit log: không có gì xóa vĩnh viễn
-- ← pain: EP23 an toàn rồi nhưng một lần xóa nhầm là kẹt — không khôi phục, không truy được thủ phạm.
-- Học: soft delete (deletedAt), filter mặc định ẩn bản đã xóa, restore, audit log ai-làm-gì-lúc-nào, request context ghi người thao tác.
-- AI moment: nhờ AI đề xuất "audit nên log những trường nào?" — rồi cắt bớt theo tư duy privacy (không log thừa thông tin).
-- Thành quả: xóa nhầm → khôi phục được; mọi thay đổi có dấu vết. → **pain: thêm field mới làm client cũ vỡ nát.**
+### EP 29 — Realtime WebSocket: dữ liệu tự đi đến
+- ← pain: EP28 server đã tự động nhưng trình duyệt vẫn phải refresh để thấy task mới.
+- Học: Socket.IO gateway, `@WebSocketServer`, emit event, client subscribe, ACK và reconnect cơ bản.
+- AI moment: AI sinh gateway → host chất vấn client mất mạng ngay sau emit thì sao.
+- Thành quả: task mới hiện trên tab khác. → **pain: socket nào cũng nhận mọi sự kiện.**
 
-### EP 25 — API versioning & backward compatibility
-- ← pain: EP24 đổi response shape (thêm deletedAt) — app cũ parse lỗi.
-- Học: URI versioning (/v1, /v2), deprecation chiến lược, không phá contract cũ, changelog cho API.
-- AI moment: AI đề xuất v2 endpoint — host phê duyệt từng breaking change như review PR thật.
-- Thành quả: v1 và v2 sống chung hòa bình. → **pain: data lớn dần, chỗ cũ chậm không phải chỗ mới — đo ở đâu?**
+### EP 30 — Socket auth & rooms: phòng riêng cho mỗi người
+- ← pain: EP29 mọi client nhận mọi notification, làm lộ dữ liệu.
+- Học: JWT handshake, reuse auth service, room per user/project, permission khi join room, emit có chủ đích.
+- AI moment: kết nối bằng token hết hạn và user thiếu permission → AI review flow, host tìm đường bypass.
+- Thành quả: mỗi user chỉ nhận event được phép. → **pain: chạy nhiều server thì room nằm rải rác trong từng process.**
 
-### EP 26 — Performance: N+1, index và nghệ thuật đo trước khi sửa
-- ← pain: EP25 xong, vài endpoint chậm dần — sửa kiểu mò, ai cũng có ý kiến.
-- Học: đo trước (timing, Prisma query log), N+1 là gì và bắt nó như nào, DB index (metaphor mục lục sách), EXPLAIN cơ bản.
-- AI moment: AI nhìn query log đoán N+1 — host verify bằng số liệu thật, không tin bằng miệng.
-- Thành quả: endpoint chậm nhất nhanh lên rõ rệt, có số before/after. → **pain: mọi thứ tự động trừ... deploy — vẫn tay.**
+### EP 31 — WebSocket nhiều server: Redis Adapter và sticky session
+- ← pain: user nối API1 nhưng event phát từ API3 không tới đúng room.
+- Học: Socket.IO Redis adapter, pub/sub giữa instance, sticky session, reconnect và giới hạn delivery guarantee.
+- Redis đã xuất hiện ở EP26 nên tập này tập trung vào scaling, không dạy lại cache.
 
-### EP 27 — CI/CD GitHub Actions: robot nhận việc deploy
-- ← pain: EP26 xong nhưng mỗi lần push là RÍT rung người: test tay, build tay, deploy tay.
-- Học: workflow YAML, matrix test, build image, auto deploy khi merge main, branch protection, PR check.
-- AI moment: nhờ AI viết workflow — host đọc từng bước và XÓA bớt (learn: CI thừa bước cũng là lỗi).
-- Thành quả: git push → test → deploy tự động. → **pain: deploy lúc 18h đang giờ cao điểm — request đang chạy bị đứt ngang.**
+### EP 32 — Soft delete & Audit log: không có gì xóa vĩnh viễn
+- ← pain: socket đã đúng người nhưng user lỡ xóa task thì mất trắng, không truy được ai làm.
+- Học: `deletedAt`, filter mặc định, restore, audit actor/action/time, request context và privacy.
+- AI moment: AI đề xuất log mọi field → host cắt dữ liệu nhạy cảm và chỉ giữ bằng chứng cần thiết.
+- Thành quả: khôi phục được và có dấu vết. → **pain: thêm field mới làm client cũ vỡ contract.**
 
-### EP 28 — Health check & graceful shutdown: thay lốp xe đang chạy
-- ← pain: EP27 deploy tự động nhưng mỗi lần rollout là vài giây 502.
-- Học: /health endpoint (liveness/readiness), SIGTERM, graceful shutdown (xong việc đang làm rồi mới nghỉ), connection draining, zero-downtime deploy.
-- AI moment: hỏi AI "vài giây 502 đó chuyện gì xảy ra bên trong?" — host vẽ lại timeline shutdown bằng lời AI kể.
-- Thành quả: deploy không rơi request. → **pain: thêm tính năng là sửa TaskService — file to dần, đụng gì cũng động vào nó.**
+### EP 33 — API versioning & backward compatibility
+- ← pain: EP32 đổi response shape làm app cũ parse lỗi.
+- Học: URI versioning, deprecation, compatibility window, changelog và contract test.
+- AI moment: AI đề xuất v2 → host duyệt từng breaking change như review PR.
+- Thành quả: v1 và v2 sống chung. → **pain: dữ liệu lớn dần, endpoint chậm nhưng chưa biết vì sao.**
 
-### EP 29 — Event-driven: module nói chuyện qua sự kiện
-- ← pain: cả series mọi logic dồn về service — muốn thêm 1 tính năng là sờ vào file nóng.
-- Học: decouple bằng event emitter trong monolith (OnEvent), domain event TaskCompleted, listener gửi mail/notify — không cần sửa TaskService, nguyên tắc open-closed bằng ngôn ngữ đời thường.
-- AI moment: AI đề xuất thêm "điểm thưởng khi hoàn thành task" — host implement KHÔNG sửa một dòng TaskService — demo open-closed thật.
-- Thành quả: tính năng mới = listener mới. Đây là cửa ngõ microservices sau này. → **pain: 30 tập — ôm được mớ kiến thức nào ra phỏng vấn?**
+### EP 34 — Performance: N+1, index và đo trước khi sửa
+- ← pain: EP33 xong, một số endpoint chậm dần và mọi người sửa theo cảm giác.
+- Học: query log/trace, N+1, index, `EXPLAIN` cơ bản, đo before/after.
+- AI moment: AI nhìn telemetry đoán bottleneck → host verify bằng query plan và số liệu thật.
+- Thành quả: endpoint chậm nhất cải thiện có số đo. → **pain: GraphQL bonus cũng có thể tạo N+1 tinh vi.**
 
-### EP 30 — Recap: từ folder rỗng đến hệ thống thật — và câu hỏi phỏng vấn
-- ← pain: cuối hành trình — lo "học xong không nhớ gì, phỏng vấn hỏi gì cũng lúng túng".
-- Học: map 29 tập trước thành kiến trúc TaskFlow hoàn chỉnh (1 diagram lớn), 15 câu phỏng vấn backend hay gặp rút từ project, cách kể project trong CV/phỏng vấn (STAR), roadmap tiếp theo (microservices, GraphQL, k8s).
-- AI moment: AI đóng vai interviewer difficulty cao — host trả lời thật, không đoán trước — closer của series: "AI hỏi — mình hiểu".
-- Thành quả: sơ đồ kiến thức + bộ câu chuyện phỏng vấn. Teaser series tiếp theo.
+### BONUS 34.5 — GraphQL N+1: DataLoader giải quyết thế nào?
+- Dùng query users → tasks → labels để tạo N+1 thật.
+- So sánh naive field resolver, batching/caching theo request và DataLoader; verify bằng số query.
+
+### EP 35 — CI/CD GitHub Actions: robot nhận việc deploy
+- ← pain: code nhanh hơn nhưng mỗi lần push vẫn test, build và deploy bằng tay.
+- Học: workflow YAML, test matrix, build image, deploy khi merge, branch protection và PR checks.
+- AI moment: AI viết workflow → host đọc từng step và xóa phần thừa.
+- Thành quả: push → test → deploy. → **pain: rollout đang có traffic làm request bị đứt.**
+
+### EP 36 — Health check & graceful shutdown: thay lốp xe đang chạy
+- ← pain: EP35 deploy tự động nhưng rollout vẫn tạo vài giây 502.
+- Học: liveness/readiness, dependency health, SIGTERM, connection draining và graceful shutdown.
+- AI moment: AI kể timeline shutdown → host đối chiếu bằng log và request đang chạy.
+- Thành quả: deploy không làm rơi request. → **pain: thêm listener mail/notification vẫn phải sửa service trung tâm.**
+
+### EP 37 — Event-driven: module nói chuyện qua sự kiện
+- ← pain: TasksService trở thành file nóng vì mail, audit, notification cùng bám vào nó.
+- Học: domain event trong monolith, `TaskCompleted`, listener, eventual side effect và failure boundary.
+- AI moment: thêm tính năng điểm thưởng bằng listener mà không sửa use case hoàn thành task.
+- Thành quả: module giao tiếp qua event có chủ đích. → **pain: boundary đã rõ, câu hỏi tiếp theo là khi nào nên tách process.**
+
+### EP 38 — Recap modular monolith: từ folder rỗng đến hệ thống thật
+- ← pain: 37 tập nhiều khái niệm, người học cần một bản đồ và tiêu chí trước khi bước sang distributed system.
+- Học: vẽ lại TaskFlow, dependency direction, auth/RBAC, production stack, 15 câu phỏng vấn và cách kể project theo STAR.
+- AI moment: AI đóng vai interviewer → host trả lời bằng quyết định và trade-off đã thực sự implement.
+- Thành quả: modular monolith hoàn chỉnh, có lý do rõ ràng nếu muốn tách service. → **pain: notification workload bắt đầu ảnh hưởng API chính.**
+
+## SEASON 4 — MICROSERVICES (EP 39–46): chỉ tách khi monolith có lý do để tách
+
+### EP 39 — Monolith → Microservices: khi nào nên tách?
+- ← pain: notification workload ảnh hưởng API nhưng không muốn chia service theo cảm tính.
+- Học: service boundary, ownership dữ liệu, operational cost, modular monolith vs distributed system.
+- AI moment: AI đề xuất tách mọi module → host dùng coupling và failure data để chỉ chọn Notification Service.
+- Thành quả: có boundary và lý do đo được. → **pain: hai service cần giao tiếp nhưng chưa biết dùng message hay event.**
+
+### EP 40 — MessagePattern vs EventPattern: hỏi đáp hay phát sự kiện?
+- ← pain: API cần gửi lệnh và nhận kết quả, trong khi TaskCompleted chỉ cần thông báo.
+- Học: request-response, event-based messaging, timeout, contract và transport abstraction của Nest.
+- AI moment: AI dùng event cho câu hỏi cần response → host dựng failure để lộ thiết kế sai.
+- Thành quả: chọn đúng communication style. → **pain: consumer chết giữa chừng thì message xử lý tới đâu?**
+
+### EP 41 — RabbitMQ: ACK, retry và dead-letter queue
+- ← pain: message đã gửi nhưng worker crash trước khi hoàn tất.
+- Học: broker, durable message, manual ACK/NACK, retry/backoff, DLQ và poison message.
+- AI moment: kill consumer đúng giữa xử lý → quan sát redelivery thay vì suy đoán.
+- Thành quả: message không im lặng biến mất. → **pain: retry có thể chạy business action hai lần.**
+
+### EP 42 — Idempotency: message chạy hai lần thì sao?
+- ← pain: RabbitMQ redelivery làm email hoặc side effect bị lặp.
+- Học: idempotency key, inbox/deduplication record, unique constraint và retry-safe handler.
+- AI moment: phát cùng message hai lần → host chứng minh chỉ một side effect xảy ra.
+- Thành quả: at-least-once delivery không phá business data. → **pain: database commit nhưng publish event có thể fail.**
+
+### EP 43 — Distributed transaction và Outbox Pattern
+- ← pain: task đã hoàn thành trong DB nhưng event không tới Notification Service.
+- Học: dual-write problem, transactional outbox, relay worker, retry và cleanup.
+- AI moment: ngắt broker giữa DB commit và publish → tái hiện mất event rồi verify outbox phục hồi.
+- Thành quả: state và event không lệch nhau. → **pain: không phải giao tiếp service nào cũng phù hợp asynchronous event.**
+
+### EP 44 — gRPC: synchronous service-to-service
+- ← pain: API cần dữ liệu đồng bộ từ service khác với contract chặt và latency thấp.
+- Học: protobuf, unary call, deadline, error mapping, schema evolution cơ bản.
+- AI moment: AI thay REST bằng gRPC mọi nơi → host đo trade-off và giữ event cho workflow bất đồng bộ.
+- Thành quả: có thêm lựa chọn synchronous rõ ràng. → **pain: một request đi qua HTTP, gRPC và RabbitMQ thì log từng service không đủ.**
+
+### EP 45 — NestJS Observe Distributed Tracing
+- ← pain: request chạy qua nhiều service, trace ID bị đứt ở transport boundary.
+- Học: propagation qua HTTP/gRPC/microservice transport, trace waterfall, slow span và error chain.
+- AI moment: AI đọc trace thật để khoanh vùng service chậm → host verify bằng span và metric.
+- Thành quả: nhìn được hành trình xuyên service. → **pain: hệ thống đã phân tán nhưng còn thiếu kiểm chứng production toàn diện.**
+
+### EP 46 — Microservices production capstone
+- ← pain: từng pattern chạy riêng, chưa biết hệ thống chịu deploy, retry và service failure đồng thời ra sao.
+- Học: health/readiness, deploy order, backward-compatible contract, failure drill, runbook và cost review.
+- AI moment: AI đóng vai incident commander trên một sự cố dựng sẵn → host yêu cầu evidence trước mỗi hành động.
+- Thành quả: TaskFlow distributed chạy end-to-end và người học hiểu cả giá phải trả của Microservices.
 
 ## Nguyên tắc xuyên suốt series
 
 1. Mỗi ep mở bằng NỖI ĐAU của ep trước (chain rule) — không bao giờ mở bằng "hôm nay ta học X".
-2. Mỗi ep có đúng MỘT khoảnh khắc AI nổi bật — không lạm dụng, đó là brand của series.
+2. Mỗi ep có đúng MỘT AI sequence liền mạch — có thể gồm vài lượt hỏi–đáp nhưng chỉ phục vụ một outcome, không biến thành màn trình diễn nhiều tính năng AI.
 3. **AI-Driven Development Workflow (quy trình chuẩn 6 bước, xuyên suốt mọi ep):** (1) Yêu cầu — mô tả mục tiêu + context → (2) AI lên Plan → (3) host Review bằng mắt → (4) host Approve → (5) AI Thực hiện code → (6) Kiểm chứng (git diff / test / chạy app). AI không bao giờ tự ý sửa.
 4. Host luôn TỰ GÕ lại ít nhất một đoạn code AI sinh trong mỗi ep — điều kiện để gọi là "mình hiểu".
 5. Kết mỗi ep teaser 1 câu cho ep sau (retention loop + minh bạch chain).
 6. Tool AI: **Opus trong IDE Antigravity**. Đổi tool thì giữ nguyên pattern hỏi–đọc–chất vấn.
-7. Mỗi season kết bằng recap nhẹ (EP 10, 20) giúp người xem muộn bám kịp — EP 30 là tổng kết lớn.
+7. Mỗi season có điểm tổng kết rõ: EP17 recap nền tảng, EP27 recap production, EP38 tổng kết modular monolith và EP46 là microservices capstone.
 8. Title mọi tập đánh số series: `NestJS #NN: <hook> | Lập trình là cuộc sống`.

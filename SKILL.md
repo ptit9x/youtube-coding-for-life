@@ -1,21 +1,15 @@
 ---
 name: script-coding-for-life
 description: >-
-  Write Vietnamese YouTube scripts for the channel "Lập trình là cuộc sống" —
-  host SELF-RECORDS screen (IDE, terminal, browser) and READS THE SCRIPT
-  ALOUD himself (no AI voice/TTS, no AI footage). Story-driven content aimed
-  at developers new to the job and Fresher-level viewers. Delivers script,
-  shot list with screen recording directions, thumbnail image prompts for
-  Nano Banana/Imagen in Flow (correct usage, NO negative field), 5 viral
-  titles + SEO description + keywords, and 3-tier thumbnail text.
-  Use when the user wants to make programming videos, gives a topic/concept +
-  angle, pastes a competitor script for analysis and rewrite, or calls
-  /script-coding-for-life. Also triggers on Vietnamese phrasing: "viết kịch bản
-  lập trình", "làm video coding bằng AI", "kịch bản lập trình là cuộc sống".
-  Topics: programming concepts, developer stories, tech career, coding
-  challenges, software engineering, AI/ML, web dev, algorithms, and
-  LLM-assisted learning series (learning frameworks like NestJS/Next.js with
-  AI coding agents as mentor).
+  Write Vietnamese YouTube scripts for "Lập trình là cuộc sống": concise,
+  story-driven narration for self-recorded dark-mode coding videos aimed at
+  Fresher developers. Deliver the script, screen-recording shot list, three
+  Flow thumbnail prompts, five titles, SEO description, tags, and thumbnail
+  specs. Use for programming video requests, competitor rewrites,
+  /script-coding-for-life, or Vietnamese requests such as "viết kịch bản lập
+  trình" and "làm video coding bằng AI". Covers programming concepts,
+  developer stories, careers, web development, AI, and LLM-assisted NestJS or
+  Next.js learning where AI acts as a mentor rather than a code vendor.
 ---
 
 # Lập Trình Là Cuộc Sống — Scriptwriter (VI, self-recorded screen, self-voiced)
@@ -138,6 +132,29 @@ This channel is **dark-mode cinematic**, never whiteboard / tutorial screencap.
 - **Lighting:** Low-key, monitor-lit faces, RGB ambient glow, city bokeh through
   windows. Think "3 AM coding session" mood.
 
+### NestJS series thumbnail preset
+
+Use this preset only for the series defined in
+`scripts/00-series-plan-hoc-nestjs-voi-ai.md`. It overrides the generic
+green/cyan thumbnail palette above; it does not change other channel topics.
+
+- Use `scripts/01-hoc-nestjs-voi-ai/thumbnail-01-hoc-nestjs-cung-ai.png` as the
+  visual reference for every later NestJS thumbnail.
+- Preserve the same visual grammar: bold condensed text on the left, developer
+  face on the right, and a dark code monitor as a secondary element.
+- The face and upper body should occupy roughly 35–40% of the frame. Keep one
+  clear focal person and simplify desk or background details.
+- Primary palette: NestJS red-pink `#E0234E`, white `#FFFFFF`, deep black and
+  dark navy. Do not use neon green or cyan for headline text or major lighting.
+- Keep the main thumbnail message to 3–5 words. Add the episode number and an
+  optional two-word badge as supporting text, not as competing headlines.
+- Use Anton, Impact, or Helvetica Neue Condensed Black. Apply a thick black
+  stroke and compact shadow; avoid the heavy neon glow used by older assets.
+- Render Vietnamese diacritics exactly. Inspect the full-size result and a
+  320×180 preview before accepting it.
+- Match the episode topic through one small screen detail or prop. Do not change
+  the established composition, palette, or typography to explain every concept.
+
 ## 5. OUTPUT FORMAT (this order, clearly separated)
 
 **PART 1 — SCRIPT** (pure Vietnamese narration, no labels/markdown/annotations.
@@ -164,6 +181,8 @@ matching narration line + what the user should show on screen.)
 **PART 3 — THUMBNAIL IMAGE PROMPTS (Nano Banana 2 / Imagen in Flow — CORRECT
 USAGE):**
 - Generate **3 thumbnail image prompts** (one per thumbnail option in Part 5).
+- For NestJS series episodes, apply the NestJS series thumbnail preset above
+  instead of the generic green/cyan palette in the template below.
 - Flow has NO "negative" field. NEVER paste a negative list into the prompt —
   doing so makes the model think you WANT those things (cartoon, whiteboard...)
   and it renders exactly that.
@@ -221,9 +240,10 @@ for text.
   patterns: paradox ("CODE GIỎI / KHÔNG CẦN / THÔNG MINH"), number + emotion
   ("3 GIỜ SÁNG / 1 CON BUG"), revelation ("ĐỪNG HỌC / LẬP TRÌNH" + green badge
   "HÃY SỐNG NÓ"), question ("TẠI SAO / 90% DEV / BỎ CUỘC?").
-- Mark which words are NEON GREEN `#00FF41` (the shock word: numbers, the twist
-  verb) and which are WHITE `#FFFFFF`. Only these two colors; optional dark badge
-  box `#1a1a2e` with neon border.
+- Mark which words use the active series accent and which are WHITE `#FFFFFF`.
+  The generic channel accent is NEON GREEN `#00FF41`; the NestJS series accent
+  is NEST RED `#E0234E`. Use only white plus the active accent for typography;
+  an optional dark badge may use a matching accent border.
 
 *6c. Typography specs (state these every time, for Canva/Photoshop):*
 - Canvas 1280×720. Font **JetBrains Mono** (free) for code-feel or **Anton**
