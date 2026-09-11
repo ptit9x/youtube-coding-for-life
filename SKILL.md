@@ -2,28 +2,41 @@
 name: script-coding-for-life
 description: >-
   Write Vietnamese YouTube scripts for the channel "Lập trình là cuộc sống" —
-  voiceover-ready, story-driven coding/programming content. User self-records
-  screen (IDE, terminal, browser). Delivers script, shot list with screen
-  recording directions, thumbnail image prompts for Nano Banana/Imagen in Flow
-  (correct usage, NO negative field), 10 viral titles, and 3-tier thumbnail text.
+  host SELF-RECORDS screen (IDE, terminal, browser) and READS THE SCRIPT
+  ALOUD himself (no AI voice/TTS, no AI footage). Story-driven content aimed
+  at developers new to the job and Fresher-level viewers. Delivers script,
+  shot list with screen recording directions, thumbnail image prompts for
+  Nano Banana/Imagen in Flow (correct usage, NO negative field), 5 viral
+  titles + SEO description + keywords, and 3-tier thumbnail text.
   Use when the user wants to make programming videos, gives a topic/concept +
   angle, pastes a competitor script for analysis and rewrite, or calls
   /script-coding-for-life. Also triggers on Vietnamese phrasing: "viết kịch bản
   lập trình", "làm video coding bằng AI", "kịch bản lập trình là cuộc sống".
   Topics: programming concepts, developer stories, tech career, coding
-  challenges, software engineering, AI/ML, web dev, algorithms.
+  challenges, software engineering, AI/ML, web dev, algorithms, and
+  LLM-assisted learning series (learning frameworks like NestJS/Next.js with
+  AI coding agents as mentor).
 ---
 
-# Lập Trình Là Cuộc Sống — Scriptwriter (VI, self-recorded screen, Flow-ready)
+# Lập Trình Là Cuộc Sống — Scriptwriter (VI, self-recorded screen, self-voiced)
 
-Goal: produce a **Vietnamese** narration script that goes **straight into
-Vbee with zero edits** (no brackets, markdown, annotations, section
-headers) plus the full production package: shot list with screen recording
-directions, thumbnail image prompts in correct Flow format, titles, thumbnails.
+Goal: produce a **Vietnamese** narration script for the host to **read aloud
+himself** while recording — no brackets, markdown, annotations, section
+headers — plus the full production package: shot list with screen recording
+directions, thumbnail image prompts in correct Flow format, titles, SEO
+description, keywords, thumbnails.
 
-**Video footage:** The user self-records their screen (IDE, terminal, browser,
-diagrams). This skill does NOT generate Veo motion prompts. Image prompts are
-only for thumbnails.
+**Video footage & voice:** The user SELF-RECORDS their screen (IDE, terminal,
+browser, diagrams) and VOICES the narration himself. This skill does NOT
+generate Veo motion prompts and does NOT optimize for AI TTS (Vbee) — write
+natural SPOKEN Vietnamese: short sentences (≤ 20 words each), clear subjects,
+read-aloud rhythm. Unfamiliar brand names get a Vietnamese phonetic
+transcription (e.g. NestJS → "Nét-JS"); common dev English (code, framework,
+API, decorator...) stays as-is.
+
+**Audience:** developers NEW to the job and Fresher-level — first framework
+contact. Explain every term briefly the first time it appears, with one
+real-life analogy. Senior experience is used to simplify, never to flex.
 
 This is STORYTELLING about code and developers, not a tutorial or lecture. One
 relatable scenario, one real struggle, one breakthrough moment, one takeaway that
@@ -83,6 +96,16 @@ project/job) → Growth → Meaning. Keep one person as the protagonist.
 **Concept Explainer variant:** Mystery (what IS this thing?) → Failed intuition
 (the obvious answer is wrong) → History/origin (who invented it, why) → The
 elegant solution (explain it beautifully) → Real-world impact → Meaning.
+
+**Học bằng LLM variant (LLM-assisted learning — for tutorial series):**
+Storytelling built around ONE small real project. Structure: pain of
+self-study (thick docs, outdated tutorials) → twist: use an LLM coding agent
+as a MENTOR, not a code-vendor → real on-screen build (host types, agent
+explains/generates, host reads and challenges it) → the "aha" moment
+(understanding the concept, not copying code) → working result → lesson about
+how to learn. SURVIVAL RULE: the host MUST understand and re-explain every
+piece of AI-generated code — "AI writes, I understand", never "AI writes, I
+copy". Reading and challenging AI code IS the series' differentiator.
 
 ## 3. Voice and technique (mandatory)
 
@@ -270,6 +293,11 @@ Pick and deepen these lanes across multiple videos:
 5. **"Code wars"** — Technology comparisons told as stories, not feature lists
    (React vs Vue as two philosophies of life, SQL vs NoSQL as two ways of
    thinking).
+6. **"Học lập trình bằng LLM"** — Tutorial series for Fresher: host learns and
+   builds a real project (NestJS, Next.js...) WITH an LLM coding agent
+   (Cursor, Claude Code, Copilot...) as mentor. Prompting well, reading AI
+   code, challenging it, verifying — never copy-blind. Emphasize the meta
+   skill: learning how to learn with AI. One video = one part of the project.
 
 ## Notes
 

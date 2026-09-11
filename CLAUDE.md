@@ -12,9 +12,10 @@ cuộc sống developer theo phong cách cinematic, sâu lắng, và đầy cả
 - **Stack chính:** JavaScript/TypeScript (React, Next.js, Node.js), Python
   (Django, FastAPI, AI/ML), full-stack. Cũng có kiến thức DevOps và bidding
   dự án.
-- **Nhưng kênh hướng đến Junior, Fresher, Mid-level** — những người mới vào
-  nghề cần được hướng dẫn. Viết script ở tầm dễ tiếp cận, dùng kinh nghiệm
-  senior để giải thích đơn giản, KHÔNG để flex hay tạo khoảng cách.
+- **Kênh hướng đến Developer mới vào nghề và Fresher** — người vừa học xong
+  hoặc mới đi làm vài tháng, lần đầu chạm framework. Mọi thuật ngữ khi xuất
+  hiện lần đầu phải được giải thích ngắn trong 1 câu kèm ví dụ đời thực.
+  Dùng kinh nghiệm senior để đơn giản hóa, KHÔNG để flex hay tạo khoảng cách.
 - **Góc nhìn đặc trưng:** Người đã đi qua hết rồi, giờ quay lại kể cho đàn
   em nghe — chân thật, không tô hồng, nhưng vẫn truyền cảm hứng.
 
@@ -55,70 +56,59 @@ nhiều humor hơn, career topics cần nhiều thẳng thắn hơn.
 
 ### Goal
 
-Produce a **Vietnamese** narration script that goes **straight into Vbee
-with zero edits** (no brackets, markdown, annotations, section headers) plus
-the full production package: shot list with screen recording directions,
-thumbnail image prompts, titles, thumbnails.
+Produce a **Vietnamese** narration script for the host to **read aloud
+himself** while self-recording his screen — no brackets, markdown,
+annotations, section headers — plus the full production package: shot list
+with screen recording directions, thumbnail image prompts, titles,
+thumbnails.
 
-**Video footage:** Tôi tự quay màn hình (IDE, terminal, browser, diagrams).
-KHÔNG tạo Veo motion prompts. Image prompts chỉ dùng cho thumbnails.
+**Video footage & voice:** Tôi TỰ QUAY màn hình (IDE, terminal, browser,
+diagrams) và TỰ THOẠI ÂM — KHÔNG dùng AI tạo footage (Veo) lẫn giọng đọc
+(Vbee). Image prompts chỉ dùng cho thumbnails.
 
 This is STORYTELLING about code and developers, not a tutorial or lecture. One
 relatable scenario, one real struggle, one breakthrough moment, one takeaway
 that changes how the viewer thinks about programming and life.
 
-### Vbee TTS Optimization (bắt buộc cho PART 1 — SCRIPT)
+### Giọng đọc tự nhiên (bắt buộc cho PART 1 — SCRIPT)
 
-Script PART 1 sẽ được đưa thẳng vào Vbee (text-to-speech tiếng Việt). Phải
-tối ưu từ ngữ để Vbee đọc tự nhiên, không bị phát âm sai.
+Script PART 1 là lời thoại người thật đọc — phải viết như người nói,
+KHÔNG phải văn viết.
 
-**Nguyên tắc chung:** Từ tiếng Anh phổ thông trong giới dev/tech → giữ nguyên
-(Vbee đọc được). Tên riêng, brand name lạ, viết tắt, câu lệnh terminal →
-phiên âm Việt.
+**Nguyên tắc:** Viết câu ngắn, 1 câu ≤ 20 từ, chủ ngữ rõ. Đọc thử thành
+tiếng — nếu phải hít giữa câu thì câu quá dài. Từ tiếng Anh phổ thông
+(code, framework, API...) giữ nguyên. Tên riêng/brand lạ phiên âm Việt
+theo bảng dưới (NestJS → **Nét-JS**, Kamil Myśliwiec → **Ca-min Mi-sli-vét**,
+decorator → giữ nguyên, `nest g resource` → đọc "nest giơ re-xốt").
 
-#### Giữ nguyên tiếng Anh (Vbee xử lý được)
-Các từ sau ĐÃ ĐƯỢC Vbee đọc tốt, KHÔNG cần phiên âm:
-- **Từ phổ thông:** code, video, subscribe, token, model, format, account,
-  combo, credit, free, chat, logic, terminal, dashboard, quota, dev, tool,
-  endpoint, request, extension, panel, response, active, backend, output,
-  context, noise, budget, workflow, tier, cent, gateway
-- **Thuật ngữ tech phổ biến:** API key, IDE, AI, VS Code, GitHub, repo,
-  developer, subscription, cheap, config, Settings
+#### Giữ nguyên khi đọc
+Các từ này phổ biến với dev Việt, đọc nguyên bản tiếng Anh:
+- **Từ phổ thông:** code, video, framework, API, backend, frontend, dev, tool,
+  request, response, endpoint, token, model, terminal, dashboard, config,
+  repo, workflow, budget, credit, gateway, decorator, module, controller,
+  service, provider, dependency injection (đọc trôi chảy là được)
+- **Thuật ngữ:** API key, IDE, AI, VS Code, GitHub, TypeScript, Node.js,
+  Express, Angular, React, NestJS (đọc "Nét-JS" nếu cần nhấn)
 
-#### Phải phiên âm Việt (Vbee sẽ đọc sai nếu để nguyên)
+#### Phiên âm Việt (tên lạ, đọc nguyên sẽ vấp)
 
-| Loại | Ví dụ gốc | Phiên âm Vbee |
+| Loại | Ví dụ gốc | Đọc là |
 |---|---|---|
-| **Tên sản phẩm lạ** | 9Router | nai-rao-tờ |
-| | Cursor | Cơ-xờ |
+| **Tên sản phẩm lạ** | Cursor | Cơ-xờ |
 | | Claude | Cờ-lốt |
-| | Copilot | Cô-pai-lột |
-| | Codex | Cô-đéc |
 | | ChatGPT | Chát-gi-pi-ti |
 | | OpenAI | Ô-pần-AI |
 | | Gemini | Giê-mi-ni |
-| | MiniMax | Mi-ni-mắc |
-| | Vertex | Vơ-tếch |
-| | ZooCode | Du Cốt |
 | | Kiro | Ki-rô |
 | | OpenCode | Ô-pần-cốt |
-| | Deep-Work | Đíp-Oóc |
-| **Viết tắt** | RTK | ờ-tê-ka |
-| | GLM | gi-eo-em |
-| | LLM | eo-eo-em |
+| **Viết tắt** | LLM | eo-eo-em |
 | | GPT | gi-pi-ti |
 | | npm | en-pi-em |
-| **Câu lệnh terminal** | npm install -g | en-pi-em in-xtồ đét-g |
-| | git diff | gít đíp |
-| | grep | grếp |
-| | ls | eo-ét |
-| **Cụm tiếng Anh dài** | Rate limit exceeded | Rết li-mít ếch-xì-địt |
-| | Never stop coding | Ne-vờ xtốp cô-đinh |
-| | Rust Token Killer | Rớt Tô-kần Ki-lờ |
-| | round-robin | rao-rô-bin |
-| **Localhost / Port** | localhost:20128 | lô-cồ-hốt cổng hai-không-một-hai-tám |
-| | /v1 | xờ-lát vì-oăn |
-| | kr/claude-sonnet-4.5 | ka-a xờ-lát cờ-lốt xo-nét bốn chấm năm |
+| **Tên người** | Kamil Myśliwiec | Ca-min Mi-sli-vét |
+| **Câu lệnh terminal** | npm i -g @nestjs/cli | "en-pi-em ai đét-gi, ét-nest-js-CLI" |
+| | nest g resource | "nest giơ re-xốt" |
+| | nest new hello-app | "nest niu hel-lô-app" |
+| **Cụm tiếng Anh dài** | Never stop coding | Ne-vờ xtốp cô-đinh |
 
 #### Quy tắc số
 - **Số port:** Đọc từng chữ số: `20128` → `hai-không-một-hai-tám`
@@ -141,6 +131,11 @@ Các từ sau ĐÃ ĐƯỢC Vbee đọc tốt, KHÔNG cần phiên âm:
 long videos. Every sentence must earn its place. If a point can be made in 1
 sentence instead of 3, use 1. Cut filler, cut repetition, cut flowery
 transitions. Respect the viewer's time above all.
+
+**Straight to the point, no decorative imagery** (user-corrected): Bài nói
+ngắn gọn, xúc tích, dễ hiểu, vào thẳng vấn đề. Tránh hình ảnh tưởng tượng /
+mường tượng không cần thiết — mỗi concept tối đa MỘT metaphor, chỉ khi nó
+thực sự giúp Fresher hiểu; câu nào chỉ để "vẽ cảnh" thì cắt.
 
 Visuals carry ~60–70%. Narration is thoughtful and atmospheric, leaving room for
 screen recordings to breathe.
@@ -188,6 +183,21 @@ project/job) → Growth → Meaning. Keep one person as the protagonist.
 **Concept Explainer variant:** Mystery (what IS this thing?) → Failed intuition
 (the obvious answer is wrong) → History/origin (who invented it, why) → The
 elegant solution (explain it beautifully) → Real-world impact → Meaning.
+
+**Học bằng LLM variant (LLM-assisted learning — dùng cho series hướng dẫn):**
+Vẫn là storytelling nhưng xây quanh 1 project nhỏ có thật. Cấu trúc:
+Nỗi đau học chay (docs dày, tutorial lỗi thời) → Twist: dùng LLM coding agent
+làm "mentor" thay vì "người làm hộ" → Build thật trên màn hình (host gõ code,
+agent explain/generate, host đọc và phản biện) → Khoảnh khắc "à hóa ra"
+(hiểu concept chứ không copy code) → Thành quả chạy được → Bài học cách học.
+QUY TẮC SỐNG CÒN: host PHẢI hiểu và giải thích lại từng đoạn code AI viết —
+"AI viết, mình hiểu" chứ KHÔNG phải "AI viết, mình copy". Kỹ năng đọc và
+phản biện code AI chính là điểm khác biệt của series.
+QUY TẮC VÀNG — AI-DRIVEN DEVELOPMENT WORKFLOW (6 bước, mọi video series):
+(1) Yêu cầu: mô tả mục tiêu + context → (2) AI lên Plan → (3) host Review
+bằng mắt → (4) host Approve → (5) AI Thực hiện code → (6) Kiểm chứng
+(git diff / test / chạy lại app). AI không bao giờ tự ý sửa. Thể hiện rõ
+workflow này trên màn hình trong mọi video series.
 
 ### 3. Voice and technique (mandatory)
 
@@ -362,6 +372,11 @@ Pick and deepen these lanes across multiple videos:
 5. **"Code wars"** — Technology comparisons told as stories, not feature lists
    (React vs Vue as two philosophies of life, SQL vs NoSQL as two ways of
    thinking).
+6. **"Học lập trình bằng LLM"** — Series hướng dẫn framework/công nghệ cho
+   Fresher, trong đó host học và build cùng LLM coding agent (Cursor, Claude
+   Code, Copilot...): prompt hay, đọc code AI, phản biện, verify, không
+   copy-blind. Mỗi video 1 phần của project thật (NestJS, Next.js...).
+   Nhấn mạnh kỹ năng "học cách học" — LLM là mentor, không phải người làm hộ.
 
 ## File output
 
