@@ -24,7 +24,7 @@
 
 Chào mọi người đến với Lập trình là cuộc sống — dạo gần đây mình thấy các khóa học NestJS trên mạng khá cũ, và chưa có tutorial nào thật sự dùng AI để học một framework mới. Vì vậy mình làm series này theo một tinh thần khác: không bắt AI làm hộ, mà biến AI thành mentor cho mình.
 
-Hiện tại có rất nhiều IDE hỗ trợ lập trình bằng AI. Mình chọn Antigravity vì nó free — model Opus chạy ngay trong agent panel, đọc được codebase thật. Series này mình cũng cố gắng hướng dẫn áp dụng AI với chi phí thấp nhất. Cách học của mình: hỏi nhiều hơn gõ. Hai buổi tối, mình vào được NestJS.
+Hiện tại có rất nhiều IDE hỗ trợ lập trình bằng AI. Mình chọn Antigravity vì nó free — model Opus chạy ngay trong agent panel, đọc được codebase thật. Series này mình cũng cố gắng hướng dẫn áp dụng AI với chi phí thấp nhất. Thay vì gõ mù theo tutorial, mình hỏi Opus từng điều chưa hiểu, đọc câu trả lời, chất vấn lại — rồi mới tự tay gõ. Hai buổi tối, mình vào được NestJS.
 
 Nói nhanh NestJS là gì, cho đúng bản chất. Nó là framework backend chạy trên Node. Bên trong vẫn là Express — Nest không thay Express. Nó đóng thêm một lớp kiến trúc lên trên. Express giao cho bạn dây và gỗ. Nest giao bạn ngôi nhà có phòng: ai làm gì, nằm ở đâu, rõ ràng. Đó là lý do công ty dùng nó — không phải vì nhanh, mà vì mười người code chung không giẫm chân nhau.
 
