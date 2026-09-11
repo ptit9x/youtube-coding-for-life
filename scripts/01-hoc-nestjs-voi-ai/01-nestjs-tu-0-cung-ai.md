@@ -22,9 +22,7 @@
 
 ## PART 1 — SCRIPT
 
-Repo công ty, tuần đầu đi làm. Một cây thư mục đầy module, controller, và chữ @ loắt choắt trước mọi class. Bạn không biết dòng nào chạy trước, dòng nào chạy sau.
-
-Khóa học ba tiếng trên YouTube — phút bốn mươi, mắt nheo lại. Tutorial quay hai năm trước, package đã đổi version, lỗi đỏ ngập terminal. Ba đêm, đi được nửa đường.
+Chào mọi người đến với Lập trình là cuộc sống — dạo gần đây mình thấy các khóa học NestJS trên mạng khá cũ, và chưa có tutorial nào thật sự dùng AI để học một framework mới. Vì vậy mình làm series này theo một tinh thần khác: không bắt AI làm hộ, mà biến AI thành mentor cho mình.
 
 Rồi mình nhận ra điều ngược đời: muốn học nhanh, đừng học một mình — nhưng cũng đừng bắt AI làm hộ. Biến nó thành mentor. Mình dùng Opus ngay trong IDE Antigravity, và chạy đúng một quy trình chuẩn sáu bước — AI-Driven Development Workflow. Một: yêu cầu — mô tả mục tiêu kèm context. Hai: AI lên plan. Ba: mình review plan bằng mắt. Bốn: mình approve. Năm: AI mới được thực hiện code. Sáu: kiểm chứng — git diff, test, chạy lại app. AI không bao giờ tự ý sửa. Hai buổi tối, mình vào được NestJS. Bằng cách hỏi nhiều hơn gõ.
 
@@ -70,27 +68,26 @@ Series ba mươi tập này đi từ số 0 tới production thật: validation,
 
 | # | Type | Nội dung quay | Thoại khớp | Thời lượng |
 |---|---|---|---|---|
-| 1 | [B-ROLL] | Phòng tối, màn hình sáng — repo NestJS thật, scroll chậm cây thư mục đầy chữ @ | Cold open | 25s |
-| 2 | [BROWSER] | YouTube khóa học 3h — progress dừng phút 40; [TERM] lỗi đỏ version mismatch | "Ba đêm, nửa đường" | 25s |
-| 3 | [DIAGRAM] | Excalidraw: quy trình 6 bước AI-Driven Development Workflow — Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng (vòng tròn khép kín) | "Quy trình chuẩn 6 bước" | 25s |
-| 4 | [TERM] | `node -v` → `npm i -g @nestjs/cli` → `nest new task-app` (chọn npm) | "Làm thật" | 40s |
-| 5 | [TERM] | `npm run start:dev` → [BROWSER] localhost:3000 Hello World | "Chạy trước đã" | 25s |
-| 5b | [IDE] | Cây file nest new sinh: main.ts, app.module, app.controller, app.service, **file .spec** (zoom), tsconfig — mỗi file hiện caption lý do ngắn góc màn hình | "Vì sao sinh ra như vậy — gốc Angular" | 35s |
-| 6 | [IDE] | main.ts — highlight `NestFactory.create(AppModule)` + `listen(3000)` | Chặng 1: điểm khởi động | 35s |
-| 7 | [IDE] | app.module.ts — mở `imports`, `controllers`, `providers`; [DIAGRAM] cây module AppModule gốc → cành feature | Chặng 2: hộp đựng + cây module | 45s |
-| 8 | [DIAGRAM] | 2 ô so sánh: xếp theo LOẠI (tủ quần áo) vs theo FEATURE (folder tự trọn) — cây thư mục type-based của nest new bên trái | "Tủ quần áo vs folder tự trọn" | 35s |
-| 9 | [IDE] | tasks.controller.ts — highlight @Controller, @Get, @Post; vẽ nhanh bảng routing `GET /tasks → findAll()` | Chặng 3: decorator = nhãn metadata, Nest dựng bảng routing | 55s |
-| 10 | [IDE] | Split controller vs service — controller gõ mỏng, service chứa logic; highlight @Injectable | Chặng 4: lễ tân vs thợ | 35s |
-| 11 | [IDE] | Constructor `private readonly tasksService` — zoom; [DIAGRAM] IoC container: Nest tạo → bảng chứa → tiêm constructor; nhãn singleton | "Câu hỏi hay nhất" — DI | 45s |
-| 12 | [IDE] | Antigravity agent panel (Opus): prompt 1 "giải thích cấu trúc src cho fresher, dùng code thật" → trả lời trỏ đúng file; hỏi "DI là gì?" — flow khớp hình vừa học | "Prompt đầu tiên — kiến thức đóng đinh" | 40s |
-| 13 | [IDE] | Agent prompt 2 — chạy đủ 6 bước trên màn hình: (1) gõ yêu cầu → (2) Opus trình **PLAN** → (3) host đọc plan từng dòng, hỏi 1 chỗ lạ → (4) bấm **APPROVE** → (5) cây thư mục đảo nhà → (6) [TERM] `git diff --stat` đối chiếu plan + `npm run start:dev` vẫn xanh | "Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng" | 55s |
-| 14 | [TERM]+[IDE] | `nest g resource tasks` (chọn REST API) → sinh vào đúng folder feature + dto/; agent giải thích DTO; hỏi "bỏ DTO thì sao?" | "Hợp đồng dữ liệu + chất vấn" | 40s |
-| 14b | [IDE] | Agent prompt 4: "viết SKILL tạo-feature — nói tên feature là sinh chuẩn project này" → file `tao-feature.md` hiện ra, scroll nhanh nội dung (quy trình + cấu trúc mẫu + checklist); demo 1 câu "thêm feature labels" → folder labels sinh ra | "Kiến thức nằm lại trong project" | 40s |
-| 15 | [IDE] | Host gõ tay endpoint `getTaskCount()` (không copy), save, watch reload | "Ranh giới học và copy" | 30s |
-| 16 | [TERM]+[BROWSER] | Postman: POST /tasks → 201 → GET /tasks thấy JSON | "Khoảnh khắc đền đáp" | 35s |
-| 17 | [B-ROLL] | Cà phê, màn hình soi nhẹ; end card subscribe neon + "NestJS #02" teaser | "AI viết, mình hiểu" + CTA | 35s |
+| 1 | [B-ROLL] | Title card series "NestJS #01 — Học framework cùng AI mentor" trên nền màn hình tối; lướt nhanh 2-3 thumbnail khóa học NestJS cũ trên YouTube | Lời chào + lý do series | 20s |
+| 2 | [DIAGRAM] | Excalidraw: quy trình 6 bước AI-Driven Development Workflow — Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng (vòng tròn khép kín) | "Quy trình chuẩn 6 bước" | 25s |
+| 3 | [TERM] | `node -v` → `npm i -g @nestjs/cli` → `nest new task-app` (chọn npm) | "Làm thật" | 40s |
+| 4 | [TERM] | `npm run start:dev` → [BROWSER] localhost:3000 Hello World | "Chạy trước đã" | 25s |
+| 4b | [IDE] | Cây file nest new sinh: main.ts, app.module, app.controller, app.service, **file .spec** (zoom), tsconfig — mỗi file hiện caption lý do ngắn góc màn hình | "Vì sao sinh ra như vậy — gốc Angular" | 35s |
+| 5 | [IDE] | main.ts — highlight `NestFactory.create(AppModule)` + `listen(3000)` | Chặng 1: điểm khởi động | 35s |
+| 6 | [IDE] | app.module.ts — mở `imports`, `controllers`, `providers`; [DIAGRAM] cây module AppModule gốc → cành feature | Chặng 2: hộp đựng + cây module | 45s |
+| 7 | [DIAGRAM] | 2 ô so sánh: xếp theo LOẠI (tủ quần áo) vs theo FEATURE (folder tự trọn) — cây thư mục type-based của nest new bên trái | "Tủ quần áo vs folder tự trọn" | 35s |
+| 8 | [IDE] | tasks.controller.ts — highlight @Controller, @Get, @Post; vẽ nhanh bảng routing `GET /tasks → findAll()` | Chặng 3: decorator = nhãn metadata, Nest dựng bảng routing | 55s |
+| 9 | [IDE] | Split controller vs service — controller gõ mỏng, service chứa logic; highlight @Injectable | Chặng 4: lễ tân vs thợ | 35s |
+| 10 | [IDE] | Constructor `private readonly tasksService` — zoom; [DIAGRAM] IoC container: Nest tạo → bảng chứa → tiêm constructor; nhãn singleton | "Câu hỏi hay nhất" — DI | 45s |
+| 11 | [IDE] | Antigravity agent panel (Opus): prompt 1 "giải thích cấu trúc src cho fresher, dùng code thật" → trả lời trỏ đúng file; hỏi "DI là gì?" — flow khớp hình vừa học | "Prompt đầu tiên — kiến thức đóng đinh" | 40s |
+| 12 | [IDE] | Agent prompt 2 — chạy đủ 6 bước trên màn hình: (1) gõ yêu cầu → (2) Opus trình **PLAN** → (3) host đọc plan từng dòng, hỏi 1 chỗ lạ → (4) bấm **APPROVE** → (5) cây thư mục đảo nhà → (6) [TERM] `git diff --stat` đối chiếu plan + `npm run start:dev` vẫn xanh | "Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng" | 55s |
+| 13 | [TERM]+[IDE] | `nest g resource tasks` (chọn REST API) → sinh vào đúng folder feature + dto/; agent giải thích DTO; hỏi "bỏ DTO thì sao?" | "Hợp đồng dữ liệu + chất vấn" | 40s |
+| 13b | [IDE] | Agent prompt 4: "viết SKILL tạo-feature — nói tên feature là sinh chuẩn project này" → file `tao-feature.md` hiện ra, scroll nhanh nội dung (quy trình + cấu trúc mẫu + checklist); demo 1 câu "thêm feature labels" → folder labels sinh ra | "Kiến thức nằm lại trong project" | 40s |
+| 14 | [IDE] | Host gõ tay endpoint `getTaskCount()` (không copy), save, watch reload | "Ranh giới học và copy" | 30s |
+| 15 | [TERM]+[BROWSER] | Postman: POST /tasks → 201 → GET /tasks thấy JSON | "Khoảnh khắc đền đáp" | 35s |
+| 16 | [B-ROLL] | Cà phê, màn hình soi nhẹ; end card subscribe neon + "NestJS #02" teaser | "AI viết, mình hiểu" + CTA | 35s |
 
-**Tổng: ~600s ≈ 10:00.** Batch: cảnh 1+17 quay chung buổi B-roll; cảnh 4+5 idempotent (xóa folder chạy lại được); cảnh 12–14 là agent panel — quay thật, giữ nguyên câu hỏi lẫn câu trả lời, đừng edit đẹp.
+**Tổng: ~570s ≈ 9:30.** Batch: cảnh 1+16 quay chung buổi B-roll; cảnh 3+4 idempotent (xóa folder chạy lại được); cảnh 11–13 là agent panel — quay thật, giữ nguyên câu hỏi lẫn câu trả lời, đừng edit đẹp.
 
 **Code chuẩn bị trước:**
 ```bash
@@ -123,7 +120,7 @@ whenever I ask for a new feature, you scaffold it consistently:
 - Include a completion checklist (compiles, app boots, CRUD responds)
 Save it in the project so future sessions can reuse it.
 ```
-Endpoint tự gõ (cảnh 15):
+Endpoint tự gõ (cảnh 14):
 ```typescript
 // tasks.controller.ts
 @Get('count')
@@ -177,20 +174,20 @@ NestJS docs: https://docs.nestjs.com/
 Series plan 30 tập: https://github.com/ptit9x/youtube-coding-for-life
 
 ⏱ Timestamps:
-0:00 Cold open — repo công ty lạ hoắc
-0:50 Twist: AI mentor, không phải AI làm hộ
-1:30 NestJS là gì — ngôi nhà có phòng
-2:05 Cài CLI + nest new + Hello World
-2:45 Chặng 1: main.ts — điểm khởi động app
-3:15 Chặng 2: AppModule — cây module + feature-based là gì
-4:30 Chặng 3: Decorator — bóc trần ma thuật
-5:35 Chặng 4: Controller vs Service — lễ tân và thợ
-6:15 Dependency Injection + IoC container
-6:55 Opus: prompt 1 giải thích project thật
-7:30 Prompt 2: AI restructure feature-based + git diff
-8:10 Prompt 3: nest g resource + DTO + chất vấn
-9:00 Tự gõ endpoint + Postman 201
-9:30 AI viết, mình hiểu + series 30 tập
+0:00 Lời chào + lý do làm series
+0:20 Twist: biến AI thành mentor, không phải AI làm hộ
+1:00 NestJS là gì — ngôi nhà có phòng
+1:35 Cài CLI + nest new + Hello World
+2:15 Chặng 1: main.ts — điểm khởi động app
+2:45 Chặng 2: AppModule — cây module + feature-based là gì
+4:00 Chặng 3: Decorator — bóc trần ma thuật
+5:05 Chặng 4: Controller vs Service — lễ tân và thợ
+5:45 Dependency Injection + IoC container
+6:25 Opus: prompt 1 giải thích project thật
+7:00 Prompt 2: AI restructure feature-based + git diff
+7:40 Prompt 3: nest g resource + DTO + chất vấn
+8:30 Tự gõ endpoint + Postman 201
+9:00 AI viết, mình hiểu + series 30 tập
 
 #NestJS #HocNestJS #Opus #Antigravity #AIMentor #FeatureBased #Fresher #Backend #TypeScript #NodeJS #DependencyInjection #LapTrinhLaCuocSong #DevVietNam
 ```
