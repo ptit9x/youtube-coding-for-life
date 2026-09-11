@@ -24,7 +24,7 @@
 
 Chào mọi người đến với Lập trình là cuộc sống — dạo gần đây mình thấy các khóa học NestJS trên mạng khá cũ, và chưa có tutorial nào thật sự dùng AI để học một framework mới. Vì vậy mình làm series này theo một tinh thần khác: không bắt AI làm hộ, mà biến AI thành mentor cho mình.
 
-Hiện tại có rất nhiều IDE hỗ trợ lập trình bằng AI. Mình chọn Antigravity vì nó free — model Opus chạy ngay trong agent panel, đọc được codebase thật. Series này mình cũng cố gắng hướng dẫn áp dụng AI với chi phí thấp nhất. Thay vì gõ mù theo tutorial, mình hỏi Opus từng điều chưa hiểu, đọc câu trả lời, chất vấn lại — rồi mới tự tay gõ. Hai buổi tối, mình vào được NestJS.
+Hiện tại có rất nhiều IDE hỗ trợ lập trình bằng AI. Mình chọn Antigravity vì nó free — model Opus chạy ngay trong agent panel, đọc được codebase thật. Series này mình cố gắng hướng dẫn áp dụng AI với chi phí thấp nhất. Hai lưu ý nhỏ trước khi bắt đầu. Một: trong video mình prompt bằng tiếng Việt cho dễ demo — nhưng bạn nên dùng tiếng Anh, vì tiết kiệm chi phí AI hơn. Hai: với sự phát triển của AI, Antigravity và nhiều IDE khác đang chuyển sang giao diện kiểu Antigravity 2.0. Tuy nhiên với mình, IDE truyền thống vẫn là bạn đồng hành của developer — đọc và thao tác với nhiều file vẫn tiện hơn. Nên series này mình tập trung thao tác trên Antigravity 1.0.
 
 Nói nhanh NestJS là gì, cho đúng bản chất. Nó là framework backend chạy trên Node. Bên trong vẫn là Express — Nest không thay Express. Nó đóng thêm một lớp kiến trúc lên trên. Express giao cho bạn dây và gỗ. Nest giao bạn ngôi nhà có phòng: ai làm gì, nằm ở đâu, rõ ràng. Đó là lý do công ty dùng nó — không phải vì nhanh, mà vì mười người code chung không giẫm chân nhau.
 
@@ -70,7 +70,7 @@ Series ba mươi tập này đi từ số 0 tới production thật: validation,
 
 | # | Type | Nội dung quay | Thoại khớp | Thời lượng |
 |---|---|---|---|---|
-| 1 | [B-ROLL] | Title card series "NestJS #01 — Học framework cùng AI mentor" trên nền màn hình tối; lướt nhanh 2-3 thumbnail khóa học NestJS cũ trên YouTube | Lời chào + lý do series | 20s |
+| 1 | [B-ROLL] | Title card series "NestJS #01 — Học framework cùng AI mentor" trên nền màn hình tối; lướt nhanh 2-3 thumbnail khóa học NestJS cũ trên YouTube | Lời chào + lý do series + 2 lưu ý (prompt tiếng Việt, Antigravity 1.0) | 45s |
 | 2 | [TERM] | `node -v` → `npm i -g @nestjs/cli` → `nest new task-app` (chọn npm) | "Làm thật" | 40s |
 | 3 | [TERM] | `npm run start:dev` → [BROWSER] localhost:3000 Hello World | "Chạy trước đã" | 25s |
 | 4 | [DIAGRAM] | Excalidraw: quy trình 6 bước AI-Driven Development Workflow — Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng (vòng tròn khép kín) | "Quy trình chuẩn 6 bước" | 25s |
@@ -89,7 +89,7 @@ Series ba mươi tập này đi từ số 0 tới production thật: validation,
 | 17 | [TERM]+[BROWSER] | Postman: POST /tasks → 201 → GET /tasks thấy JSON | "Khoảnh khắc đền đáp" | 35s |
 | 18 | [B-ROLL] | Cà phê, màn hình soi nhẹ; end card subscribe neon + "NestJS #02" teaser | "AI viết, mình hiểu" + CTA | 35s |
 
-**Tổng: ~670s ≈ 11:10.** Batch: cảnh 1+18 quay chung buổi B-roll; cảnh 2+3 idempotent (xóa folder chạy lại được); cảnh 12–15 là agent panel — quay thật, giữ nguyên câu hỏi lẫn câu trả lời, đừng edit đẹp.
+**Tổng: ~695s ≈ 11:35.** Batch: cảnh 1+18 quay chung buổi B-roll; cảnh 2+3 idempotent (xóa folder chạy lại được); cảnh 12–15 là agent panel — quay thật, giữ nguyên câu hỏi lẫn câu trả lời, đừng edit đẹp.
 
 **Code chuẩn bị trước:**
 ```bash
@@ -177,21 +177,21 @@ Series plan 30 tập: https://github.com/ptit9x/youtube-coding-for-life
 
 ⏱ Timestamps:
 0:00 Lời chào + lý do làm series — AI mentor, không phải AI làm hộ
-0:35 NestJS là gì — lớp kiến trúc trên Express
-1:15 Cài NestJS CLI + nest new + Hello World
-1:45 AI-Driven Development Workflow — quy trình 6 bước
-2:15 Vì sao nest new sinh ra đúng những file này
-2:50 Chặng 1: main.ts — điểm khởi động app
-3:25 Chặng 2: AppModule — cây module + feature-based là gì
-4:35 Chặng 3: Decorator — bóc trần ma thuật
-5:35 Chặng 4: Controller vs Service — lễ tân và thợ
-6:10 Dependency Injection + IoC container
-6:55 Prompt 1: Opus giải thích project thật
-7:35 Prompt 2: restructure feature-based — 6 bước thật + git diff
-8:30 Prompt 3: nest g resource + DTO + chất vấn
-9:10 Prompt 4: SKILL tạo-feature — kiến thức nằm lại trong project
-9:50 Tự gõ endpoint + Postman 201
-10:20 AI viết, mình hiểu + series 30 tập
+1:00 NestJS là gì — lớp kiến trúc trên Express
+1:40 Cài NestJS CLI + nest new + Hello World
+2:10 AI-Driven Development Workflow — quy trình 6 bước
+2:40 Vì sao nest new sinh ra đúng những file này
+3:15 Chặng 1: main.ts — điểm khởi động app
+3:50 Chặng 2: AppModule — cây module + feature-based là gì
+5:00 Chặng 3: Decorator — bóc trần ma thuật
+6:00 Chặng 4: Controller vs Service — lễ tân và thợ
+6:35 Dependency Injection + IoC container
+7:20 Prompt 1: Opus giải thích project thật
+8:00 Prompt 2: restructure feature-based — 6 bước thật + git diff
+8:55 Prompt 3: nest g resource + DTO + chất vấn
+9:35 Prompt 4: SKILL tạo-feature — kiến thức nằm lại trong project
+10:15 Tự gõ endpoint + Postman 201
+10:45 AI viết, mình hiểu + series 30 tập
 
 #NestJS #HocNestJS #Opus #Antigravity #AIMentor #FeatureBased #Fresher #Backend #TypeScript #NodeJS #DependencyInjection #LapTrinhLaCuocSong #DevVietNam
 ```
