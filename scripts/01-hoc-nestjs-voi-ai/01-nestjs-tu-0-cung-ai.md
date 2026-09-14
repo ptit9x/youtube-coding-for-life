@@ -19,7 +19,7 @@ Mình từng học framework bằng cách mở tutorial rồi gõ theo. Code ch�
 
 NestJS là framework backend chạy trên Node.js. Mặc định, nó dùng Express ở bên dưới; bạn cũng có thể đổi sang Fastify. Phần Nest thêm vào là kiến trúc: module gom tính năng, controller nhận request, còn service xử lý logic. Nó giống một bản sơ đồ điện được dán sẵn lên căn nhà. Khi nhiều người cùng sửa, ai cũng biết dây nào đi về đâu.
 
-Bắt đầu từ terminal. Gõ `node -v`. Với Nest CLI hiện tại, cách an toàn nhất là dùng bản Node Active LTS mới nhất. Máy mình đang dùng phiên bản hiện trên màn hình. Tiếp theo, cài CLI bằng `npm i -g @nestjs/cli`, rồi chạy `nest new taskflow-api`.
+Bắt đầu từ terminal. Gõ `node -v`. Với Nest CLI hiện tại, cách an toàn nhất là dùng bản Node Active LTS mới nhất. Máy mình đang dùng phiên bản hiện trên màn hình. Tiếp theo, cài CLI bằng `npm i -g @nestjs/cli`, rồi chạy `nest new nestjs-base-with-ai`.
 
 CLI hỏi package manager. Nest CLI 12 sinh sẵn ESM, `"type": "module"`, không cần chọn gì thêm. Hai lựa chọn này không thay đổi những khái niệm Nest mà ta sắp học. Cài xong, vào thư mục project và chạy `npm run start:dev`. Browser mở `localhost:3000`. Dòng Hello World xuất hiện.
 
@@ -71,7 +71,7 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 |---|---|---|---|---|
 | 1 | [B-ROLL]+[IDE] | Repo NestJS thật; mở nhanh cây `src`, dừng ở các decorator và constructor | Cold open: repo chạy nhưng không biết request đi đâu | 30s |
 | 2 | [DIAGRAM] | Một lớp Nest nằm trên Express/Fastify; bên phải là Module → Controller → Service | NestJS là gì và giá trị kiến trúc | 35s |
-| 3 | [TERM] | `node -v`, cài CLI, `nest new taskflow-api`; chọn npm; từ chối observability nếu CLI hỏi | Setup bằng phiên bản hiện hành | 40s |
+| 3 | [TERM] | `node -v`, cài CLI, `nest new nestjs-base-with-ai`; chọn npm; từ chối observability nếu CLI hỏi | Setup bằng phiên bản hiện hành | 40s |
 | 4 | [TERM]+[BROWSER] | `npm run start:dev` → `localhost:3000` → Hello World | Chạy trước khi sửa | 25s |
 | 5 | [DIAGRAM] | Vòng sáu bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng | Workflow AI của series | 40s |
 | 6 | [IDE] | `main.ts`; highlight `NestFactory.create(AppModule)` và `listen` | Chặng 1: bootstrap | 45s |
@@ -93,10 +93,10 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 ```bash
 node -v
 npm i -g @nestjs/cli
-nest new taskflow-api
+nest new nestjs-base-with-ai
 # Chọn npm. CLI 12 không hỏi module type — sinh sẵn ESM "type": "module".
 # Nếu CLI hỏi observability (@nestjs/observe), chọn No để giữ project tối giản.
-cd taskflow-api
+cd nestjs-base-with-ai
 npm run start:dev
 nest g resource modules/users --no-spec
 # Chọn REST API, CRUD entry points: Yes
@@ -291,3 +291,80 @@ nestjs, học nestjs, nestjs tiếng việt, nestjs cho người mới, nestjs t
 ### Thumbnail đã tạo
 
 ![Thumbnail NestJS EP01 — NestJS từ số 0 cùng AI](./thumbnail-01-hoc-nestjs-cung-ai.png)
+
+---
+
+## PART 6 — DIAGRAMS (MERMAID)
+
+Dưới đây là các sơ đồ (diagram) bằng Mermaid được trích xuất từ Shot List. Bạn có thể copy mã này vào các công cụ render (như Obsidian, Notion, hoặc [Mermaid Live Editor](https://mermaid.live/)) để xuất ra ảnh (PNG/SVG) chèn vào video cho phần minh hoạ.
+
+### Shot 2: Kiến trúc NestJS cơ bản
+
+```mermaid
+graph LR
+    subgraph Core
+        Nest[NestJS Layer]
+        Under[Express / Fastify]
+        Nest --> Under
+    end
+    
+    subgraph Architecture
+        Module[Module] --> Controller[Controller]
+        Controller --> Service[Service]
+    end
+    
+    Core -.-> Architecture
+```
+
+### Shot 5: Workflow AI 6 bước
+
+```mermaid
+graph LR
+    1([1. Yêu cầu]) --> 2([2. Plan])
+    2 --> 3([3. Review])
+    3 --> 4([4. Approve])
+    4 --> 5([5. Thực hiện])
+    5 --> 6([6. Kiểm chứng])
+    
+    style 1 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+    style 2 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+    style 3 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+    style 4 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+    style 5 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+    style 6 fill:#2b2b2b,stroke:#e0234e,stroke-width:2px,color:#fff
+```
+
+### Shot 7: Cấu trúc thư mục chuẩn
+
+```mermaid
+graph TD
+    src[src/] --> modules[modules/]
+    src --> common[common/]
+    src --> config[config/]
+    src --> database[database/]
+    
+    modules --> users[users/]
+    
+    style modules fill:#e0234e,stroke:#fff,color:#fff
+```
+
+### Shot 9: IoC Container & Dependency Injection
+
+```mermaid
+graph TD
+    IoC[IoC Container]
+    
+    subgraph Providers
+        AppService[AppService]
+    end
+    
+    subgraph Controllers
+        AppController[AppController]
+    end
+    
+    IoC -- "1. Khởi tạo & giữ" --> AppService
+    IoC -- "2. Tiêm (Inject) qua constructor" --> AppController
+    AppController -. "Sử dụng" .-> AppService
+    
+    style IoC fill:#e0234e,stroke:#fff,color:#fff
+```

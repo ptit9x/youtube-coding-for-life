@@ -4,7 +4,7 @@
 - **Gồm:** Short 07, 08 và 09
 - **Khung hình:** 9:16, 1080×1920, 30fps
 - **Thời lượng mục tiêu:** 42–52 giây/Short
-- **Project quay:** `taskflow-api` sau EP01, Users API dùng mảng in-memory
+- **Project quay:** `nestjs-base-with-ai` sau EP01, Users API dùng mảng in-memory
 - **Visual:** One Dark Pro, JetBrains Mono 24–28px, NestJS red `#E0234E`
 - **Thông điệp:** AI viết, mình hiểu; AI đề xuất, mình kiểm chứng.
 

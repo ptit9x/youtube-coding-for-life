@@ -3,7 +3,7 @@
 - **Series:** Học NestJS bằng AI — tập 2/46
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; giữ workflow Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng.
-- **Technical baseline:** Tiếp tục project `taskflow-api` từ EP01; Users API đang lưu dữ liệu trong RAM.
+- **Technical baseline:** Tiếp tục project `nestjs-base-with-ai` từ EP01; Users API đang lưu dữ liệu trong RAM.
 - **Target runtime:** ~11:55
 - **Audience:** Dev mới vào nghề / Fresher đã xem EP01 hoặc biết controller/service cơ bản.
 - **Outcome chính:** Mọi payload đi vào Users API được kiểm tra trước controller bằng global ValidationPipe.
@@ -88,7 +88,7 @@ Nếu bạn muốn thấy user sống sót sau một lần restart, gặp lại 
 ### Command chuẩn bị
 
 ```bash
-cd taskflow-api
+cd nestjs-base-with-ai
 npm i class-validator class-transformer
 npm run start:dev
 npm run build

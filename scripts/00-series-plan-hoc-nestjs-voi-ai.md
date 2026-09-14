@@ -245,9 +245,9 @@ Definition of done cho từng script migrated:
 - Thành quả: user chỉ thao tác task được phép và thuộc phạm vi của mình. → **pain: nhiều nhánh auth/permission/ownership quá, thử tay không còn đáng tin.**
 - File: `11-tasksmodule-nestjs/11-tasksmodule-rbac-ownership.md`
 
-### EP 12 — Testing phân quyền bằng Jest và Supertest ⚠️ script cần cập nhật Prisma 8
+### EP 12 — Testing phân quyền bằng Vitest và Supertest ⚠️ script cần cập nhật Prisma 8 + đổi Jest sang Vitest
 - ← pain: EP11 thay guard hoặc ownership rule là phải thử tay hàng loạt tài khoản và route.
-- Học: Jest unit test service/guard với mock, e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì.
+- Học: Vitest unit test service/guard với mock (Nest CLI 12 scaffold sẵn vitest 4, `globals: true` — API tương thích Jest), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì.
 - Ma trận bắt buộc: user không role; nhiều role; permission trùng qua hai role; revoke role; revoke permission; thiếu permission; ownership sai; direct ALLOW/DENY nếu bật override.
 - AI moment: AI sinh test chỉ assert status chung chung → host mutation nhỏ vào guard để chứng minh test vẫn xanh, rồi viết lại assertion có giá trị.
 - Thành quả: `test` và `test:e2e` bảo vệ luồng auth/RBAC/ownership. → **pain: duplication giữa ba feature bắt đầu rõ, rất dễ refactor quá tay.**
