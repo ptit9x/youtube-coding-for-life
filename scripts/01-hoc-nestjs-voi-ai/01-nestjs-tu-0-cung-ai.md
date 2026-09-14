@@ -3,7 +3,7 @@
 - **Series:** Học NestJS bằng AI — tập 1/46
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; có thể thay bằng coding agent khác nhưng giữ nguyên workflow.
-- **Technical baseline:** NestJS 12, Node.js Active LTS tương thích Nest CLI, npm, CommonJS.
+- **Technical baseline:** NestJS 12, Node.js 24 Active LTS, npm, ESM (Nest CLI 12 sinh sẵn `"type": "module"`).
 - **Target runtime:** ~11:15 (khung phù hợp: 10–12 phút)
 - **Audience:** Dev mới vào nghề / Fresher — lần đầu chạm backend framework.
 - **Outcome chính:** Hiểu đường đi của một request và chạy được Users API trong `src/modules/users` bằng mảng in-memory.
@@ -21,7 +21,7 @@ NestJS là framework backend chạy trên Node.js. Mặc định, nó dùng Expr
 
 Bắt đầu từ terminal. Gõ `node -v`. Với Nest CLI hiện tại, cách an toàn nhất là dùng bản Node Active LTS mới nhất. Máy mình đang dùng phiên bản hiện trên màn hình. Tiếp theo, cài CLI bằng `npm i -g @nestjs/cli`, rồi chạy `nest new taskflow-api`.
 
-CLI hỏi package manager và kiểu module. Mình chọn npm và CommonJS để tập đầu ít nhiễu hơn. Hai lựa chọn này không thay đổi những khái niệm Nest mà ta sắp học. Cài xong, vào thư mục project và chạy `npm run start:dev`. Browser mở `localhost:3000`. Dòng Hello World xuất hiện.
+CLI hỏi package manager. Nest CLI 12 sinh sẵn ESM, `"type": "module"`, không cần chọn gì thêm. Hai lựa chọn này không thay đổi những khái niệm Nest mà ta sắp học. Cài xong, vào thư mục project và chạy `npm run start:dev`. Browser mở `localhost:3000`. Dòng Hello World xuất hiện.
 
 Trước khi thêm code, đây là workflow dùng AI xuyên suốt series. Mình đưa yêu cầu và context. AI chỉ trình plan, chưa được sửa file. Mình đọc, chất vấn và approve. Sau đó AI mới thực hiện. Cuối cùng, mình xem git diff, chạy test và gọi API thật. Sáu bước: yêu cầu, plan, review, approve, thực hiện, kiểm chứng.
 
@@ -71,7 +71,7 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 |---|---|---|---|---|
 | 1 | [B-ROLL]+[IDE] | Repo NestJS thật; mở nhanh cây `src`, dừng ở các decorator và constructor | Cold open: repo chạy nhưng không biết request đi đâu | 30s |
 | 2 | [DIAGRAM] | Một lớp Nest nằm trên Express/Fastify; bên phải là Module → Controller → Service | NestJS là gì và giá trị kiến trúc | 35s |
-| 3 | [TERM] | `node -v`, cài CLI, `nest new taskflow-api`; chọn npm + CommonJS | Setup bằng phiên bản hiện hành | 40s |
+| 3 | [TERM] | `node -v`, cài CLI, `nest new taskflow-api`; chọn npm; từ chối observability nếu CLI hỏi | Setup bằng phiên bản hiện hành | 40s |
 | 4 | [TERM]+[BROWSER] | `npm run start:dev` → `localhost:3000` → Hello World | Chạy trước khi sửa | 25s |
 | 5 | [DIAGRAM] | Vòng sáu bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng | Workflow AI của series | 40s |
 | 6 | [IDE] | `main.ts`; highlight `NestFactory.create(AppModule)` và `listen` | Chặng 1: bootstrap | 45s |
@@ -94,7 +94,8 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 node -v
 npm i -g @nestjs/cli
 nest new taskflow-api
-# Chọn npm, CommonJS
+# Chọn npm. CLI 12 không hỏi module type — sinh sẵn ESM "type": "module".
+# Nếu CLI hỏi observability (@nestjs/observe), chọn No để giữ project tối giản.
 cd taskflow-api
 npm run start:dev
 nest g resource modules/users --no-spec
