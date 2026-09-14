@@ -47,7 +47,7 @@ Database schema là cấu trúc thật đang tồn tại trong PostgreSQL.
 
 Hai khái niệm này gần nhau, nhưng không phải một.
 
-Mình chỉ khai báo model User. ID là UUID, email unique, cùng thời điểm tạo và cập nhật.
+Mình chỉ khai báo model User. ID là UUID, email unique, cùng thời điểm tạo và cập nhật. Với Prisma 8, timestamp cập nhật dùng `temporal.updatedAt()`.
 
 Không có Role, Permission hay Task trong tập này. Một migration nhỏ luôn dễ review hơn một migration chứa cả tương lai.
 
@@ -109,7 +109,7 @@ Mình mở git diff.
 
 Đây là bằng chứng cho dependency direction, không phải một sơ đồ đẹp để ngắm.
 
-Mình chạy migration check, rồi apply migration vào PostgreSQL.
+Mình chạy migration check, rồi apply migration vào PostgreSQL với `--advance-ref db` để lần plan tiếp theo bắt đầu từ đúng trạng thái vừa áp dụng.
 
 Cuối cùng, `prisma db verify` xác nhận database thật đang khớp với contract đã emit.
 
@@ -153,7 +153,7 @@ Theo dõi series nếu bạn muốn nhìn lỗi 500 này được bóc tách đ�
 | 12 | [IDE] | Review contract, DI tokens và lifecycle provider trước khi approve | 70s |
 | 13 | [IDE] | Agent implement adapter bằng `db.orm.public.User` | 70s |
 | 14 | [IDE] | Host tự gõ `findByEmail`; kiểm tra git diff và import boundary | 55s |
-| 15 | [TERM] | `migration check`, `db migrate`, `db verify`, build và test | 65s |
+| 15 | [TERM] | `migration check`, `db migrate --advance-ref db`, `db verify`, build và test | 65s |
 | 16 | [BROWSER] | POST, GET, restart app, GET lại vẫn có dữ liệu | 60s |
 | 17 | [BROWSER]+[TERM] | POST email trùng → 500 và Prisma 8 structured error | 40s |
 | 18 | [B-ROLL] | Desk tối, freeze error code, teaser EP04 | 20s |
@@ -190,6 +190,7 @@ Trong ngày quay, thay hai placeholder bằng exact versions hiển thị trên 
 npx prisma@<PRISMA_CLI_VERSION> orm init --yes --target postgres --authoring psl
 npm install --save-dev --save-exact prisma@<PRISMA_CLI_VERSION>
 npm install --save-exact @prisma/orm-postgres@<POSTGRES_RUNTIME_VERSION>
+npm install --save-exact temporal-polyfill
 npx prisma skills sync
 ```
 
@@ -199,7 +200,7 @@ Sau khi điền `DATABASE_URL` và model User:
 npx prisma contract emit
 npx prisma migration plan --name create_users
 npx prisma migration check
-npx prisma db migrate
+npx prisma db migrate --advance-ref db
 npx prisma db verify
 npm run build
 npm run test
@@ -248,7 +249,7 @@ model User {
   name      String
   email     String   @unique
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt temporal.updatedAt()
 
   @@map("users")
 }
@@ -263,8 +264,8 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Temporal.Instant;
+  updatedAt: Temporal.Instant;
 };
 
 export type CreateUserData = Pick<User, 'name' | 'email'>;
@@ -283,7 +284,13 @@ export interface UsersRepository {
 
 ### Prisma provider và lifecycle
 
-`src/prisma/db.ts` do Prisma 8 scaffold tạo. Nest chỉ bọc database facade bằng explicit token.
+`src/prisma/db.ts` do Prisma 8 scaffold tạo. Vì baseline dùng Node 24, thêm polyfill theo hướng dẫn Prisma 8 ở đầu file này:
+
+```typescript
+import 'temporal-polyfill/full/global';
+```
+
+Nest chỉ bọc database facade bằng explicit token.
 
 ```typescript
 import {
@@ -394,7 +401,7 @@ Constraints:
 - UsersService must depend on a UsersRepository contract.
 - PrismaUsersRepository receives the Prisma 8 db facade through an explicit DI token.
 - Use db.orm.public.User, not PrismaClient or @prisma/client.
-- Use contract emit, migration plan, migration check, db migrate and db verify.
+- Use contract emit, migration plan, migration check, db migrate --advance-ref db and db verify.
 - Do not use schema.prisma, prisma generate, migrate dev, migrate deploy, P2002 or $transaction.
 - Do not create Tasks, Roles or Permissions yet.
 - Keep the existing DTO validation behavior.
@@ -411,6 +418,7 @@ Constraints:
 - [ ] Adapter là nơi duy nhất gọi `db.orm`.
 - [ ] Migration plan chưa apply trước khi host review.
 - [ ] `contract.json`, `contract.d.ts`, migration package và lockfile xuất hiện trong diff.
+- [ ] Node 24 đã nạp `temporal-polyfill/full/global`; timestamp trong code là `Temporal.Instant`.
 - [ ] Database URL không xuất hiện trong diff hoặc log công khai.
 
 ---
@@ -516,9 +524,10 @@ Mọi option dùng ảnh tham chiếu `../01-hoc-nestjs-voi-ai/thumbnail-01-hoc-
 | Runtime tối thiểu, trạng thái RC/GA và feature chưa hỗ trợ | [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status) |
 | `schema.prisma` → `contract.prisma`; `generate` → `contract emit`; migration command mới | [Coming from Prisma ORM 7](https://www.prisma.io/docs/orm/coming-from-prisma-orm-7) |
 | Ý nghĩa contract, emitted JSON/types và database schema | [The Prisma 8 data contract](https://www.prisma.io/docs/orm/contract-authoring/the-data-contract), [contract artifacts](https://www.prisma.io/docs/orm/contract-authoring/the-contract-artifact) |
-| Cú pháp PSL cho UUID, unique, default và mapping table | [Prisma 8 PSL syntax](https://www.prisma.io/docs/orm/contract-authoring/psl-syntax) |
+| Cú pháp PSL cho UUID, unique, default, `temporal.updatedAt()` và mapping table | [Prisma 8 PSL syntax](https://www.prisma.io/docs/orm/contract-authoring/psl-syntax), [Coming from Prisma ORM 7](https://www.prisma.io/docs/orm/coming-from-prisma-orm-7) |
 | `.create`, `.where`, `.first`, `.all`, không có wrapper `data` | [Writing data](https://www.prisma.io/docs/orm/fundamentals/writing-data), [Reading data](https://www.prisma.io/docs/orm/fundamentals/reading-data) |
-| Plan → review → apply migration và `db verify` | [How migrations work](https://www.prisma.io/docs/orm/migrations/how-migrations-work), [Applying a migration](https://www.prisma.io/docs/orm/migrations/applying-a-migration) |
+| Plan → review → `db migrate --advance-ref db` → `db verify` | [How migrations work](https://www.prisma.io/docs/orm/migrations/how-migrations-work), [Applying a migration](https://www.prisma.io/docs/orm/migrations/applying-a-migration) |
+| Node 24 cần Temporal polyfill; `DateTime` trả về `Temporal.Instant` | [Coming from Prisma ORM 7](https://www.prisma.io/docs/orm/coming-from-prisma-orm-7) |
 | Một database facade dùng lâu dài và chỉ close khi shutdown | [Transactions and runtime reference](https://www.prisma.io/docs/orm/reference/transactions-and-runtime) |
 | Prisma 8 structured error thay cho `P2002`/`instanceof` cũ | [Prisma 8 error reference](https://www.prisma.io/docs/orm/reference/error-reference) |
 | Nest provider, custom token và lifecycle hooks | [NestJS Custom Providers](https://docs.nestjs.com/fundamentals/custom-providers), [Lifecycle events](https://docs.nestjs.com/fundamentals/lifecycle-events) |

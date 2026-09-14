@@ -90,6 +90,8 @@ Nếu chỉ đủ sức làm hai Shorts mỗi tuần, giữ **Pain Short** và *
 
 ### Tuần 1 — EP01: Users API đầu tiên
 
+Kịch bản hoàn chỉnh: [Shorts 07–09 — Users API đầu tiên](./shorts/week-01/07-09-users-api-dau-tien.md)
+
 | # | Hook/tiêu đề Short | Bằng chứng trên màn hình | Dẫn đến |
 |---|---|---|---|
 | 07 | **Module, Controller, Service: đừng học thuộc** | Trace một request duy nhất qua ba file | EP01 |
@@ -252,7 +254,7 @@ Quy tắc phiên bản:
 | 15, 16, 17 | [Prisma 8 Error Reference](https://www.prisma.io/docs/orm/reference/error-reference), [NestJS Exception Filters](https://docs.nestjs.com/exception-filters), [RFC 9110 status codes](https://www.rfc-editor.org/rfc/rfc9110.html#name-status-codes) | Map structured database error sang HTTP response; không dùng `P2002` của Prisma 7 |
 | 18 | [NestJS Exception Filters](https://docs.nestjs.com/exception-filters), [OWASP Error Handling](https://cheatsheetseries.owasp.org/cheatsheets/Error_Handling_Cheat_Sheet.html) | Liệt kê failure path và không lộ chi tiết nội bộ |
 | 19 | [OWASP Password Storage](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html) | Password phải hash, không encrypt/plaintext; Argon2id được ưu tiên cho hệ thống mới |
-| 20 | [RFC 7519: JWT](https://www.rfc-editor.org/rfc/rfc7519.html), [OWASP JWT for Java](https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_for_Java_Cheat_Sheet.html) | JWT payload có thể decode; chữ ký không phải encryption |
+| 20 | [RFC 7519: JWT](https://www.rfc-editor.org/rfc/rfc7519.html), [OWASP JSON Web Token](https://cheatsheetseries.owasp.org/cheatsheets/JSON_Web_Token_Cheat_Sheet.html) | JWT payload có thể decode; chữ ký không phải encryption |
 | 21 | [RFC 9110: 401](https://www.rfc-editor.org/rfc/rfc9110.html#name-401-unauthorized), [RFC 9110: 403](https://www.rfc-editor.org/rfc/rfc9110.html#name-403-forbidden), [NestJS Guards](https://docs.nestjs.com/guards) | 401 liên quan credentials; 403 là server hiểu nhưng từ chối thực hiện |
 | 22, 37 | [Git diff](https://git-scm.com/docs/git-diff), [series AI workflow](./00-series-plan-hoc-nestjs-voi-ai.md) | Review diff trước khi chấp nhận thay đổi của AI |
 | 23, 24 | [Agent Skills specification](https://agentskills.io/specification), [script EP06](./06-agent-skill-nestjs/06-agent-skill-nestjs.md) | Cấu trúc `SKILL.md`, progressive disclosure và convention của repo |

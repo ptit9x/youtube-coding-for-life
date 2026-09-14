@@ -3,7 +3,7 @@
 - **Format:** 38 tập xây modular monolith, 8 tập Microservices và các tập bonus rẽ sang stack khác. Host tự quay màn hình + tự thoại âm.
 - **Thời lượng:** Phần lớn 10–15 phút. Tập concept 8–11 phút; tập implementation phức tạp 14–18 phút. Không kéo dài chỉ để chạm mốc thời lượng.
 - **Nguyên tắc tách tập:** Mỗi tập có một outcome chính và một pain nối sang tập sau. Nếu cần quá 18 phút để hoàn thành hai outcome độc lập, tách thành hai tập.
-- **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript `5.9+`, npm, ESM (`"type": "module"`) và PostgreSQL. Data layer dùng **Prisma ORM 8** với PSL contract. Khi setup, luôn hiện phiên bản thực tế trên màn hình.
+- **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript `5.9+`, npm, ESM (`"type": "module"`) và PostgreSQL. Data layer dùng **Prisma ORM 8** với PSL contract; Node 24 nạp `temporal-polyfill/full/global` vì timestamp Prisma 8 là `Temporal.Instant`. Khi setup, luôn hiện phiên bản thực tế trên màn hình.
 - **AI tool:** **Opus trong IDE Antigravity** (agent panel đọc codebase thật). Pattern: hỏi – đọc – chất vấn – verify.
 - **Spine:** build MỘT project thật từ đầu đến cuối — **TaskFlow**, task manager API — từ folder rỗng đến modular monolith production, rồi tách sang Microservices có chủ đích. Phần nền tảng hoàn thiện User–Role–Permission trước khi đưa Tasks vào làm business feature đầu tiên.
 - **Chain rule:** tập sau mở bằng NỖI ĐAU tập trước tạo ra (không phải "hôm nay ta học X"). Dưới đây mỗi tập ghi rõ "← pain" kế thừa.
@@ -86,9 +86,10 @@ npx prisma --version
 
 1. Node.js tối thiểu `22.18`; nếu dùng Node 24 thì tối thiểu `24.11`. Series chuẩn hóa Node `24.11+` để tránh lệch môi trường.
 2. TypeScript tối thiểu `5.9`, project chạy ESM.
-3. Không có `@prisma/client` trong dependency tree của TaskFlow.
-4. Mọi feature dùng trong tập phải có trong [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status). Không nhờ AI đoán API còn thiếu.
-5. Query và command phải đối chiếu [Prisma 8 docs](https://www.prisma.io/docs/orm), không lấy snippet Prisma 6/7 từ search result.
+3. Trên Node 24, cài `temporal-polyfill` và import `temporal-polyfill/full/global` ở đầu `src/prisma/db.ts`; field cập nhật dùng `temporal.updatedAt()`, type runtime là `Temporal.Instant`.
+4. Không có `@prisma/client` trong dependency tree của TaskFlow.
+5. Mọi feature dùng trong tập phải có trong [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status). Không nhờ AI đoán API còn thiếu.
+6. Query và command phải đối chiếu [Prisma 8 docs](https://www.prisma.io/docs/orm), không lấy snippet Prisma 6/7 từ search result.
 
 Workflow database chuẩn của series:
 
@@ -97,7 +98,7 @@ Sửa contract
 → prisma contract emit
 → prisma migration plan --name <ten>
 → host review migration.ts + ops.json + DDL preview
-→ prisma db migrate
+→ prisma db migrate --advance-ref db
 → prisma db verify
 → chạy integration/e2e test
 ```
@@ -110,7 +111,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 
 | Mức | Script | Việc phải đổi |
 |---|---|---|
-| Blocker | `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md` | Viết lại toàn bộ setup, contract, query API, DI provider và migration workflow Prisma 8 |
+| Hoàn tất | `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md` | Đã viết lại setup, contract, query API, DI provider, migration workflow và source map cho Prisma 8 |
 | Blocker | `04-error-handling-nestjs/04-error-handling-nestjs.md` | Bỏ `P2002`; dùng Prisma 8 structured error code và `isStructuredError` |
 | Blocker | `12-testing-rbac-nestjs/12-testing-ma-tran-rbac-ownership.md` | Đổi direct `prisma.task...` sang Prisma 8 facade hoặc test repository contract |
 | Blocker | `17-docker-deploy-nestjs/17-docker-deploy-taskflow.md` | Bỏ `generate`/`migrate deploy`; đóng gói emitted contract và chạy migration gate Prisma 8 |
@@ -167,7 +168,7 @@ Definition of done cho từng script migrated:
 - Thành quả: POST bậy → 400 rõ ràng. → **pain: dù sao data vẫn nằm trong RAM.**
 - File: `02-validation-nestjs/02-dto-validationpipe-nestjs.md`
 
-### EP 03 — Kết nối PostgreSQL bằng Prisma 8 ⚠️ script cần rewrite
+### EP 03 — Kết nối PostgreSQL bằng Prisma 8 ✅ đã rewrite
 - ← pain: EP02 xong, restart server, dữ liệu bốc hơi.
 - Học: khởi tạo Prisma 8 trong Nest app bằng `prisma orm init --target postgres --authoring psl`; phân biệt contract với database schema; emit contract; plan/review/apply migration; tạo `DatabaseModule`, Prisma provider, repository contract và Prisma adapter. Chỉ persist User, chưa tạo Tasks hay Access Control trong tập này.
 - File sinh ra: `src/prisma/contract.prisma`, `contract.json`, `contract.d.ts`, `db.ts`, `prisma.config.ts` và `migrations/app/`. Commit emitted contract artifacts và migration package.
@@ -175,7 +176,7 @@ Definition of done cho từng script migrated:
 - Query demo dùng API Prisma 8: `db.orm.public.User.create(...)`, `.where(...).first()` và `.all()`; không dùng `prisma.user.findMany()` của Prisma 7.
 - Cấu hình tối thiểu: `DATABASE_URL` đi qua biến môi trường và không commit secret. Phần tổ chức config đầy đủ được xử lý ở EP15.
 - AI moment: AI lấy nhầm snippet Prisma 7 (`schema.prisma`, `PrismaClient`, `migrate dev`) → host dùng release status và docs Prisma 8 bắt lỗi, sửa plan trước khi code.
-- Kiểm chứng bắt buộc: `contract emit` → `migration plan --name init` → review DDL → `db migrate` → `db verify` → restart Nest app → user vẫn còn.
+- Kiểm chứng bắt buộc: `contract emit` → `migration plan --name init` → review DDL → `db migrate --advance-ref db` → `db verify` → restart Nest app → user vẫn còn.
 - Thành quả: restart, data còn nguyên. → **pain: trùng email → crash 500 xấu xí.**
 - File: `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md`
 
@@ -291,7 +292,7 @@ Definition of done cho từng script migrated:
 
 ### EP 17 — Docker và Deploy NestJS lên Production ⚠️ script cần rewrite Prisma 8
 - ← pain: cả 16 tập chạy localhost — máy thiếu Node/PostgreSQL là không chạy được.
-- Học: Dockerfile Node 24, docker-compose kèm PostgreSQL, commit `contract.json`/`contract.d.ts` và `migrations/`, chạy `prisma migration check` + `prisma db migrate --show` + `prisma db migrate` trước khi start app, env production, deploy Render/Railway.
+- Học: Dockerfile Node 24, docker-compose kèm PostgreSQL, commit `contract.json`/`contract.d.ts` và `migrations/`, chạy `prisma migration check` + `prisma db migrate --show` + `prisma db migrate --advance-ref db` trước khi start app, env production, deploy Render/Railway.
 - Prisma 8 không có native query engine và không có bước `prisma generate` trong image. Không dùng `prisma migrate deploy` của Prisma 7.
 - AI moment: AI dùng Dockerfile Prisma cũ rồi cài OpenSSL/query-engine không cần thiết → host đối chiếu guide Prisma 8, review từng layer và migration gate. Recap Season 1.
 - Thành quả: public URL. → **pain: API công khai mà không có tài liệu — ai biết gọi thế nào.**
