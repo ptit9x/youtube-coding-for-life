@@ -570,10 +570,10 @@ Mọi option dùng ảnh tham chiếu `../01-hoc-nestjs-voi-ai/thumbnail-01-hoc-
 
 ### Option 1 — khuyên dùng
 
-- `PRISMA 8` — NEST RED `#E0234E`
-- `ĐÃ KHÁC` — WHITE
+- `NESTJS` — WHITE
+- `KẾT NỐI DB` — NEST RED `#E0234E`
 - Badge nhỏ: `EP03`
-- Hình: host nhìn migration plan; monitor hiện `contract.prisma`.
+- Hình: host nhìn màn hình; monitor thể hiện NestJS kết nối PostgreSQL.
 
 ### Option 2
 
