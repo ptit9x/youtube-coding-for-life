@@ -148,9 +148,9 @@ Theo dõi series nếu bạn muốn nhìn lỗi 500 này được bóc tách đ�
 | 7 | [IDE] | Viết model User; zoom UUID, unique email và timestamps | 50s |
 | 8 | [TERM]+[IDE] | `contract emit`; mở `contract.json` và `contract.d.ts` | 45s |
 | 9 | [TERM]+[IDE] | `migration plan`; review `migration.ts`, `ops.json`, DDL preview | 70s |
-| 10 | [IDE] | Gõ prompt; AI đề xuất PrismaClient và inject thẳng vào service | 45s |
+| 10 | [IDE] | Gõ Prompt 1 (ngây thơ); AI đề xuất PrismaClient và inject thẳng vào service | 45s |
 | 11 | [DIAGRAM] | UsersService → UsersRepository ← PrismaUsersRepository → Prisma 8 db | 45s |
-| 12 | [IDE] | Review contract, DI tokens và lifecycle provider trước khi approve | 70s |
+| 12 | [IDE] | Host bắt lỗi xong gõ Prompt 2 (đã dẫn nguồn); review contract, DI tokens và lifecycle provider trước khi approve | 70s |
 | 13 | [IDE] | Agent implement adapter bằng `db.orm.public.User` | 70s |
 | 14 | [IDE] | Host tự gõ `findByEmail`; kiểm tra git diff và import boundary | 55s |
 | 15 | [TERM] | `migration check`, `db migrate --advance-ref db`, `db verify`, build và test | 65s |
@@ -386,7 +386,19 @@ export class UsersService {
 export class UsersModule {}
 ```
 
-### Prompt cho Opus
+### Prompts cho Opus (2 bước)
+
+Tập này cần HAI prompt — đó là chính cốt chuyện: prompt ngây thơ khiến AI rơi vào snippet Prisma 7, rồi prompt sửa lại sau khi host bắt lỗi.
+
+**Prompt 1 — câu hỏi ngây thơ (cảnh 10).** Gõ nguyên văn, không thêm context phiên bản. AI sẽ trả plan kiểu Prisma 7: `PrismaClient`, `schema.prisma`, `prisma generate`, `migrate dev`, inject thẳng vào UsersService. Đó chính là chất liệu để host bắt lỗi.
+
+```text
+Read this NestJS project. Replace the in-memory Users store with PostgreSQL using Prisma.
+Keep the current UsersService and controller behavior.
+Show a plan first, do not edit any file until I approve.
+```
+
+**Prompt 2 — sau khi host bắt lỗi (đối chiếu release status + skill + contract vừa emit).**
 
 ```text
 Read the current NestJS 12 ESM project and the installed Prisma 8 skill.
