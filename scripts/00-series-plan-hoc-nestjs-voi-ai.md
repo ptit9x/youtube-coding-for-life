@@ -150,7 +150,7 @@ Definition of done cho từng script migrated:
 - Mỗi EP chỉ thay nội dung headline, biểu cảm nhẹ và chi tiết trên monitor. Không thay visual grammar của cả series.
 - Trước khi chốt, kiểm tra ảnh full-size và bản thu nhỏ `320×180`; dấu tiếng Việt phải chính xác.
 
-### EP 01 — Học NestJS với AI: Xây Users API đầu tiên ✅
+### EP 01 — Học NestJS với AI: Xây Users API đầu tiên ✅ đã quay — prompt demo đã có
 - ← pain: repo công ty lạ hoắc, tutorial 3h lỗi thời.
 - Học: Nest CLI, luồng `main.ts → module → controller → service`, decorator, DI cơ bản và nguyên tắc module theo business domain.
 - Cấu trúc đầu tiên: tạo `src/modules/users` bằng `nest g resource modules/users`; chưa tạo sẵn `common/`, `config/`, `database/` khi chưa có code thật.
@@ -160,7 +160,7 @@ Definition of done cho từng script migrated:
 - → **pain mới:** gửi `{ "name": "Richard", "email": 123 }` vẫn được chấp nhận vì DTO chưa có validation runtime.
 - File: `01-hoc-nestjs-voi-ai/01-nestjs-tu-0-cung-ai.md`
 
-### EP 02 — ValidationPipe: Chặn dữ liệu sai từ DTO ✅
+### EP 02 — ValidationPipe: Chặn dữ liệu sai từ DTO ✅ đã quay — prompt demo đã có
 - ← pain: EP01 nhận payload gì cũng được — `email` là số hoặc sai định dạng vẫn thành user.
 - Học: compile-time type khác runtime validation; class-validator, ValidationPipe toàn cục (`whitelist`, `forbidNonWhitelisted`, `transform`), `@IsString`, `@IsNotEmpty`, `@IsEmail`, custom message tiếng Việt.
 - Cấu trúc mới: thêm `src/common/pipes/app-validation.pipe.ts`; pipe chỉ phụ thuộc Nest/class-validator, không import Users hay business domain.
@@ -168,7 +168,7 @@ Definition of done cho từng script migrated:
 - Thành quả: POST bậy → 400 rõ ràng. → **pain: dù sao data vẫn nằm trong RAM.**
 - File: `02-validation-nestjs/02-dto-validationpipe-nestjs.md`
 
-### EP 03 — Kết nối PostgreSQL bằng Prisma 8 ✅ đã rewrite
+### EP 03 — Kết nối PostgreSQL bằng Prisma 8 ✅ đã rewrite — prompt demo đã có (2 prompt)
 - ← pain: EP02 xong, restart server, dữ liệu bốc hơi.
 - Học: khởi tạo Prisma 8 trong Nest app bằng `prisma orm init --target postgres --authoring psl`; phân biệt contract với database schema; emit contract; plan/review/apply migration; tạo `DatabaseModule`, Prisma provider, repository contract và Prisma adapter. Chỉ persist User, chưa tạo Tasks hay Access Control trong tập này.
 - File sinh ra: `src/prisma/contract.prisma`, `contract.json`, `contract.d.ts`, `db.ts`, `prisma.config.ts` và `migrations/app/`. Commit emitted contract artifacts và migration package.
