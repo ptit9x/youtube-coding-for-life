@@ -208,24 +208,24 @@ docker compose version
 services:
   postgres:
     image: postgres:18-alpine
-    container_name: taskflow-postgres
+    container_name: nestjs-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: taskflow
-      POSTGRES_PASSWORD: taskflow
-      POSTGRES_DB: taskflow_dev
+      POSTGRES_USER: nestjs
+      POSTGRES_PASSWORD: nestjs
+      POSTGRES_DB: nestjs_dev
     ports:
       - "5432:5432"
     volumes:
-      - taskflow_pgdata:/var/lib/postgresql/data
+      - nestjs_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U taskflow -d taskflow_dev"]
+      test: ["CMD-SHELL", "pg_isready -U nestjs -d nestjs_dev"]
       interval: 5s
       timeout: 3s
       retries: 10
 
 volumes:
-  taskflow_pgdata:
+  nestjs_pgdata:
 ```
 
 Chạy và kiểm tra:
@@ -234,7 +234,7 @@ Chạy và kiểm tra:
 docker compose -f docker-compose.postgres.yml up -d
 docker compose -f docker-compose.postgres.yml ps        # STATUS phải "healthy"
 docker compose -f docker-compose.postgres.yml logs postgres | tail -5
-docker exec -it taskflow-postgres psql -U taskflow -d taskflow_dev -c "SELECT version();"
+docker exec -it nestjs-postgres psql -U nestjs -d nestjs_dev -c "SELECT version();"
 # Hạ database khi cần: docker compose -f docker-compose.postgres.yml down
 # Xóa sạch dữ liệu dev:  docker compose -f docker-compose.postgres.yml down -v
 ```
@@ -242,7 +242,7 @@ docker exec -it taskflow-postgres psql -U taskflow -d taskflow_dev -c "SELECT ve
 `.env` (đã có trong `.gitignore`; nếu chưa thì thêm ngay):
 
 ```text
-DATABASE_URL="postgresql://taskflow:taskflow@localhost:5432/taskflow_dev"
+DATABASE_URL="postgresql://nestjs:nestjs@localhost:5432/nestjs_dev"
 ```
 
 **Bước 1 — Prisma 8.** Trong ngày quay, thay hai placeholder bằng exact versions hiển thị trên release status. Không giả định số RC của CLI và runtime giống nhau.

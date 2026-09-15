@@ -181,11 +181,7 @@ export class CreateUserDto {
 
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
 
-1. `A cinematic close-up of a Vietnamese developer staring at two conflicting panes on a dark monitor, green TypeScript code declaring email as a string on one side and a red API payload containing email number 123 on the other, cyan and neon-green monitor glow, tense focused expression, city bokeh, deep shadows, subject on the right with clean negative space on the left, 16:9, photorealistic technology documentary, no text, no logos, no watermark.`
-
-2. `A cinematic photograph of a red malformed JSON request hitting a bright neon security gate before reaching a dark NestJS controller and service diagram, a Vietnamese developer observing from the right, green and cyan code reflections, dramatic high contrast, subtle fog and city bokeh, empty dark space on the left for typography, 16:9, photorealistic, no text, no logos, no watermark.`
-
-3. `A cinematic macro photograph of a monitor showing a whitespace-only name payload slipping through green validation decorators while an AI agent panel confidently marks the task complete, a skeptical Vietnamese developer on the right noticing the flaw, red warning glow against a dark IDE, high contrast, empty left side for text, 16:9, photorealistic, no text, no logos, no watermark.`
+Ảnh tham chiếu của series: `../01-hoc-nestjs-voi-ai/thumbnail-01-hoc-nestjs-cung-ai.png`. Giữ cùng host, bố cục, ánh sáng đỏ và typography; chỉ đổi badge thành `EP02`, headline thành `CHẶN / DATA BẨN`, và màn hình thành request `POST /users` với `"email": 123` bị trả `400 Bad Request`. Badge `CÙNG AI` giữ nguyên.
 
 ---
 
@@ -251,25 +247,8 @@ nestjs validation, nestjs validationpipe, nestjs dto validation, class validator
 
 ## PART 5 — THUMBNAIL PACKAGE
 
-### Option 1 — “Type chưa đủ” — khuyên dùng
+### Thumbnail đã tạo
 
-- Dòng nhỏ: `NESTJS #02` — WHITE
-- Dòng 1: `TYPE ≠` — WHITE
-- Dòng 2: `VALIDATION` — NEON GREEN `#00FF41`
-- Hình: `email: string` màu xanh đối diện payload `email: 123` màu đỏ.
+![Thumbnail NestJS EP02 — Chặn data bẩn](./thumbnail-02-chan-data-ban.png)
 
-### Option 2 — “Payload bị chặn”
-
-- Dòng nhỏ: `NESTJS #02` — WHITE
-- Dòng 1: `PAYLOAD BẬY` — WHITE
-- Dòng 2: `400` — NEON GREEN `#00FF41`
-- Hình: request đỏ va vào validation gate trước controller.
-
-### Option 3 — “AI bỏ sót”
-
-- Dòng nhỏ: `NESTJS #02` — WHITE
-- Dòng 1: `3 DẤU CÁCH` — WHITE
-- Dòng 2: `PHÁ VALIDATION` — NEON GREEN `#00FF41`
-- Hình: payload whitespace lọt qua trong lúc agent báo hoàn thành.
-
-**Typography chung:** Canvas 1280×720. Anton cho headline, JetBrains Mono cho số tập. Chữ chiếm khoảng một phần ba khung bên trái, stroke đen 6–10px. Neon glow chỉ dùng cho từ khóa. Typeset trong Canva để giữ brand nhất quán và luôn lưu thêm một bản nền không chữ.
+**Typography chung của series:** Canvas 1672×941. Headline condensed đậm bên trái, host bên phải, monitor là lớp phụ. Chỉ dùng WHITE `#FFFFFF`, NEST RED `#E0234E`, đen và navy đậm; stroke đen và shadow gọn. Kiểm tra dấu tiếng Việt và độ đọc ở bản thu nhỏ 320×180 trước khi đăng.

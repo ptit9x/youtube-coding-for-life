@@ -73,7 +73,7 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 | 2 | [DIAGRAM] | Một lớp Nest nằm trên Express/Fastify; bên phải là Module → Controller → Service | NestJS là gì và giá trị kiến trúc | 35s |
 | 3 | [TERM] | `node -v`, cài CLI, `nest new nestjs-base-with-ai`; chọn npm; từ chối observability nếu CLI hỏi | Setup bằng phiên bản hiện hành | 40s |
 | 4 | [TERM]+[BROWSER] | `npm run start:dev` → `localhost:3000` → Hello World | Chạy trước khi sửa | 25s |
-| 5 | [DIAGRAM] | Vòng sáu bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng | Workflow AI của series | 40s |
+| 5 | [DIAGRAM] | Dùng ảnh `workflow-ai-6-buoc-video-01.png`: Yêu cầu → AI lên Plan → Review → Approve → Thực hiện → Kiểm chứng | Workflow AI của series | 40s |
 | 6 | [IDE] | `main.ts`; highlight `NestFactory.create(AppModule)` và `listen` | Chặng 1: bootstrap | 45s |
 | 7 | [IDE]+[DIAGRAM] | `app.module.ts`; nối AppModule tới `modules/users`; hiện sơ đồ đích `common/config/database/modules` | Chặng 2: business module và chiều dependency | 65s |
 | 8 | [IDE] | `app.controller.ts` và `app.service.ts` đặt cạnh nhau; highlight `@Controller`, `@Get`, lời gọi service | Chặng 3: controller và service | 45s |
