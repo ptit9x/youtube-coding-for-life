@@ -1,6 +1,6 @@
 # NestJS #02 — ValidationPipe: Chặn dữ liệu sai từ DTO
 
-- **Series:** Học NestJS bằng AI — tập 2/46
+- **Series:** Học NestJS bằng AI — tập 2/45
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; giữ workflow Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng.
 - **Technical baseline:** Tiếp tục project `nestjs-base-with-ai` từ EP01; Users API đang lưu dữ liệu trong RAM.

@@ -1,6 +1,6 @@
 # NestJS #09 — Quan hệ User, Role và Permission với Prisma
 
-- **Series:** Học NestJS bằng AI — tập 9/46
+- **Series:** Học NestJS bằng AI — tập 9/45
 - **Target runtime:** ~11 phút
 - **Outcome:** Explicit join models, seed và API assign/revoke đầy đủ.
 - **Pain mở EP10:** Database đã có chính sách, nhưng route chưa thực thi permission.

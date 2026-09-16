@@ -1,6 +1,6 @@
 # NestJS #06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án
 
-- **Series:** Học NestJS bằng AI — tập 6/46
+- **Series:** Học NestJS bằng AI — tập 6/45
 - **Target runtime:** ~10 phút
 - **Outcome:** Tạo repo-scoped Agent Skill để scaffold feature đúng kiến trúc, không generic hóa business logic.
 - **Pain mở EP07:** Access token ngắn hạn an toàn nhưng buộc người dùng đăng nhập lại liên tục.

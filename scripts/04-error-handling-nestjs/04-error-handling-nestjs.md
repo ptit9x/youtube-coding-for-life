@@ -1,6 +1,6 @@
 # NestJS #04 — Error Handling: Trả đúng lỗi 400, 404 và 409
 
-- **Series:** Học NestJS bằng AI — tập 4/46
+- **Series:** Học NestJS bằng AI — tập 4/45
 - **Target runtime:** ~11 phút
 - **Outcome:** Chuẩn hóa lỗi 400, 404, 409 và che chi tiết nội bộ khỏi client.
 - **Pain mở EP05:** API trả lỗi đẹp nhưng bất kỳ ai vẫn gọi được endpoint riêng tư.

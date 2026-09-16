@@ -1,6 +1,6 @@
 # NestJS #11 — RBAC và Ownership: Không cho sửa task người khác
 
-- **Series:** Học NestJS bằng AI — tập 11/46
+- **Series:** Học NestJS bằng AI — tập 11/45
 - **Target runtime:** ~12 phút
 - **Outcome:** TasksModule hoàn chỉnh, permission theo route và ownership theo resource.
 - **Pain mở EP12:** Số nhánh bảo mật đã vượt khả năng kiểm tra thủ công.

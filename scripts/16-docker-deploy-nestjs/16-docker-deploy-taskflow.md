@@ -1,6 +1,6 @@
-# NestJS #17 — Docker và Deploy NestJS lên Production
+# NestJS #16 — Docker và Deploy NestJS lên Production
 
-- **Series:** Học NestJS bằng AI — tập 17/46, kết Season 1
+- **Series:** Học NestJS bằng AI — tập 16/45, kết Season 1
 - **Target runtime:** ~15 phút
 - **Outcome:** Container production, PostgreSQL local, migration deploy và public health check.
 - **Pain mở Season 2:** API đã public nhưng chưa có tài liệu cho người sử dụng.
@@ -15,7 +15,7 @@ Mình gửi repo cho một người khác. Họ thiếu đúng phiên bản Node
 
 Ứng dụng không khởi động.
 
-Mười sáu tập code vẫn chỉ hoạt động trên máy mình.
+Mười lăm tập code vẫn chỉ hoạt động trên máy mình.
 
 Tập cuối Season 1 phải biến repo này thành một cách chạy lặp lại được.
 
@@ -73,7 +73,7 @@ Mình chọn Render cho demo, nhưng quy trình áp dụng được cho Railway.
 
 Nền tảng build từ Dockerfile và cấp PostgreSQL riêng.
 
-Mình cấu hình `DATABASE_URL`, JWT secrets, TTL và `NODE_ENV` trên dashboard.
+Mình cấu hình `DATABASE_URL`, JWT access secret, access TTL, refresh TTL và `NODE_ENV` trên dashboard.
 
 Không truyền secret bằng Docker build argument.
 
@@ -119,7 +119,7 @@ Mình là Richard. Lập trình là cuộc sống.
 | 8 | [DIAGRAM] | Migration trong release pipeline | 65s |
 | 9 | [BROWSER] | Cấu hình service, database và environment | 90s |
 | 10 | [BROWSER] | Health check và public API thành công | 80s |
-| 11 | [MONTAGE] | Recap EP01 tới EP17 | 70s |
+| 11 | [MONTAGE] | Recap EP01 tới EP16 | 70s |
 | 12 | [B-ROLL] | Swagger mở Season 2 | 25s |
 
 **Tổng: 830 giây ≈ 13:50.** Che URL database và secret; font terminal tối thiểu 18px.
@@ -184,18 +184,18 @@ Plan a production Docker deployment for the current NestJS and Prisma project.
 
 ### 4a. Titles
 
-1. Docker và Deploy NestJS lên Production — EP17 | Lập trình là cuộc sống
-2. Viết Dockerfile multi-stage cho NestJS và Prisma — EP17 | Lập trình là cuộc sống
-3. Chạy NestJS và PostgreSQL bằng Docker Compose — EP17 | Lập trình là cuộc sống
-4. Chạy Prisma Migration khi deploy production — EP17 | Lập trình là cuộc sống
-5. Đưa API NestJS từ localhost lên public URL — EP17 | Lập trình là cuộc sống
+1. Docker và Deploy NestJS lên Production — EP16 | Lập trình là cuộc sống
+2. Viết Dockerfile multi-stage cho NestJS và Prisma — EP16 | Lập trình là cuộc sống
+3. Chạy NestJS và PostgreSQL bằng Docker Compose — EP16 | Lập trình là cuộc sống
+4. Chạy Prisma Migration khi deploy production — EP16 | Lập trình là cuộc sống
+5. Đưa API NestJS từ localhost lên public URL — EP16 | Lập trình là cuộc sống
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho Dockerfile và Title 5 cho outcome deploy.
 
 ### 4b. SEO Description
 
 ```text
-Mười sáu tập code vẫn chỉ chạy trên máy mình. Tập kết Season 1 đóng gói TaskFlow bằng Docker và đưa API lên public URL.
+Mười lăm tập code vẫn chỉ chạy trên máy mình. Tập kết Season 1 đóng gói TaskFlow bằng Docker và đưa API lên public URL.
 
 ✅ Phân biệt Dockerfile, image và container
 ✅ Viết Dockerfile multi-stage
@@ -224,7 +224,7 @@ Mười sáu tập code vẫn chỉ chạy trên máy mình. Tập kết Season 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs docker, deploy nestjs, dockerfile nestjs prisma, docker compose postgresql, prisma migrate deploy, nestjs render deploy, railway nestjs deploy, multi stage docker nodejs, production nestjs, nestjs tiếng việt, nestjs tập 17, lập trình là cuộc sống
+nestjs docker, deploy nestjs, dockerfile nestjs prisma, docker compose postgresql, prisma migrate deploy, nestjs render deploy, railway nestjs deploy, multi stage docker nodejs, production nestjs, nestjs tiếng việt, nestjs tập 16, lập trình là cuộc sống
 ```
 
 ---

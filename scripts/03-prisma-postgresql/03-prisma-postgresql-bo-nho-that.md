@@ -1,11 +1,11 @@
 # NestJS #03 — Kết nối PostgreSQL bằng Prisma 8
 
-- **Series:** Học NestJS bằng AI — tập 3/46
-- **Target runtime:** 12–14 phút
-- **Outcome:** Dựng PostgreSQL local bằng Docker Compose; thay Users in-memory bằng PostgreSQL qua Prisma 8 và repository contract.
+- **Series:** Học NestJS bằng AI — tập 3/45
+- **Target runtime:** 14–16 phút
+- **Outcome:** Dựng PostgreSQL local không hardcode Compose config; cấu hình ENV có validation; thay Users in-memory bằng PostgreSQL qua Prisma 8 và repository contract.
 - **Technical baseline:** NestJS 12, Node.js 24.11+, TypeScript 5.9+, ESM, PostgreSQL, Prisma ORM 8.
 - **Pain mở EP04:** Email trùng chạm unique constraint và biến thành lỗi 500 khó hiểu.
-- **Source of truth:** [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frameworks/nestjs), [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status).
+- **Source of truth:** [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frameworks/nestjs), [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status), [NestJS Configuration](https://docs.nestjs.com/techniques/configuration), [Docker Compose interpolation](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/).
 
 ---
 
@@ -29,11 +29,13 @@ Trước tiên, mình cần một PostgreSQL chạy thật trên máy.
 
 Không cài qua installer. Một file `docker-compose.postgres.yml` trong project là đủ.
 
-Image `postgres:18-alpine` được khóa ngay trong file. Dữ liệu nằm trong Docker volume nên container tắt vẫn còn.
+Image `postgres:18-alpine` được pin qua `POSTGRES_IMAGE`. Compose từ chối chạy nếu biến bắt buộc bị thiếu.
+
+Dữ liệu nằm trong Docker volume nên container tắt vẫn còn.
 
 Một lệnh duy nhất: `docker compose -f docker-compose.postgres.yml up -d`.
 
-Vài giây sau, healthcheck chuyển xanh. Port 5432 đã sẵn sàng trên máy.
+Vài giây sau, healthcheck chuyển xanh. Host port trong `POSTGRES_PORT` đã sẵn sàng trên máy.
 
 Connection string ghi vào file `.env` với tên `DATABASE_URL`. File này không bao giờ lên git.
 
@@ -54,6 +56,32 @@ Không còn `schema.prisma`, `prisma generate` hay `prisma migrate dev` trong wo
 Thay vào đó, mình khởi tạo Prisma 8 ngay trong Nest project đang có.
 
 Project dùng ESM. Prisma tạo `contract.prisma`, `db.ts`, config và các file type được emit.
+
+Lúc này có một chi tiết dễ bỏ qua. Tạo `.env` chưa có nghĩa mọi process sẽ tự đọc nó.
+
+Prisma CLI và Nest runtime dùng chung một giá trị, nhưng mỗi bên phải nạp nó rõ ràng.
+
+Mình yêu cầu AI audit toàn bộ config trước khi sửa. Nó tìm cả giá trị đang hardcode trong Docker Compose.
+
+Mình review danh sách biến, cách validate và `.env.example`, rồi mới approve.
+
+Image PostgreSQL, user, password, database và host port được chuyển thành biến bắt buộc trong `.env`.
+
+Compose dùng chúng để nội suy file YAML. Nest không validate các biến chỉ dành cho Compose.
+
+`prisma.config.ts` nạp `.env` cho command Prisma. Nest dùng `ConfigModule` làm boundary của application.
+
+Mình thêm `.env.example` chỉ chứa giá trị mẫu, rồi kiểm tra `.env` đã nằm trong `.gitignore`.
+
+Trong `AppModule`, ConfigModule ép kiểu port và validate `DATABASE_URL` ngay khi startup.
+
+Mình cố tình xóa biến đó. App dừng trước request đầu tiên và chỉ đúng field đang thiếu.
+
+Không có fallback database URL bí mật. Config bắt buộc phải fail fast.
+
+`src/prisma/db.ts` được đổi từ singleton đọc `process.env` thành factory nhận URL đã validate.
+
+Database provider gọi factory qua DI. UsersService không biết `.env`, `ConfigService` hay connection string tồn tại.
 
 Contract là lời hứa giữa application và database.
 
@@ -83,7 +111,7 @@ Primary key có đúng UUID không. Unique constraint có nằm trên email khô
 
 ORM giúp ta viết query nhanh hơn. Nó không thay trách nhiệm hiểu database sắp thay đổi thế nào.
 
-Giờ mình mở agent panel. AI chỉ được lên plan, chưa được sửa code.
+Quay lại agent panel, mình đưa yêu cầu tích hợp Prisma. AI vẫn chỉ được lên plan, chưa được sửa code.
 
 Nó trả về một đoạn quen thuộc: tạo PrismaClient rồi inject thẳng vào UsersService.
 
@@ -153,27 +181,29 @@ Theo dõi series nếu bạn muốn nhìn lỗi 500 này được bóc tách đ�
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER]+[TERM] | Tạo user, restart Nest app, GET lại thành mảng rỗng | 35s |
-| 2 | [DIAGRAM] | RAM nằm trong Node process; PostgreSQL nằm ngoài process | 35s |
-| 3 | [TERM]+[IDE] | Tạo `docker-compose.postgres.yml`; `up -d`; đợi healthcheck xanh; `psql` ping được | 60s |
-| 4 | [TERM] | Hiện Node, TypeScript, Nest, Prisma dist-tags và package tree | 50s |
-| 5 | [BROWSER] | Mở Prisma 8 release status; highlight runtime và feature limitations | 40s |
-| 6 | [TERM] | Pin exact Prisma 8 CLI/runtime; chạy `prisma orm init` trong Nest project | 65s |
-| 7 | [IDE] | Review `contract.prisma`, `db.ts`, `prisma.config.ts` và package scripts | 55s |
-| 8 | [IDE] | Viết model User; zoom UUID, unique email và timestamps | 50s |
-| 9 | [TERM]+[IDE] | `contract emit`; mở `contract.json` và `contract.d.ts` | 45s |
-| 10 | [TERM]+[IDE] | `migration plan`; review `migration.ts`, `ops.json`, DDL preview | 70s |
-| 11 | [IDE] | Gõ Prompt 1 (ngây thơ); AI đề xuất PrismaClient và inject thẳng vào service | 45s |
-| 12 | [DIAGRAM] | UsersService → UsersRepository ← PrismaUsersRepository → Prisma 8 db | 45s |
-| 13 | [IDE] | Host bắt lỗi xong gõ Prompt 2 (đã dẫn nguồn); review contract, DI tokens và lifecycle provider trước khi approve | 70s |
-| 14 | [IDE] | Agent implement adapter bằng `db.orm.public.User` | 70s |
-| 15 | [IDE] | Host tự gõ `findByEmail`; kiểm tra git diff và import boundary | 55s |
-| 16 | [TERM] | `migration check`, `db migrate --advance-ref db`, `db verify`, build và test | 65s |
-| 17 | [BROWSER] | POST, GET, restart app, GET lại vẫn có dữ liệu | 60s |
-| 18 | [BROWSER]+[TERM] | POST email trùng → 500 và Prisma 8 structured error | 40s |
-| 19 | [B-ROLL] | Desk tối, freeze error code, teaser EP04 | 20s |
+| 1 | [BROWSER]+[TERM] | Tạo user, restart Nest app, GET lại thành mảng rỗng | 30s |
+| 2 | [DIAGRAM] | RAM nằm trong Node process; PostgreSQL nằm ngoài process | 25s |
+| 3 | [TERM]+[IDE] | Tạo `docker-compose.postgres.yml`; `up -d`; đợi healthcheck xanh; `psql` ping được | 50s |
+| 4 | [TERM] | Hiện Node, TypeScript, Nest, Prisma dist-tags và package tree | 40s |
+| 5 | [BROWSER] | Mở Prisma 8 release status; highlight runtime và feature limitations | 30s |
+| 6 | [TERM] | Pin exact Prisma 8 CLI/runtime; chạy `prisma orm init` trong Nest project | 50s |
+| 7 | [IDE] | Review `contract.prisma`, `db.ts`, `prisma.config.ts` và package scripts | 40s |
+| 8 | [AI]+[IDE]+[TERM] | Gõ Prompt 1 audit ENV; chuyển giá trị Compose sang biến bắt buộc; thêm ConfigModule, Zod và `.env.example` | 70s |
+| 9 | [IDE] | Đổi `db.ts` thành factory nhận URL đã validate; review DI boundary | 40s |
+| 10 | [IDE] | Viết model User; zoom UUID, unique email và timestamps | 40s |
+| 11 | [TERM]+[IDE] | `contract emit`; mở `contract.json` và `contract.d.ts` | 35s |
+| 12 | [TERM]+[IDE] | `migration plan`; review `migration.ts`, `ops.json`, DDL preview | 60s |
+| 13 | [IDE] | Gõ Prompt 2 (ngây thơ); AI đề xuất PrismaClient và inject thẳng vào service | 35s |
+| 14 | [DIAGRAM] | UsersService → UsersRepository ← PrismaUsersRepository → Prisma 8 db | 40s |
+| 15 | [IDE] | Host bắt lỗi xong gõ Prompt 3; review config, contract, DI tokens và lifecycle provider trước khi approve | 60s |
+| 16 | [IDE] | Agent implement adapter bằng `db.orm.public.User` | 55s |
+| 17 | [IDE] | Host tự gõ `findByEmail`; kiểm tra git diff và import boundary | 40s |
+| 18 | [TERM] | `migration check`, `db migrate --advance-ref db`, `db verify`, build và test | 55s |
+| 19 | [BROWSER] | POST, GET, restart app, GET lại vẫn có dữ liệu | 50s |
+| 20 | [BROWSER]+[TERM] | POST email trùng → 500 và Prisma 8 structured error | 35s |
+| 21 | [B-ROLL] | Desk tối, freeze error code, teaser EP04 | 15s |
 
-**Tổng: 980 giây ≈ 16:20.** Khi dựng, cắt các khoảng chờ cài package, pull image và migrate để đưa bản cuối về 12–14 phút.
+**Tổng: 895 giây ≈ 14:55.** Cắt toàn bộ thời gian chờ cài package, pull image và migrate.
 
 Dùng One Dark Pro, JetBrains Mono tối thiểu 18px cho video ngang. Khi quay lại cảnh dọc cho Shorts, tăng lên 24px và giữ code trong safe zone giữa màn hình.
 
@@ -196,30 +226,29 @@ docker compose version
 - TypeScript `5.9+`.
 - `package.json` có `"type": "module"`.
 - Không có `@prisma/client`.
-- Docker Engine + Compose v2 chạy được; port 5432 trên máy còn trống (`docker ps`, `ss -ltn | grep 5432`).
+- Docker Engine + Compose v2 chạy được; host port trong `POSTGRES_PORT` còn trống.
 - CLI và PostgreSQL runtime được pin exact trong lockfile.
 - Release status xác nhận các API dùng trong tập đã tồn tại.
 
 ### Command chuẩn bị
 
-**Bước 0 — PostgreSQL local bằng Docker.** Tạo `docker-compose.postgres.yml` ở project root (file này tách riêng khỏi compose deploy của EP17 — nó chỉ phục vụ dev):
+**Bước 0 — PostgreSQL local bằng Docker.** Tạo `docker-compose.postgres.yml` ở project root (file này tách riêng khỏi compose deploy của EP16 — nó chỉ phục vụ dev):
 
 ```yaml
 services:
   postgres:
-    image: postgres:18-alpine
-    container_name: nestjs-postgres
+    image: "${POSTGRES_IMAGE:?POSTGRES_IMAGE is required}"
     restart: unless-stopped
     environment:
-      POSTGRES_USER: nestjs
-      POSTGRES_PASSWORD: nestjs
-      POSTGRES_DB: nestjs_dev
+      POSTGRES_USER: "${POSTGRES_USER:?POSTGRES_USER is required}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}"
+      POSTGRES_DB: "${POSTGRES_DB:?POSTGRES_DB is required}"
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:?POSTGRES_PORT is required}:5432"
     volumes:
       - nestjs_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U nestjs -d nestjs_dev"]
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
       interval: 5s
       timeout: 3s
       retries: 10
@@ -231,19 +260,42 @@ volumes:
 Chạy và kiểm tra:
 
 ```bash
+docker compose -f docker-compose.postgres.yml config --quiet
 docker compose -f docker-compose.postgres.yml up -d
 docker compose -f docker-compose.postgres.yml ps        # STATUS phải "healthy"
 docker compose -f docker-compose.postgres.yml logs postgres | tail -5
-docker exec -it nestjs-postgres psql -U nestjs -d nestjs_dev -c "SELECT version();"
+docker compose -f docker-compose.postgres.yml exec postgres sh -lc 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "SELECT version();"'
 # Hạ database khi cần: docker compose -f docker-compose.postgres.yml down
 # Xóa sạch dữ liệu dev:  docker compose -f docker-compose.postgres.yml down -v
 ```
 
-`.env` (đã có trong `.gitignore`; nếu chưa thì thêm ngay):
+`.env` thật nằm trong `.gitignore`:
 
 ```text
+POSTGRES_IMAGE="postgres:18-alpine"
+POSTGRES_USER="nestjs"
+POSTGRES_PASSWORD="nestjs"
+POSTGRES_DB="nestjs_dev"
+POSTGRES_PORT=5432
 DATABASE_URL="postgresql://nestjs:nestjs@localhost:5432/nestjs_dev"
+PORT=3000
+NODE_ENV="development"
 ```
+
+`.env.example` được commit, nhưng chỉ chứa placeholder:
+
+```text
+POSTGRES_IMAGE="postgres:18-alpine"
+POSTGRES_USER="YOUR_LOCAL_USER"
+POSTGRES_PASSWORD="CHANGE_ME_LOCAL_ONLY"
+POSTGRES_DB="YOUR_LOCAL_DATABASE"
+POSTGRES_PORT=5432
+DATABASE_URL="postgresql://YOUR_LOCAL_USER:CHANGE_ME_LOCAL_ONLY@localhost:5432/YOUR_LOCAL_DATABASE"
+PORT=3000
+NODE_ENV=development
+```
+
+`DATABASE_URL` được ghi tường minh vì Prisma CLI và Nest cùng cần URL hoàn chỉnh. Không dựa vào nested interpolation mà `dotenv` và Compose có thể xử lý khác nhau; khi đổi credential hoặc port local, phải cập nhật URL cùng lúc.
 
 **Bước 1 — Prisma 8.** Trong ngày quay, thay hai placeholder bằng exact versions hiển thị trên release status. Không giả định số RC của CLI và runtime giống nhau.
 
@@ -252,6 +304,7 @@ npx prisma@<PRISMA_CLI_VERSION> orm init --yes --target postgres --authoring psl
 npm install --save-dev --save-exact prisma@<PRISMA_CLI_VERSION>
 npm install --save-exact @prisma/orm-postgres@<POSTGRES_RUNTIME_VERSION>
 npm install --save-exact temporal-polyfill
+npm install --save-exact @nestjs/config zod
 npx prisma skills sync
 ```
 
@@ -272,6 +325,10 @@ npm run start:dev
 
 ```text
 src/
+├── config/
+│   ├── app.config.ts
+│   ├── database.config.ts
+│   └── env.validation.ts
 ├── prisma/
 │   ├── contract.prisma
 │   ├── contract.json
@@ -295,8 +352,66 @@ migrations/
 └── app/
 prisma.config.ts
 docker-compose.postgres.yml
-.env          # gitignored — DATABASE_URL
+.env          # gitignored — local config và secret
+.env.example  # committed — chỉ có placeholder
 ```
+
+### Một `.env`, hai consumer rõ ràng
+
+`prisma.config.ts` phục vụ Prisma CLI nên giữ `import 'dotenv/config'`. Nest runtime không import file CLI này; nó nạp cùng `.env` qua `ConfigModule`.
+
+```typescript
+// src/config/env.validation.ts
+import { z } from 'zod';
+
+export const envSchema = z.object({
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
+  PORT: z.coerce.number().int().min(1).max(65535).default(3000),
+  DATABASE_URL: z.string().url(),
+});
+
+export type Env = z.infer<typeof envSchema>;
+```
+
+```typescript
+// src/config/app.config.ts
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('app', () => ({
+  port: Number(process.env.PORT ?? 3000),
+}));
+```
+
+```typescript
+// src/config/database.config.ts
+import { registerAs } from '@nestjs/config';
+
+export default registerAs('database', () => ({
+  url: process.env.DATABASE_URL!,
+}));
+```
+
+```typescript
+// app.module.ts
+ConfigModule.forRoot({
+  isGlobal: true,
+  cache: true,
+  load: [appConfig, databaseConfig],
+  validationSchema: envSchema,
+});
+```
+
+`main.ts` cũng lấy port từ config đã parse, không đọc lại `process.env`:
+
+```typescript
+import type { ConfigType } from '@nestjs/config';
+import appConfig from './config/app.config.js';
+
+const config = app.get<ConfigType<typeof appConfig>>(appConfig.KEY);
+await app.listen(config.port);
+```
+
+Chỉ `src/config` và `prisma.config.ts` được chạm môi trường thô. Controller, service, repository adapter và Prisma runtime nhận dependency đã cấu hình.
 
 ### Prisma 8 contract cốt lõi
 
@@ -347,13 +462,19 @@ export interface UsersRepository {
 
 ### Prisma provider và lifecycle
 
-`src/prisma/db.ts` do Prisma 8 scaffold tạo. Vì baseline dùng Node 24, thêm polyfill theo hướng dẫn Prisma 8 ở đầu file này:
+`src/prisma/db.ts` do Prisma 8 scaffold tạo. Vì baseline dùng Node 24, thêm polyfill rồi đổi singleton thành factory nhận URL đã validate:
 
 ```typescript
 import 'temporal-polyfill/full/global';
+import postgres from '@prisma/orm-postgres/runtime';
+import type { Contract } from './contract.d';
+import contractJson from './contract.json' with { type: 'json' };
+
+export const createDb = (url: string) =>
+  postgres<Contract>({ contractJson, url });
 ```
 
-Nest chỉ bọc database facade bằng explicit token.
+Nest tạo database facade qua DI. `ConfigModule` validate trước; provider chỉ nhận giá trị bắt buộc.
 
 ```typescript
 import {
@@ -362,10 +483,12 @@ import {
   Module,
   OnApplicationShutdown,
 } from '@nestjs/common';
-import { db } from '../prisma/db.js';
+import type { ConfigType } from '@nestjs/config';
+import databaseConfig from '../config/database.config.js';
+import { createDb } from '../prisma/db.js';
 
 export const PRISMA_DB = Symbol('PRISMA_DB');
-export type PrismaDb = typeof db;
+export type PrismaDb = ReturnType<typeof createDb>;
 
 @Injectable()
 class PrismaShutdown implements OnApplicationShutdown {
@@ -378,7 +501,12 @@ class PrismaShutdown implements OnApplicationShutdown {
 
 @Module({
   providers: [
-    { provide: PRISMA_DB, useValue: db },
+    {
+      provide: PRISMA_DB,
+      inject: [databaseConfig.KEY],
+      useFactory: (config: ConfigType<typeof databaseConfig>) =>
+        createDb(config.url),
+    },
     PrismaShutdown,
   ],
   exports: [PRISMA_DB],
@@ -449,11 +577,36 @@ export class UsersService {
 export class UsersModule {}
 ```
 
-### Prompts cho Opus (2 bước)
+### Prompts cho Opus (3 bước)
 
-Tập này cần HAI prompt — đó là chính cốt chuyện: prompt ngây thơ khiến AI rơi vào snippet Prisma 7, rồi prompt sửa lại sau khi host bắt lỗi.
+Ba prompt vẫn nằm trong một sequence liên tục: chuẩn hóa ENV trước, đưa yêu cầu Prisma ngây thơ để lộ snippet cũ, rồi sửa plan trước khi approve.
 
-**Prompt 1 — câu hỏi ngây thơ (cảnh 11).** Gõ nguyên văn, không thêm context phiên bản. AI sẽ trả plan kiểu Prisma 7: `PrismaClient`, `schema.prisma`, `prisma generate`, `migrate dev`, inject thẳng vào UsersService. Đó chính là chất liệu để host bắt lỗi.
+**Prompt 1 — chuẩn hóa ENV và Docker Compose (cảnh 8).**
+
+```text
+Audit and standardize environment configuration for this NestJS 12, Prisma 8 and local Docker Compose project.
+
+Before editing:
+1. Inventory every process.env read and every environment-specific value hardcoded in docker-compose.postgres.yml.
+2. Classify each variable as application runtime, Prisma CLI, or local Compose-only configuration.
+3. Show the proposed .env keys, safe .env.example placeholders, affected files and verification commands.
+
+Requirements:
+- Use the project-root .env as the single local-development value source for Docker Compose interpolation, Prisma CLI and Nest runtime.
+- Keep .env ignored. Commit .env.example with the same key names and no real secrets.
+- Move the PostgreSQL image, user, password, database name and host port out of docker-compose.postgres.yml.
+- Use required Compose interpolation (${VAR:?message}); do not silently substitute empty strings or secret defaults.
+- Keep PostgreSQL's container port 5432 fixed; only the host port is configurable.
+- Let Compose validate Compose-only variables. Nest startup validation should cover only application runtime variables such as NODE_ENV, PORT and DATABASE_URL.
+- Keep DATABASE_URL explicit. Do not rely on nested .env interpolation; verify that it matches the local PostgreSQL credentials and host port.
+- prisma.config.ts may load dotenv for Prisma CLI. Nest must load .env with ConfigModule and pass typed config into the database factory.
+- Do not read process.env from controllers, business services or repository adapters.
+- Validate the Compose model with `docker compose -f docker-compose.postgres.yml config --quiet` so secrets are not printed.
+- Never print DATABASE_URL or POSTGRES_PASSWORD in the answer, terminal recording or logs.
+- Show the audit and plan first. Do not edit until I approve.
+```
+
+**Prompt 2 — câu hỏi Prisma ngây thơ (cảnh 13).** Gõ nguyên văn, không thêm context phiên bản. AI sẽ trả plan kiểu Prisma 7: `PrismaClient`, `schema.prisma`, `prisma generate`, `migrate dev`, inject thẳng vào UsersService. Đó chính là chất liệu để host bắt lỗi.
 
 ```text
 Read this NestJS project. Replace the in-memory Users store with PostgreSQL using Prisma.
@@ -461,7 +614,7 @@ Keep the current UsersService and controller behavior.
 Show a plan first, do not edit any file until I approve.
 ```
 
-**Prompt 2 — sau khi host bắt lỗi (đối chiếu release status + skill + contract vừa emit).**
+**Prompt 3 — sau khi host bắt lỗi (đối chiếu release status + skill + contract vừa emit).**
 
 ```text
 Read the current NestJS 12 ESM project and the installed Prisma 8 skill.
@@ -480,6 +633,9 @@ Constraints:
 - Do not use schema.prisma, prisma generate, migrate dev, migrate deploy, P2002 or $transaction.
 - Do not create Tasks, Roles or Permissions yet.
 - Keep the existing DTO validation behavior.
+- Preserve the approved ENV and Docker Compose boundary from Prompt 1.
+- Change the Prisma runtime singleton into a factory that receives the validated URL through DI.
+- Do not read process.env from controllers, business services or repository adapters.
 - First show the file plan, dependency direction, contract, migration workflow and verification commands.
 - Do not edit until I approve.
 ```
@@ -494,6 +650,12 @@ Constraints:
 - [ ] Migration plan chưa apply trước khi host review.
 - [ ] `contract.json`, `contract.d.ts`, migration package và lockfile xuất hiện trong diff.
 - [ ] Node 24 đã nạp `temporal-polyfill/full/global`; timestamp trong code là `Temporal.Instant`.
+- [ ] Xóa `DATABASE_URL` khiến Nest fail lúc startup trước khi nhận request.
+- [ ] `.env` bị ignore; `.env.example` có đủ key, chỉ chứa placeholder và được commit.
+- [ ] `docker-compose.postgres.yml` không hardcode image, user, password, database hoặc host port.
+- [ ] `docker compose -f docker-compose.postgres.yml config --quiet` pass mà không in secret.
+- [ ] `DATABASE_URL` khớp PostgreSQL credential và host port trong `.env`.
+- [ ] UsersService và PrismaUsersRepository không đọc `process.env` hoặc inject `ConfigService`.
 - [ ] Database URL không xuất hiện trong diff hoặc log công khai.
 
 ---
@@ -526,6 +688,11 @@ Ba prompt tuân theo visual preset của series: NestJS red `#E0234E`, trắng, 
 Restart NestJS một lần, toàn bộ user trong RAM biến mất. Ta sẽ đưa dữ liệu vào PostgreSQL bằng Prisma 8 mà không khóa UsersService vào ORM.
 
 ✅ Dựng PostgreSQL local bằng Docker Compose (không cài installer)
+✅ Đưa image, credential, database và host port của Compose vào `.env`
+✅ Dùng required interpolation để thiếu biến thì Compose dừng ngay
+✅ Nạp cùng một `.env` cho Prisma CLI và Nest runtime
+✅ Validate DATABASE_URL, PORT và NODE_ENV ngay lúc startup
+✅ Giữ secret ngoài Git bằng `.gitignore` và `.env.example`
 ✅ Kiểm tra và khóa chính xác phiên bản Prisma 8
 ✅ Hiểu contract khác database schema thế nào
 ✅ Emit contract.json và contract.d.ts
@@ -540,20 +707,22 @@ Restart NestJS một lần, toàn bộ user trong RAM biến mất. Ta sẽ đư
 🔗 Prisma 8 Data Contract: https://www.prisma.io/docs/orm/contract-authoring/the-data-contract
 🔗 Prisma 8 Migrations: https://www.prisma.io/docs/orm/migrations/how-migrations-work
 🔗 Prisma 8 Writing Data: https://www.prisma.io/docs/orm/fundamentals/writing-data
+🔗 Docker Compose interpolation: https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/
 
 ⏱ 0:00 Restart và mất sạch user
 ⏱ 1:10 PostgreSQL nằm ngoài process
 ⏱ 2:10 Dựng PostgreSQL local bằng Docker
-⏱ 3:20 Khóa phiên bản Prisma 8
-⏱ 4:30 Contract thay cho schema.prisma
-⏱ 5:50 Emit và review migration plan
-⏱ 7:25 AI dùng nhầm Prisma 7
-⏱ 8:40 Repository boundary và DI token
-⏱ 10:40 Query bằng db.orm.public.User
-⏱ 12:10 Migrate, verify và restart
-⏱ 13:40 Email trùng tạo lỗi 500
+⏱ 3:20 ConfigModule và fail fast DATABASE_URL
+⏱ 4:40 Khóa phiên bản Prisma 8
+⏱ 5:50 Contract thay cho schema.prisma
+⏱ 7:10 Emit và review migration plan
+⏱ 8:45 AI dùng nhầm Prisma 7
+⏱ 10:00 Repository boundary và DI token
+⏱ 12:00 Query bằng db.orm.public.User
+⏱ 13:30 Migrate, verify và restart
+⏱ 14:35 Email trùng tạo lỗi 500
 
-#NestJS #Prisma8 #PostgreSQL #RepositoryPattern #TypeScript #Backend #AICoding #Fresher #LapTrinhLaCuocSong
+#NestJS #Prisma8 #PostgreSQL #ConfigModule #RepositoryPattern #TypeScript #Backend #AICoding #LapTrinhLaCuocSong
 ```
 
 ### 4c. Keywords / Tags

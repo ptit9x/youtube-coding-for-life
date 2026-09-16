@@ -1,6 +1,6 @@
 # NestJS #05 — JWT Authentication: Register, Login và AuthGuard
 
-- **Series:** Học NestJS bằng AI — tập 5/46
+- **Series:** Học NestJS bằng AI — tập 5/45
 - **Target runtime:** ~13 phút
 - **Outcome:** Register, login, hash password, phát JWT và bảo vệ `/users/me`.
 - **Pain mở EP06:** Chuẩn bị thêm Role và Permission, nhưng convention phải nhắc lại cho AI mỗi lần.
@@ -51,7 +51,11 @@ Khi đúng, JwtService ký payload chỉ có `sub`. Trong JWT, `sub` là subject
 
 Mình chưa nhét role hoặc permission vào token. Quyền thay đổi thường xuyên hơn danh tính, và token cũ không tự cập nhật.
 
-Secret không nằm trong source code. Tập Config sẽ tổ chức nó đầy đủ; hiện tại terminal export biến môi trường trước khi chạy.
+Secret không nằm trong source code. Mình mở config boundary đã tạo ở EP03 và thêm `auth.config.ts`.
+
+`JWT_ACCESS_SECRET` được thêm vào schema validation như một giá trị bắt buộc. Không có fallback kiểu `secret` cho tiện demo.
+
+Nếu thiếu secret, application từ chối khởi động trước khi nhận request.
 
 AuthGuard lấy Bearer token từ header, verify chữ ký và expiration. Payload hợp lệ được gắn vào request.
 
@@ -91,7 +95,7 @@ Tập sau, ta biến convention đã kiểm chứng thành Agent Skill. AI sẽ 
 | 2 | [DIAGRAM] | Password lúc login → JWT cho request sau | 45s |
 | 3 | [DIAGRAM] | Plaintext vs salted hash; không minh họa giải mã hash | 45s |
 | 4 | [IDE]+[TERM] | Thêm passwordHash, migration/reset dev có cảnh báo | 55s |
-| 5 | [TERM] | Cài bcrypt và `@nestjs/jwt`; export JWT_SECRET | 40s |
+| 5 | [IDE]+[TERM] | Cài bcrypt và `@nestjs/jwt`; mở rộng env schema và `.env.example` với JWT_ACCESS_SECRET | 50s |
 | 6 | [IDE] | Gõ prompt threat model và plan | 60s |
 | 7 | [IDE] | Review dependency Auth → Users và response leak | 55s |
 | 8 | [IDE] | Register flow, bcrypt hash, public mapper | 70s |
@@ -112,7 +116,22 @@ npm install --save-dev @types/bcrypt
 nest g module modules/auth
 nest g controller modules/auth --no-spec
 nest g service modules/auth --no-spec
-export JWT_SECRET="dev-only-change-me"
+```
+
+Thêm `JWT_ACCESS_SECRET` vào `.env` local và chỉ thêm placeholder đủ dài vào `.env.example`. `auth.config.ts` là nơi duy nhất chuyển biến môi trường thô thành config của Auth.
+
+```typescript
+export default registerAs('auth', () => ({
+  accessSecret: process.env.JWT_ACCESS_SECRET!,
+  accessTtl: process.env.JWT_ACCESS_TTL ?? '15m',
+}));
+```
+
+Schema từ EP03 được mở rộng để app fail fast:
+
+```typescript
+JWT_ACCESS_SECRET: z.string().min(32),
+JWT_ACCESS_TTL: z.string().default('15m'),
 ```
 
 ### Code cốt lõi
@@ -154,7 +173,9 @@ Requirements:
 - JWT payload contains sub only for now.
 - Use one generic 401 message for invalid email or password.
 - AuthModule may depend on UsersModule; UsersModule must not import AuthModule.
-- Read JWT_SECRET from the environment and fail at startup if missing.
+- Extend the ConfigModule boundary created in EP03 with a typed auth.config.ts.
+- Add JWT_ACCESS_SECRET to startup validation; require at least 32 characters and never provide a secret fallback.
+- Update .env.example with placeholders only; never commit or print the real secret.
 - First produce a threat model, file plan and verification matrix.
 - Do not edit before approval.
 ```

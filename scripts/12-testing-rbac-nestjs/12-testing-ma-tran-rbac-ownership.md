@@ -1,6 +1,6 @@
 # NestJS #12 — Testing phân quyền bằng Jest và Supertest
 
-- **Series:** Học NestJS bằng AI — tập 12/46
+- **Series:** Học NestJS bằng AI — tập 12/45
 - **Target runtime:** ~14 phút
 - **Outcome:** Unit test, integration test và e2e bảo vệ auth, RBAC, ownership.
 - **Pain mở EP13:** Test làm duplication lộ rõ và tạo cám dỗ refactor quá tay.

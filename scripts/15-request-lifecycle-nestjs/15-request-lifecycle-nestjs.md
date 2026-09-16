@@ -1,9 +1,9 @@
-# NestJS #16 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
+# NestJS #15 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
 
-- **Series:** Học NestJS bằng AI — tập 16/46
+- **Series:** Học NestJS bằng AI — tập 15/45
 - **Target runtime:** ~12 phút
 - **Outcome:** Đọc đúng thứ tự middleware, guard, interceptor, pipe, handler và filter.
-- **Pain mở EP17:** Ứng dụng rõ luồng nhưng vẫn chỉ chạy trên máy lập trình viên.
+- **Pain mở EP16:** Ứng dụng rõ luồng nhưng vẫn chỉ chạy trên máy lập trình viên.
 
 ---
 
@@ -172,11 +172,11 @@ Produce a sequence diagram, then verify it against logs from three requests.
 
 ### 4a. Titles
 
-1. Request Lifecycle NestJS: Middleware, Guard và Pipe chạy thế nào? — EP16 | Lập trình là cuộc sống
-2. Thứ tự Middleware, Guard, Interceptor và Pipe — EP16 | Lập trình là cuộc sống
-3. Vì sao request chưa chạy vào Controller? — EP16 | Lập trình là cuộc sống
-4. Theo dõi request bằng Request ID trong NestJS — EP16 | Lập trình là cuộc sống
-5. Debug Request Lifecycle trong NestJS — EP16 | Lập trình là cuộc sống
+1. Request Lifecycle NestJS: Middleware, Guard và Pipe chạy thế nào? — EP15 | Lập trình là cuộc sống
+2. Thứ tự Middleware, Guard, Interceptor và Pipe — EP15 | Lập trình là cuộc sống
+3. Vì sao request chưa chạy vào Controller? — EP15 | Lập trình là cuộc sống
+4. Theo dõi request bằng Request ID trong NestJS — EP15 | Lập trình là cuộc sống
+5. Debug Request Lifecycle trong NestJS — EP15 | Lập trình là cuộc sống
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 3 cho tình huống debug.
 
@@ -208,7 +208,7 @@ Request trả lỗi trước khi vào controller? Hãy theo dõi đúng thứ t�
 ### 4c. Keywords / Tags
 
 ```text
-nestjs request lifecycle, middleware guard interceptor pipe order, nestjs interceptor, nestjs middleware, validation pipe nestjs, exception filter nestjs, request id nestjs, debug nestjs request, nestjs tiếng việt, nestjs tập 16, lập trình là cuộc sống
+nestjs request lifecycle, middleware guard interceptor pipe order, nestjs interceptor, nestjs middleware, validation pipe nestjs, exception filter nestjs, request id nestjs, debug nestjs request, nestjs tiếng việt, nestjs tập 15, lập trình là cuộc sống
 ```
 
 ---

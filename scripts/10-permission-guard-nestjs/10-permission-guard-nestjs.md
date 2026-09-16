@@ -1,6 +1,6 @@
 # NestJS #10 — PermissionGuard: Phân biệt lỗi 401 và 403
 
-- **Series:** Học NestJS bằng AI — tập 10/46
+- **Series:** Học NestJS bằng AI — tập 10/45
 - **Target runtime:** ~9–10 phút
 - **Outcome:** `@RequirePermissions`, PermissionGuard và response 401/403 đúng nghĩa.
 - **Pain mở EP11:** Cần một business feature thật để kiểm chứng permission và ownership.

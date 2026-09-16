@@ -1,6 +1,6 @@
 # NestJS #01 — Học NestJS với AI: Xây Users API đầu tiên
 
-- **Series:** Học NestJS bằng AI — tập 1/46
+- **Series:** Học NestJS bằng AI — tập 1/45
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; có thể thay bằng coding agent khác nhưng giữ nguyên workflow.
 - **Technical baseline:** NestJS 12, Node.js 24 Active LTS, npm, ESM (Nest CLI 12 sinh sẵn `"type": "module"`).

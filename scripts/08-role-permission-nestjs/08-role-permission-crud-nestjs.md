@@ -1,6 +1,6 @@
 # NestJS #08 — Role và Permission khác nhau thế nào?
 
-- **Series:** Học NestJS bằng AI — tập 8/46
+- **Series:** Học NestJS bằng AI — tập 8/45
 - **Target runtime:** ~13 phút
 - **Outcome:** CRUD đầy đủ Role và Permission bằng service/repository explicit.
 - **Pain mở EP09:** User, Role và Permission vẫn là các bảng rời, chưa có quan hệ N–N.

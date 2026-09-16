@@ -1,9 +1,9 @@
 # NestJS #14 — Tách common thành thư viện dùng cho nhiều dự án
 
-- **Series:** Học NestJS bằng AI — tập 14/46
+- **Series:** Học NestJS bằng AI — tập 14/45
 - **Target runtime:** ~14 phút
 - **Outcome:** Một package cross-cutting có public API, version và hai consumer thật.
-- **Pain mở EP15:** Mỗi consumer vẫn có config môi trường và secret riêng.
+- **Pain mở EP15:** Quá nhiều cross-cutting layer khiến request lỗi trước controller mà không rõ bị chặn ở đâu.
 
 ---
 
@@ -97,11 +97,11 @@ CurrentUser vẫn nằm trong AuthModule vì nó dựa vào contract của ứng
 
 Chúng ta tái sử dụng cross-cutting mechanics, không phát tán business policy.
 
-Nhưng hai ứng dụng có port, database và JWT secret khác nhau.
+Nhưng TaskFlow giờ đã có middleware, guard, pipe, interceptor và filter.
 
-Một library chung không thể quyết định config cho mọi môi trường.
+Một request trả lỗi trước controller. Breakpoint trong handler không bao giờ dừng.
 
-Tập sau, ta tổ chức config để code không đọc `process.env` khắp nơi.
+Tập sau, ta theo dấu một request qua toàn bộ lifecycle để biết chính xác nó dừng ở lớp nào.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -120,7 +120,7 @@ Mình là Richard. Lập trình là cuộc sống.
 | 7 | [TERMINAL] | Build TaskFlow và Nest app sạch | 85s |
 | 8 | [DIAGRAM] | Patch, minor, major và migration note | 65s |
 | 9 | [IDE] | Giữ PermissionGuard ngoài package | 55s |
-| 10 | [B-ROLL] | Hai môi trường với config khác nhau | 30s |
+| 10 | [B-ROLL] | Một request chạy qua middleware, guard, pipe, interceptor và filter | 30s |
 
 **Tổng: 645 giây ≈ 10:45.** Dành thêm ba phút giải thích package boundary; font tối thiểu 18px.
 

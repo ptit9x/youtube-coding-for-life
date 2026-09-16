@@ -1,6 +1,6 @@
 # NestJS #07 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên
 
-- **Series:** Học NestJS bằng AI — tập 7/46
+- **Series:** Học NestJS bằng AI — tập 7/45
 - **Target runtime:** ~14 phút
 - **Outcome:** Tạo session, refresh rotation, reuse detection và logout có thu hồi.
 - **Pain mở EP08:** Xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.
@@ -16,6 +16,8 @@ Cho token sống lâu hơn thì tiện, nhưng token bị lộ cũng sống lâu
 Đây không phải bài toán chọn tiện hoặc an toàn. Ta cần hai chiếc chìa khóa với hai nhiệm vụ khác nhau.
 
 Access token sống ngắn và mở API. Refresh token sống dài, chỉ dùng để xin một access token mới.
+
+Config boundary từ EP03 được mở rộng thêm `REFRESH_TOKEN_TTL_DAYS`. Refresh token là chuỗi ngẫu nhiên, nên không tạo thêm một JWT secret giả tạo.
 
 Nhưng lưu refresh token nguyên văn trong database lại tạo thêm một password mới. Database lộ là session của user cũng lộ.
 
@@ -90,7 +92,7 @@ Theo dõi series nếu bạn muốn security được kiểm chứng bằng time
 | 1 | [BROWSER] | Access token hết hạn; request đang làm nhận 401 | 35s |
 | 2 | [DIAGRAM] | Access token ngắn và refresh token dài | 45s |
 | 3 | [DIAGRAM] | Vé cũ bị bấm lỗ; reuse báo động | 45s |
-| 4 | [IDE] | Model AuthSession và các field lifecycle | 60s |
+| 4 | [IDE] | Thêm refresh TTL vào config đã validate; model AuthSession và các field lifecycle | 60s |
 | 5 | [BROWSER] | Mở RFC 9700 đúng đoạn refresh rotation | 35s |
 | 6 | [IDE] | Prompt AI threat model bốn tình huống | 60s |
 | 7 | [IDE] | Review lỗi update cùng row, chuyển thành token family | 60s |
@@ -126,6 +128,12 @@ model AuthSession {
 
 ### Token helpers
 
+`auth.config.ts` và env schema được mở rộng, không tạo config song song trong AuthService:
+
+```typescript
+REFRESH_TOKEN_TTL_DAYS: z.coerce.number().int().min(1).max(90).default(30),
+```
+
 ```typescript
 import { createHash, randomBytes } from 'node:crypto';
 
@@ -142,6 +150,7 @@ Threat-model and plan refresh-token rotation for the current NestJS AuthModule.
 Requirements:
 - Access tokens remain short-lived JWTs.
 - Refresh tokens are random opaque values.
+- Extend the validated auth config with REFRESH_TOKEN_TTL_DAYS; do not introduce a refresh JWT secret.
 - Store only a deterministic cryptographic hash.
 - Rotate on every successful refresh.
 - Keep revoked rows to detect reuse and revoke the whole token family.

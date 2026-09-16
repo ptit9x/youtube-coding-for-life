@@ -162,11 +162,11 @@ Nhóm này được chèn vào giữa các tập chính, dùng trong tuần ngh�
 
 | # | Hook/tiêu đề Short | Bằng chứng trên màn hình | Dẫn đến |
 |---|---|---|---|
-| 31 | **REST không phải là “API trả JSON”** | Cùng JSON nhưng một thiết kế dùng resource/status đúng, một thiết kế chỉ RPC qua HTTP | EP01/EP18 |
+| 31 | **REST không phải là “API trả JSON”** | Cùng JSON nhưng một thiết kế dùng resource/status đúng, một thiết kế chỉ RPC qua HTTP | EP01/EP17 |
 | 32 | **Đừng đặt route là `/getAllUsers`** | So sánh `GET /getAllUsers` với `GET /users` | EP01 |
-| 33 | **PUT và PATCH khác nhau ở đâu?** | Replace toàn bộ user với update riêng trường `name` | EP01/EP33 |
+| 33 | **PUT và PATCH khác nhau ở đâu?** | Replace toàn bộ user với update riêng trường `name` | EP01/EP32 |
 | 34 | **Stateless không có nghĩa là không dùng database** | Mỗi request tự mang auth context; dữ liệu vẫn nằm trong PostgreSQL | EP03/EP05 |
-| 35 | **Bấm hai lần, API có tạo hai đơn hàng?** | Gửi cùng request hai lần; giới thiệu idempotency key | EP25/EP42 |
+| 35 | **Bấm hai lần, API có tạo hai đơn hàng?** | Gửi cùng request hai lần; giới thiệu idempotency key | EP24/EP41 |
 
 Góc triển khai: dùng TaskFlow làm ví dụ xuyên suốt. Tránh biến nhóm này thành danh sách “REST constraint” học thuộc lòng; luôn bắt đầu bằng một API thiết kế sai nhưng vẫn chạy.
 
@@ -176,9 +176,9 @@ Góc triển khai: dùng TaskFlow làm ví dụ xuyên suốt. Tránh biến nh�
 |---|---|---|---|
 | 36 | **Commit không phải nút Save** | Một commit chỉ chứa một thay đổi có chủ đích; so với commit lẫn refactor và feature | EP06 |
 | 37 | **AI sửa 20 file: nhìn đâu trước?** | `git diff --stat` → diff theo file → test | EP06 |
-| 38 | **Merge, squash hay rebase?** | Vẽ ba history graph và kết quả sau khi nhập PR | EP06/EP35 |
-| 39 | **Reset và revert: chỉ một cái viết lại lịch sử** | Revert tạo commit đảo ngược; reset di chuyển branch pointer | EP35 |
-| 40 | **Xóa nhầm commit vẫn còn đường về** | `git reflog` tìm lại HEAD cũ trên repo demo | EP35 |
+| 38 | **Merge, squash hay rebase?** | Vẽ ba history graph và kết quả sau khi nhập PR | EP06/EP34 |
+| 39 | **Reset và revert: chỉ một cái viết lại lịch sử** | Revert tạo commit đảo ngược; reset di chuyển branch pointer | EP34 |
+| 40 | **Xóa nhầm commit vẫn còn đường về** | `git reflog` tìm lại HEAD cũ trên repo demo | EP34 |
 
 Góc triển khai: Git không đứng ngoài series. Nó là bằng chứng cho workflow **Review → Approve → Thực hiện → Kiểm chứng**, đặc biệt khi AI thay đổi nhiều file.
 
@@ -188,9 +188,9 @@ Góc triển khai: Git không đứng ngoài series. Nó là bằng chứng cho 
 |---|---|---|---|
 | 41 | **NestJS có phải Angular cho backend?** | Đặt Angular component/service/module cạnh Nest controller/provider/module | EP01 |
 | 42 | **Vì sao NestJS nhìn rất giống Angular?** | Decorator, module và DI ở hai codebase; kết luận “lấy cảm hứng kiến trúc”, không phải bê Angular lên server | EP01 |
-| 43 | **Trước NestJS, Node.js thiếu điều gì?** | Express route vẫn chạy tốt nhưng không áp đặt cấu trúc project | EP01/EP38 |
+| 43 | **Trước NestJS, Node.js thiếu điều gì?** | Express route vẫn chạy tốt nhưng không áp đặt cấu trúc project | EP01/EP37 |
 | 44 | **NestJS ra đời từ một nỗi đau kiến trúc** | Timeline 2017, Kamil Myśliwiec, mục tiêu app dễ test và maintain | Video lịch sử độc lập/EP01 |
-| 45 | **NestJS không thay thế Express** | Chuyển adapter Express/Fastify; Nest giữ lớp kiến trúc phía trên | EP01/EP34 |
+| 45 | **NestJS không thay thế Express** | Chuyển adapter Express/Fastify; Nest giữ lớp kiến trúc phía trên | EP01/EP33 |
 
 Guardrail nội dung: chỉ nói NestJS **được truyền cảm hứng mạnh từ Angular**. Không nói NestJS là Angular chạy trên backend hoặc dùng Angular bên trong. Trang chính thức ghi framework được phát hành từ năm 2017 và do Kamil Myśliwiec tạo ra.
 
@@ -198,11 +198,11 @@ Guardrail nội dung: chỉ nói NestJS **được truyền cảm hứng mạnh 
 
 | # | Hook/tiêu đề Short | Bằng chứng trên màn hình | Dẫn đến |
 |---|---|---|---|
-| 46 | **Một màn hình cần ba REST request hay một GraphQL query?** | Dashboard lấy user, tasks và permissions theo hai cách | Bonus 18.5 |
-| 47 | **GraphQL chọn field, REST luôn trả thừa?** | Chỉ yêu cầu `id`, `title`; so với response contract cố định của API demo | Bonus 18.5 |
-| 48 | **GraphQL không tự nhiên nhanh hơn REST** | Một query đẹp nhưng resolver tạo N+1 query database | Bonus 18.5/Bonus 34.5 |
-| 49 | **Một endpoint GraphQL có thay thế mọi REST route?** | `/graphql` nhận nhiều operation nhưng schema/resolver vẫn có boundary | Bonus 18.5 |
-| 50 | **Cùng một Service, hai lớp API** | REST controller và GraphQL resolver gọi cùng `TasksService` | Bonus 18.5 |
+| 46 | **Một màn hình cần ba REST request hay một GraphQL query?** | Dashboard lấy user, tasks và permissions theo hai cách | Bonus 17.5 |
+| 47 | **GraphQL chọn field, REST luôn trả thừa?** | Chỉ yêu cầu `id`, `title`; so với response contract cố định của API demo | Bonus 17.5 |
+| 48 | **GraphQL không tự nhiên nhanh hơn REST** | Một query đẹp nhưng resolver tạo N+1 query database | Bonus 17.5/Bonus 33.5 |
+| 49 | **Một endpoint GraphQL có thay thế mọi REST route?** | `/graphql` nhận nhiều operation nhưng schema/resolver vẫn có boundary | Bonus 17.5 |
+| 50 | **Cùng một Service, hai lớp API** | REST controller và GraphQL resolver gọi cùng `TasksService` | Bonus 17.5 |
 
 Kết luận xuyên suốt: không chọn công nghệ bằng khẩu hiệu “GraphQL hiện đại hơn”. REST phù hợp với API đơn giản, HTTP semantics và caching rõ ràng; GraphQL hữu ích khi client cần ghép dữ liệu linh hoạt. Quyết định dựa trên shape của sản phẩm và chi phí vận hành.
 
@@ -221,10 +221,10 @@ Không khẳng định Prisma “phổ biến hơn TypeORM” nếu chưa chốt
 ### Lịch chen 25 Shorts mở rộng
 
 - REST và Angular/NestJS: ưu tiên trước hoặc trong EP01–EP04.
-- Git: rải quanh EP06, testing và EP35 CI/CD.
+- Git: rải quanh EP06, testing và EP34 CI/CD.
 - Prisma vs TypeORM: đăng quanh EP03, EP13 và Bonus 13.5.
-- REST vs GraphQL: giữ ba Short đầu để “gieo vấn đề” từ EP18; đăng trọn nhóm quanh Bonus 18.5.
-- Idempotency và N+1: dùng làm callback sớm, rồi dẫn lại khi EP34/EP42 ra mắt.
+- REST vs GraphQL: giữ ba Short đầu để “gieo vấn đề” từ EP17; đăng trọn nhóm quanh Bonus 17.5.
+- Idempotency và N+1: dùng làm callback sớm, rồi dẫn lại khi EP33/EP41 ra mắt.
 
 ## 8. Source map để AI viết Short
 
@@ -282,7 +282,7 @@ Quy tắc phiên bản:
 | 46, 47 | [GraphQL Queries](https://graphql.org/learn/queries/), [NestJS GraphQL quick start](https://docs.nestjs.com/graphql/quick-start) | Client chọn field và có thể lấy dữ liệu liên quan trong một request |
 | 48 | [GraphQL Performance](https://graphql.org/learn/performance/), [NestJS GraphQL resolvers](https://docs.nestjs.com/graphql/resolvers) | GraphQL không mặc nhiên nhanh hơn; resolver thiếu batching có thể tạo N+1 |
 | 49 | [GraphQL over HTTP](https://graphql.org/learn/serving-over-http/), [NestJS GraphQL quick start](https://docs.nestjs.com/graphql/quick-start) | Một HTTP endpoint có thể nhận nhiều operation; schema và resolver vẫn là contract/boundary |
-| 50 | [NestJS Controllers](https://docs.nestjs.com/controllers), [NestJS GraphQL Resolvers](https://docs.nestjs.com/graphql/resolvers), [series Bonus 18.5](./00-series-plan-hoc-nestjs-voi-ai.md) | Controller và resolver là transport boundary; reuse service là quyết định kiến trúc của TaskFlow |
+| 50 | [NestJS Controllers](https://docs.nestjs.com/controllers), [NestJS GraphQL Resolvers](https://docs.nestjs.com/graphql/resolvers), [series Bonus 17.5](./00-series-plan-hoc-nestjs-voi-ai.md) | Controller và resolver là transport boundary; reuse service là quyết định kiến trúc của TaskFlow |
 | 51 | [Prisma 8 data contract](https://www.prisma.io/docs/orm/core-concepts), [TypeORM Entities](https://typeorm.io/docs/entity/entities/) | Prisma 8 author contract + emit types; TypeORM author class có decorator |
 | 52 | [Prisma 8 overview](https://www.prisma.io/docs/orm), [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status) | Contract, typed query API, migration graph và trạng thái phát hành hiện tại |
 | 53 | [TypeORM Active Record vs Data Mapper](https://typeorm.io/docs/guides/active-record-data-mapper/) | TypeORM hỗ trợ cả hai pattern; mỗi pattern có trade-off maintainability/simplicity |
