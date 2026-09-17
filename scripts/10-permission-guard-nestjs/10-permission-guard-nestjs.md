@@ -1,7 +1,7 @@
 # NestJS #10 — PermissionGuard: Phân biệt lỗi 401 và 403
 
 - **Series:** Học NestJS bằng AI — tập 10/45
-- **Target runtime:** ~9–10 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** `@RequirePermissions`, PermissionGuard và response 401/403 đúng nghĩa.
 - **Pain mở EP11:** Cần một business feature thật để kiểm chứng permission và ownership.
 
@@ -21,7 +21,7 @@ Bước ngoặt là để controller yêu cầu hành động, còn role chỉ l
 
 Decorator dùng metadata, không tự chạy logic. PermissionGuard dùng Reflector đọc metadata từ handler và controller.
 
-AuthGuard phải chạy trước để gắn `request.user`. PermissionGuard dùng user ID đó truy vấn effective permissions.
+Global AuthGuard từ EP05 chạy trước để gắn `request.user`. Chỉ route có `@Public()` mới bỏ qua xác thực. PermissionGuard dùng user ID đó truy vấn effective permissions.
 
 JWT vẫn chỉ giữ `sub`. Nếu nhét toàn bộ quyền vào token, một quyền vừa revoke vẫn sống tới lúc token hết hạn.
 
@@ -39,7 +39,7 @@ Guard gọi AccessControlService, không query Prisma trực tiếp. Cách tính
 
 PermissionGuard nằm trong `modules/access-control/guards`. Nó phụ thuộc policy domain nên không thuộc `common`.
 
-Đến phần tự gõ, mình thêm lỗi 403 có message và permission bị thiếu. Server log user ID, nhưng không lộ dữ liệu thừa.
+Đến phần tự gõ, mình thêm lỗi 403 với message chung. Server log user ID và permission bị thiếu để điều tra, nhưng response không liệt kê policy nội bộ cho client.
 
 Mình protect endpoint tạo Permission. User member đăng nhập đúng vẫn nhận 403.
 
@@ -47,9 +47,9 @@ Gán `permissions.manage` qua role, request thành công. Revoke quyền, dùng 
 
 Đây là payoff của việc không nhét permission vào JWT.
 
-Direct DENY được thêm cho user admin. Cùng token đó lập tức nhận 403 vì effective permission đã thay đổi.
+Revoke role của user admin. Cùng token đó lập tức nhận 403 vì effective permission đã thay đổi.
 
-Một route public không có metadata vẫn đi qua theo policy đã chốt. Route protected bắt buộc đi qua cả hai guard.
+Route không có permission metadata vẫn phải đi qua global AuthGuard. Chỉ `@Public()` mới thực sự public; route quản trị bắt buộc đi qua cả AuthGuard và PermissionGuard.
 
 Đăng nhập không phải tấm vé VIP. Nó chỉ giúp hệ thống biết tên người đang đứng trước cửa.
 
@@ -104,10 +104,11 @@ return true;
 ```text
 Plan claims-based authorization for the current AccessControlModule.
 - Add @RequirePermissions metadata and PermissionGuard.
-- AuthGuard must establish request.user first.
+- Global AuthGuard must establish request.user first; only explicit @Public routes bypass it.
 - PermissionGuard calls AccessControlService, never Prisma directly.
 - Required permissions use AND semantics.
 - No token returns 401; insufficient permission returns 403.
+- Return a generic 403 message to clients; log missing permission codes only on the server.
 - JWT remains identity-only so revocation applies immediately.
 - Keep domain-specific guard and decorator inside access-control, not common.
 - Produce a decision table and wait for approval.

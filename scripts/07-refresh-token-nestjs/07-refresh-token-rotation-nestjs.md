@@ -1,7 +1,7 @@
 # NestJS #07 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên
 
 - **Series:** Học NestJS bằng AI — tập 7/45
-- **Target runtime:** ~14 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Tạo session, refresh rotation, reuse detection và logout có thu hồi.
 - **Pain mở EP08:** Xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.
 
@@ -47,15 +47,15 @@ Login bây giờ phát access token và refresh token ngẫu nhiên. Database ch
 
 Với browser, refresh token đi trong cookie `HttpOnly`. JavaScript phía client không đọc được cookie này.
 
-Cookie bật `Secure` ở production và đặt `SameSite` phù hợp. Cookie không tự giải quyết toàn bộ CSRF, nên scope phải hẹp.
+Cookie bật `Secure` ở production, `HttpOnly`, scope `Path` chỉ dành cho refresh/logout và chọn `SameSite` theo kiến trúc frontend. Nếu buộc dùng cross-site cookie, phải có CSRF protection riêng; cookie không tự giải quyết toàn bộ CSRF.
 
-Endpoint refresh đọc cookie, hash giá trị và tìm session. Session hợp lệ sẽ bị revoke trong cùng transaction.
+Endpoint refresh đọc cookie, hash giá trị và tìm session. Session hợp lệ phải được consume theo kiểu atomic compare-and-set trong cùng transaction: chỉ row chưa revoke mới được cập nhật. Unique index trên token hash bảo đảm không có hai row cùng đại diện một token.
 
-Sau đó server tạo session thay thế, phát refresh token mới và trả access token mới.
+Sau đó server tạo session thay thế, phát refresh token mới và trả access token mới. Nếu hai request refresh dùng cùng token đến gần như đồng thời, chỉ một request thắng; request còn lại không được tạo thêm session kế nhiệm.
 
 Nếu token đã revoke xuất hiện lại, server xem đó là reuse. Toàn bộ family bị thu hồi.
 
-Đây là chi tiết AI hay bỏ qua. Rotation không có reuse detection chỉ là thay token, chưa phải cơ chế phát hiện đánh cắp.
+Đây là chi tiết AI hay bỏ qua. Rotation không có reuse detection chỉ là thay token, chưa phải cơ chế phát hiện đánh cắp. Tuy nhiên request đồng thời do browser retry không tự động chứng minh token đã bị đánh cắp; client nên single-flight refresh và server cần policy grace/reuse được threat-model rõ để tránh tự revoke phiên hợp lệ.
 
 Logout cũng revoke session hiện tại và clear cookie. Xóa cookie phía client thôi chưa đủ vì bản sao token vẫn dùng được.
 
@@ -105,7 +105,7 @@ Theo dõi series nếu bạn muốn security được kiểm chứng bằng time
 | 14 | [BROWSER] | Login mới, logout, kiểm tra cookie và DB | 50s |
 | 15 | [B-ROLL] | Hai chìa khóa trên bàn tối, teaser Role/Permission | 25s |
 
-**Tổng: 815 giây ≈ 13:35.** Khi quay, làm mờ token/cookie thật và chỉ dùng database development.
+**Tổng mục tiêu: 8–10 phút.** Khi quay, làm mờ token/cookie thật và chỉ dùng database development.
 
 ### Model cốt lõi
 
@@ -152,11 +152,15 @@ Requirements:
 - Refresh tokens are random opaque values.
 - Extend the validated auth config with REFRESH_TOKEN_TTL_DAYS; do not introduce a refresh JWT secret.
 - Store only a deterministic cryptographic hash.
+- Add a unique constraint/index for the refresh-token hash.
 - Rotate on every successful refresh.
+- Consume the current session atomically and create its replacement in one transaction.
 - Keep revoked rows to detect reuse and revoke the whole token family.
 - Logout must revoke server-side state and clear the client cookie.
 - Use an HttpOnly cookie for the browser demo.
-- Discuss concurrent refresh requests before implementation.
+- Define Secure, SameSite, Path and CSRF policy for the browser demo.
+- Discuss concurrent refresh requests, browser retry and client-side single-flight before implementation.
+- Do not treat every concurrent loser as theft without documenting the reuse/grace policy.
 - Do not edit until I approve the threat model and transaction boundary.
 ```
 

@@ -1,17 +1,15 @@
-# NestJS #09 — Quan hệ User, Role và Permission với Prisma
+# NestJS #09 — Quan hệ User, Role và Permission với Prisma 8
 
 - **Series:** Học NestJS bằng AI — tập 9/45
-- **Target runtime:** ~11 phút
-- **Outcome:** Explicit join models, seed và API assign/revoke đầy đủ.
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
+- **Outcome:** Prisma 8 explicit junction models, seed và assignment service chạy trong transaction; chưa expose API quản trị trước PermissionGuard.
 - **Pain mở EP10:** Database đã có chính sách, nhưng route chưa thực thi permission.
 
 ---
 
 ## PART 1 — SCRIPT
 
-Richard nhận `permissions.manage` từ role admin. Một direct DENY lại cấm đúng quyền đó.
-
-Nếu precedence mơ hồ, cùng một request có thể được phép hoặc bị chặn tùy cách code.
+Richard có role admin, nhưng database hiện chưa biểu diễn được admin gồm những permission nào.
 
 User, Role và Permission phải được nối bằng những quan hệ chứa đủ ý nghĩa business.
 
@@ -19,39 +17,31 @@ Bước ngoặt là coi join table như entity thật. Nó không chỉ nối ha
 
 Mô hình chuẩn có `UserRole` và `RolePermission`. Permission của user được suy ra qua những role đang sở hữu.
 
-TaskFlow còn cần ngoại lệ theo từng user. Vì vậy mình thêm `UserPermission` với `ALLOW` hoặc `DENY` rõ ràng.
-
-Nếu dự án không cần ngoại lệ, hãy bỏ bảng này. Đừng tạo quan hệ thứ ba chỉ để sơ đồ trông cân đối.
+TaskFlow bắt đầu với RBAC chuẩn: permission của user được suy ra qua Role. `UserPermission` trực tiếp chưa được thêm chỉ để sơ đồ trông cân đối. Nếu sau này nghiệp vụ thật cần ngoại lệ, model đó phải có `ALLOW` hoặc `DENY` và precedence được chốt trước khi migrate.
 
 Mỗi join model dùng composite primary key. Cùng một cặp ID không thể được gán hai lần.
 
 `assignedAt` và `assignedById` giúp audit. Đây là lý do implicit many-to-many không còn phù hợp.
 
-Mình yêu cầu AI thiết kế schema và bảng precedence trước khi migrate. Nó phải trả lời direct DENY thắng hay thua role.
-
-AI ban đầu cộng mọi permission lại. Khi đó direct DENY tồn tại nhưng không có tác dụng.
-
-Mình chốt công thức: quyền qua role, cộng direct ALLOW, rồi loại direct DENY. Deny trực tiếp có ưu tiên cuối.
+Mình yêu cầu AI thiết kế contract Prisma 8 và chỉ ra giới hạn relation hiện tại trước khi migrate. AI đề xuất nested write như các tutorial Prisma cũ. Mình dừng lại, đối chiếu tài liệu Prisma 8 rồi chuyển sang explicit junction write.
 
 Service assignment nằm trong AccessControl, không nằm trong UsersService. Users không nên sở hữu policy phân quyền.
 
-API gán và gỡ role kiểm tra cả user lẫn role tồn tại. Duplicate assignment trả 409, không rơi xuống lỗi 500.
+Assignment service gán và gỡ role phải kiểm tra cả user lẫn role tồn tại. Duplicate assignment được map thành conflict, không rơi xuống lỗi 500.
 
-RolePermission cũng có attach và detach. Một endpoint `setPermissions` dùng transaction để thay cả tập quyền nguyên tử.
+RolePermission cũng có attach và detach. Use case `setPermissions` dùng `db.transaction(async tx => ...)` để thay cả tập quyền nguyên tử. Mọi query bên trong callback đi qua `tx.orm`; không trộn query từ facade bên ngoài transaction.
 
 Đến phần tự gõ, mình viết hàm tính effective permission bằng `Set`. Permission trùng qua hai role chỉ xuất hiện một lần.
 
-Sau đó direct ALLOW được thêm, direct DENY bị xóa. Thứ tự vài dòng này chính là business policy.
+Nếu dự án bật direct override ở tương lai, công thức phải được test rõ: quyền qua role cộng direct ALLOW rồi trừ direct DENY. Nhưng tập này không thêm model chưa có nhu cầu.
 
-Mình chạy migration, đọc SQL và kiểm tra composite keys. Tiếp theo, seed role `admin`, `member` cùng permission mẫu.
+Mình chạy contract emit, lập migration, đọc DDL và kiểm tra composite keys. Tiếp theo, seed role `admin`, `member` cùng permission mẫu.
 
-Postman gán hai role cho một user. Endpoint effective permissions trả danh sách đã loại trùng.
+Integration test gán hai role cho một user. Query Prisma 8 dùng `.include(...)` để đọc relation, còn metadata của assignment được đọc trực tiếp từ collection junction. Danh sách permission hiệu lực đã loại trùng.
 
-Mình direct deny `tasks.delete`. Permission biến mất dù role admin đang cấp nó.
+Test `setPermissions` cố tình lỗi ở giữa transaction. Toàn bộ thay đổi rollback. Gán lại cùng role nhận conflict thay vì tạo record rác.
 
-Gỡ deny, quyền trở lại. Gán lại cùng role nhận 409 thay vì tạo record rác.
-
-Database bây giờ kể được toàn bộ chính sách. Nhưng controller vẫn chưa đọc câu chuyện đó.
+Database bây giờ kể được toàn bộ chính sách. Nhưng controller vẫn chưa đọc câu chuyện đó. Tập này không mở endpoint assign/revoke ra HTTP; route quản trị chỉ xuất hiện sau khi PermissionGuard có thể bảo vệ nó.
 
 Tập sau, `@RequirePermissions` và PermissionGuard sẽ biến dữ liệu thành quyết định 403.
 
@@ -65,64 +55,74 @@ Theo dõi series để xem permission rời database và đứng ngay trước c
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [DIAGRAM] | Ba bảng rời, rồi nối bằng ba join models | 45s |
-| 2 | [DIAGRAM] | Standard RBAC và nhánh direct override | 55s |
-| 3 | [IDE] | Schema UserRole, RolePermission, UserPermission | 75s |
-| 4 | [IDE] | Prompt AI về precedence; bắt lỗi DENY vô dụng | 65s |
-| 5 | [DIAGRAM] | Role grants + ALLOW − DENY | 45s |
+| 1 | [DIAGRAM] | Ba bảng rời, rồi nối bằng hai junction models | 40s |
+| 2 | [DIAGRAM] | RBAC chuẩn và nhánh direct override chỉ khi có nhu cầu | 40s |
+| 3 | [IDE] | Prisma 8 contract: UserRole và RolePermission | 60s |
+| 4 | [IDE] | AI đề xuất nested write cũ; host đối chiếu relation limitations | 50s |
+| 5 | [DIAGRAM] | Luồng explicit junction write | 35s |
 | 6 | [IDE] | AssignmentService và transaction `setPermissions` | 75s |
 | 7 | [IDE] | Host tự gõ effective permission bằng Set | 65s |
-| 8 | [TERM] | Migration, SQL composite keys và seed | 65s |
-| 9 | [BROWSER] | Assign/revoke role và permission | 75s |
-| 10 | [BROWSER] | Duplicate 409; direct DENY thắng role | 70s |
+| 8 | [TERM] | Contract emit, migration, composite keys và seed | 55s |
+| 9 | [IDE]+[TERM] | Integration test assign/revoke qua junction collection | 55s |
+| 10 | [IDE]+[TERM] | Duplicate conflict và transaction rollback | 55s |
 | 11 | [B-ROLL] | Permission đi tới cánh cửa controller | 25s |
 
-**Tổng: 660 giây ≈ 11 phút.** Giữ sơ đồ tối, ba màu nhất quán cho User, Role và Permission.
+**Tổng mục tiêu: 8–10 phút.** Giữ sơ đồ tối, ba màu nhất quán cho User, Role và Permission.
 
 ### Schema rút gọn
 
 ```prisma
-enum PermissionEffect { ALLOW DENY }
-
 model UserRole {
-  userId String
-  roleId String
+  userId Uuid
+  roleId Uuid
   assignedAt DateTime @default(now())
-  assignedById String?
+  assignedById Uuid?
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
   @@id([userId, roleId])
 }
 
 model RolePermission {
-  roleId String
-  permissionId String
+  roleId Uuid
+  permissionId Uuid
   role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
   @@id([roleId, permissionId])
 }
 
-model UserPermission {
-  userId String
-  permissionId String
-  effect PermissionEffect
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
-  @@id([userId, permissionId])
-}
 ```
+
+Nếu có requirement direct override ở tập sau, mới bổ sung `UserPermission` với `effect: ALLOW | DENY` và test precedence.
+
+### Transaction Prisma 8 cốt lõi
+
+```typescript
+await db.transaction(async (tx) => {
+  await tx.orm.public.RolePermission
+    .where({ roleId })
+    .deleteAll();
+
+  await tx.orm.public.RolePermission.createAll(
+    permissionIds.map((permissionId) => ({ roleId, permissionId })),
+  );
+});
+```
+
+Tên method chính xác phải được đối chiếu với facade type đã emit ở phiên bản Prisma 8 được pin trước khi quay.
 
 ### Prompt cho Opus
 
 ```text
 Plan explicit many-to-many access-control relations.
-- Add UserRole, RolePermission and UserPermission.
-- UserPermission must have ALLOW or DENY semantics.
+- Add UserRole and RolePermission as explicit junction models.
+- Do not add UserPermission unless a real direct-override requirement exists.
 - Store assignedAt and assignedById where assignments need audit.
 - Define precedence before writing queries.
-- Add assign/revoke APIs and a transactional setPermissions use case.
+- Add internal assign/revoke use cases and transactional setPermissions with db.transaction; query only through tx.orm inside the callback.
 - Reject duplicate assignments with 409.
 - Keep assignment business logic inside AccessControlModule.
+- Do not create HTTP management endpoints before PermissionGuard exists.
+- Use Prisma 8 contract emit, explicit junction collections, .include(...) and direct junction writes.
 - Show migration SQL risks and wait for approval.
 ```
 
@@ -140,7 +140,7 @@ Plan explicit many-to-many access-control relations.
 
 ### 4a. Titles
 
-1. Quan hệ User, Role và Permission với Prisma — EP09 | Lập trình là cuộc sống
+1. Quan hệ User, Role và Permission với Prisma 8 — EP09 | Lập trình là cuộc sống
 2. Thiết kế RBAC nhiều-nhiều trong NestJS — EP09 | Lập trình là cuộc sống
 3. Tạo UserRole và RolePermission bằng Prisma — EP09 | Lập trình là cuộc sống
 4. Khi nào cần UserPermission trực tiếp? — EP09 | Lập trình là cuộc sống
@@ -151,22 +151,23 @@ Plan explicit many-to-many access-control relations.
 ### 4b. SEO Description
 
 ```text
-Richard vừa có quyền từ role, vừa nhận direct DENY. Tập này chốt precedence và biến join table thành business entity có audit.
+User, Role và Permission đang là ba bảng rời. Tập này dùng Prisma 8 explicit junction models để biến quan hệ thành business entity có audit.
 
-✅ UserRole, RolePermission và UserPermission
+✅ UserRole và RolePermission explicit
 ✅ Composite primary key chống duplicate
 ✅ Audit assignedAt và assignedById
-✅ Direct ALLOW/DENY có precedence rõ
-✅ Assign, revoke và transaction set permissions
+✅ Chỉ thêm direct ALLOW/DENY khi có requirement thật
+✅ Assign, revoke và transaction set permissions bằng Prisma 8
 ✅ Seed admin/member cùng permission mẫu
 ✅ Tính effective permissions không trùng
+✅ Chưa expose API quản trị trước PermissionGuard
 
 🔗 Prisma Relations: https://www.prisma.io/docs/orm/prisma-schema/data-model/relations
 
 ⏱ 0:00 Ba bảng chưa nói chuyện
 ⏱ 1:20 Standard RBAC và direct override
 ⏱ 3:00 Explicit join models
-⏱ 5:00 Precedence ALLOW/DENY
+⏱ 5:00 Explicit junction writes
 ⏱ 6:45 Assignment service
 ⏱ 8:35 Migration và seed
 ⏱ 10:00 Kiểm chứng effective permissions
@@ -177,7 +178,7 @@ Richard vừa có quyền từ role, vừa nhận direct DENY. Tập này chốt
 ### 4c. Keywords / Tags
 
 ```text
-user role permission nestjs, many to many prisma, explicit join table prisma, rbac database design, userrole rolepermission, userpermission allow deny, effective permissions, composite key prisma, nestjs access control, permission assignment api, nestjs tiếng việt, học nestjs, nestjs tập 9, typescript backend, lập trình là cuộc sống
+user role permission nestjs, many to many prisma 8, explicit junction prisma 8, rbac database design, userrole rolepermission, prisma 8 transaction, effective permissions, composite key prisma, nestjs access control, permission assignment service, nestjs tiếng việt, học nestjs, nestjs tập 9, typescript backend, lập trình là cuộc sống
 ```
 
 ---
@@ -185,11 +186,11 @@ user role permission nestjs, many to many prisma, explicit join table prisma, rb
 ## PART 5 — THUMBNAIL PACKAGE
 
 ### Option 1 — khuyên dùng
-- `3 QUAN HỆ N–N` — WHITE
+- `2 JUNCTION` — WHITE
 - `ĐỪNG MƠ HỒ` — NEON GREEN `#00FF41`
 ### Option 2
-- `DIRECT DENY` — NEON GREEN `#00FF41`
-- `THẮNG ROLE` — WHITE
+- `PRISMA 8` — NEON GREEN `#00FF41`
+- `TRANSACTION` — WHITE
 ### Option 3
 - `JOIN TABLE` — WHITE
 - `LÀ BUSINESS` — NEON GREEN `#00FF41`

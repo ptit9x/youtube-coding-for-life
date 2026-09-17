@@ -1,7 +1,7 @@
 # Series Plan — "Học NestJS bằng AI" (45 tập chính + bonus, lane: Học lập trình bằng LLM)
 
 - **Format:** 37 tập xây modular monolith, 8 tập Microservices và các tập bonus rẽ sang stack khác. Host tự quay màn hình + tự thoại âm.
-- **Thời lượng:** Phần lớn 10–15 phút. Tập concept 8–11 phút; tập implementation phức tạp 14–18 phút. Không kéo dài chỉ để chạm mốc thời lượng.
+- **Thời lượng:** EP01–EP03 giữ thời lượng thực tế đã quay. Các video chưa quay hướng tới 8–10 phút với khoảng 650–800 từ thoại; chỉ dài hơn khi outcome không thể tách hợp lý.
 - **Nguyên tắc tách tập:** Mỗi tập có một outcome chính và một pain nối sang tập sau. Nếu cần quá 18 phút để hoàn thành hai outcome độc lập, tách thành hai tập.
 - **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript `5.9+`, npm, ESM (`"type": "module"`) và PostgreSQL. Data layer dùng **Prisma ORM 8** với PSL contract; Node 24 nạp `temporal-polyfill/full/global` vì timestamp Prisma 8 là `Temporal.Instant`. Khi setup, luôn hiện phiên bản thực tế trên màn hình.
 - **AI tool:** **Opus trong IDE Antigravity** (agent panel đọc codebase thật). Pattern: hỏi – đọc – chất vấn – verify.
@@ -112,13 +112,14 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 | Mức | Script | Việc phải đổi |
 |---|---|---|
 | Hoàn tất | `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md` | Đã viết lại setup, ConfigModule/env validation, contract, query API, DI provider, migration workflow và source map cho Prisma 8 |
-| Blocker | `04-error-handling-nestjs/04-error-handling-nestjs.md` | Bỏ `P2002`; dùng Prisma 8 structured error code và `isStructuredError` |
-| Blocker | `12-testing-rbac-nestjs/12-testing-ma-tran-rbac-ownership.md` | Đổi direct `prisma.task...` sang Prisma 8 facade hoặc test repository contract |
-| Blocker | `16-docker-deploy-nestjs/16-docker-deploy-taskflow.md` | Bỏ `generate`/`migrate deploy`; đóng gói emitted contract và chạy migration gate Prisma 8 |
-| Cần viết lại demo | `09-user-role-permission-nestjs/09-user-role-permission-many-to-many.md` | Dùng explicit junction, `.include(...)`, direct junction writes và `db.transaction(...)` |
-| Cần cập nhật convention | `06-agent-skill-nestjs/06-agent-skill-nestjs.md` | Skill phải cấm Prisma 7 snippet và buộc đọc release status/Prisma 8 skill |
-| Cần cập nhật so sánh | `bonus-13-5-typeorm-nestjs/bonus-13-5-prisma-vs-typeorm-inheritance.md` | So TypeORM entity với Prisma 8 contract/query facade, không so với Prisma Client cũ |
-| Audit thuật ngữ | EP02, EP07, EP08, EP10, EP11 | Thay các mô tả chung gây hiểu nhầm về schema/client/migration Prisma 7 nếu có |
+| Hoàn tất | `04-error-handling-nestjs/04-error-handling-nestjs.md` | Dùng Prisma 8 `isStructuredError`; map PostgreSQL unique violation bằng `sqlState`, không dùng mã lỗi client cũ |
+| Hoàn tất | `12-testing-rbac-nestjs/12-testing-ma-tran-rbac-ownership.md` | Đã đổi sang Vitest; test service qua repository contract và integration qua Prisma 8 facade |
+| Hoàn tất | `16-docker-deploy-nestjs/16-docker-deploy-taskflow.md` | Đã bỏ client generation/command deploy cũ; đóng gói emitted contract và chạy migration gate Prisma 8 |
+| Hoàn tất | `09-user-role-permission-nestjs/09-user-role-permission-many-to-many.md` | Dùng explicit junction, `.include(...)`, direct junction writes và `db.transaction(...)`; chưa expose API quản trị |
+| Hoàn tất | `06-agent-skill-nestjs/06-agent-skill-nestjs.md` | Skill cấm snippet Prisma 7 và buộc đọc release status/tài liệu Prisma 8 |
+| Hoàn tất | `bonus-13-5-typeorm-nestjs/bonus-13-5-prisma-vs-typeorm-inheritance.md` | So TypeORM entity với Prisma 8 contract/query facade; bổ sung base models/variants |
+| Hoàn tất | EP02, EP08 | EP02 đã đồng bộ video; EP08 dùng Prisma 8 và chưa expose API quản trị trước PermissionGuard |
+| Hoàn tất | EP07, EP10, EP11 | Đã cập nhật atomic refresh rotation/cookie policy, auth default-closed và ownership query trả 404 ngoài scope |
 
 Definition of done cho từng script migrated:
 
@@ -150,7 +151,10 @@ Definition of done cho từng script migrated:
 - Mỗi EP chỉ thay nội dung headline, biểu cảm nhẹ và chi tiết trên monitor. Không thay visual grammar của cả series.
 - Trước khi chốt, kiểm tra ảnh full-size và bản thu nhỏ `320×180`; dấu tiếng Việt phải chính xác.
 
-### EP 01 — Học NestJS với AI: Xây Users API đầu tiên ✅ đã quay — prompt demo đã có
+### EP 01 — Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1 — ✅ Đã đăng
+- **YouTube:** https://www.youtube.com/watch?v=7lRvCk_CHLs
+- **Ngày đăng:** 2026-09-15
+- **Thời lượng thực tế:** 10:41
 - ← pain: repo công ty lạ hoắc, tutorial 3h lỗi thời.
 - Học: Nest CLI, luồng `main.ts → module → controller → service`, decorator, DI cơ bản và nguyên tắc module theo business domain.
 - Cấu trúc đầu tiên: tạo `src/modules/users` bằng `nest g resource modules/users`; chưa tạo sẵn `common/`, `config/`, `database/` khi chưa có code thật.
@@ -160,7 +164,10 @@ Definition of done cho từng script migrated:
 - → **pain mới:** gửi `{ "name": "Richard", "email": 123 }` vẫn được chấp nhận vì DTO chưa có validation runtime.
 - File: `01-hoc-nestjs-voi-ai/01-nestjs-tu-0-cung-ai.md`
 
-### EP 02 — ValidationPipe: Chặn dữ liệu sai từ DTO ✅ đã quay — prompt demo đã có
+### EP 02 — NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2 — ✅ Đã đăng
+- **YouTube:** https://www.youtube.com/watch?v=GCWSSb6-qhk
+- **Ngày đăng:** 2026-09-16
+- **Thời lượng thực tế:** 6:45
 - ← pain: EP01 nhận payload gì cũng được — `email` là số hoặc sai định dạng vẫn thành user.
 - Học: compile-time type khác runtime validation; class-validator, ValidationPipe toàn cục (`whitelist`, `forbidNonWhitelisted`, `transform`), `@IsString`, `@IsNotEmpty`, `@IsEmail`, custom message tiếng Việt.
 - Cấu trúc mới: thêm `src/common/pipes/app-validation.pipe.ts`; pipe chỉ phụ thuộc Nest/class-validator, không import Users hay business domain.
@@ -168,7 +175,10 @@ Definition of done cho từng script migrated:
 - Thành quả: POST bậy → 400 rõ ràng. → **pain: dù sao data vẫn nằm trong RAM.**
 - File: `02-validation-nestjs/02-dto-validationpipe-nestjs.md`
 
-### EP 03 — Kết nối PostgreSQL bằng Prisma 8 ✅ đã rewrite — prompt demo đã có (3 prompt)
+### EP 03 — NestJS + Prisma 8: Lưu User vào PostgreSQL | #3 — ✅ Đã đăng
+- **YouTube:** Chưa có URL công khai để đối chiếu
+- **Ngày đăng:** Chưa có dữ liệu công khai để đối chiếu
+- **Thời lượng thực tế:** Chưa có dữ liệu công khai để đối chiếu
 - ← pain: EP02 xong, restart server, dữ liệu bốc hơi.
 - Học: khởi tạo Prisma 8 trong Nest app bằng `prisma orm init --target postgres --authoring psl`; phân biệt contract với database schema; emit contract; plan/review/apply migration; tạo `DatabaseModule`, Prisma provider, repository contract và Prisma adapter. Đồng thời dựng ConfigModule, Zod env validation và `.env.example` để cả Prisma CLI lẫn Nest runtime dùng một nguồn `DATABASE_URL` an toàn. Chỉ persist User, chưa tạo Tasks hay Access Control trong tập này.
 - File sinh ra: `src/prisma/contract.prisma`, `contract.json`, `contract.d.ts`, `db.ts`, `prisma.config.ts` và `migrations/app/`; đồng thời thêm `src/config/app.config.ts`, `database.config.ts`, `env.validation.ts` và `.env.example`. Commit emitted contract artifacts và migration package.
@@ -180,10 +190,10 @@ Definition of done cho từng script migrated:
 - Thành quả: restart, data còn nguyên. → **pain: trùng email → crash 500 xấu xí.**
 - File: `03-prisma-postgresql/03-prisma-postgresql-bo-nho-that.md`
 
-### EP 04 — Error Handling: Trả đúng lỗi 400, 404 và 409 ⚠️ script cần rewrite
+### EP 04 — Error Handling: Trả đúng lỗi 400, 404 và 409 ✅ script đã cập nhật Prisma 8
 - ← pain: EP03 unique constraint vi phạm → 500 stacktrace bắn ra client.
 - Học: HttpException, NotFoundException/BadRequestException/ConflictException, 404 vs 400 vs 409, custom ExceptionFilter và structured error envelope của Prisma 8.
-- Prisma 8 mapping: nhận diện bằng `isStructuredError`, match `error.code` dạng namespace/subcode và không dùng `instanceof PrismaClientKnownRequestError` hay mã `P2002` của Prisma 7.
+- Prisma 8 mapping: nhận diện error envelope bằng `isStructuredError` và `error.code` dạng namespace/subcode; unique violation của PostgreSQL được map bằng `sqlState` `23505`, không dùng error class/mã client cũ.
 - AI moment: bảo AI liệt kê MỌI chỗ service có thể fail → học tư duy defensive.
 - Thành quả: mọi lỗi trả JSON sạch, đúng status. → **pain: API ai gọi cũng được, không có cửa.**
 - File: `04-error-handling-nestjs/04-error-handling-nestjs.md`
@@ -195,7 +205,7 @@ Definition of done cho từng script migrated:
 - Thành quả: không token → 401; có token → đọc đúng hồ sơ của mình. → **pain: sắp tạo thêm Role và Permission, nhưng mỗi lần lại phải nhắc AI cùng convention.**
 - File: `05-jwt-auth-nestjs/05-jwt-auth-nestjs.md`
 
-### EP 06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án ⚠️ script cần cập nhật Prisma 8
+### EP 06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án ✅ script đã cập nhật Prisma 8
 - ← pain: chuẩn bị tạo thêm Role và Permission, nhưng mỗi feature lại phải nhắc AI cùng một cấu trúc module/controller/service/repository/DTO.
 - Học: cấu trúc `.agents/skills/<name>/SKILL.md`, YAML frontmatter, project-scoped skill và progressive disclosure.
 - AI sequence: AI đọc Users/Auth đã hoàn thiện → đề xuất convention scaffold → host loại business rule khỏi template → approve tạo skill.
@@ -210,19 +220,19 @@ Definition of done cho từng script migrated:
 - Thành quả: phiên có thể gia hạn, xoay vòng và thu hồi. → **pain: xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.**
 - File: `07-refresh-token-nestjs/07-refresh-token-rotation-nestjs.md`
 
-### EP 08 — Role và Permission khác nhau thế nào? ✅
+### EP 08 — Role và Permission khác nhau thế nào? ✅ script đã cập nhật
 - ← pain: EP07 xác định được người gọi và phiên, nhưng chưa mô tả được họ được phép làm gì.
-- Học: tạo `RolesModule` và `PermissionsModule`, DTO, repository contract/adapter, CRUD đầy đủ; `Role.name` và `Permission.code` là duy nhất.
+- Học: tạo `RolesModule` và `PermissionsModule`, repository contract/adapter, service nội bộ và seed; `Role.name` và `Permission.code` là duy nhất. Chưa expose controller quản trị trước PermissionGuard.
 - Permission code theo resource/action: `users.read`, `roles.assign`, `permissions.manage`, `tasks.create`.
 - AI moment: dùng Agent Skill scaffold hai feature → AI đề xuất `CommonService<T>` → host từ chối sau khi so sánh business rule create/delete của Role và Permission.
-- Thành quả: quản lý được danh mục Role và Permission. → **pain: chúng vẫn là ba bảng rời, chưa ai được gán quyền.**
+- Thành quả: service nội bộ quản lý được danh mục Role và Permission; HTTP boundary vẫn đóng. → **pain: chúng vẫn là ba bảng rời, chưa ai được gán quyền.**
 - File: `08-role-permission-nestjs/08-role-permission-crud-nestjs.md`
 
-### EP 09 — Quan hệ User, Role và Permission với Prisma 8 ⚠️ script cần rewrite demo
+### EP 09 — Quan hệ User, Role và Permission với Prisma 8 ✅ script đã cập nhật
 - ← pain: Role và Permission đã tồn tại nhưng chưa gắn được cho user hay cho nhau.
 - Học: Prisma 8 explicit many-to-many với `UserRole` và `RolePermission`; composite key; `assignedAt`, `assignedBy`; seed `admin`, `member` và permission mẫu. Query relation bằng `.include(...)`; đọc junction metadata bằng model junction trực tiếp.
-- API: assign/revoke role cho user; attach/detach permission cho role; dùng `db.transaction(async tx => ...)` và chỉ query qua `tx.orm` khi cập nhật nhiều quan hệ.
-- Quyết định thiết kế: mặc định permission của user được suy ra qua Role. Chỉ thêm `UserPermission` khi cần cấp quyền ngoại lệ trực tiếp.
+- Use case nội bộ: assign/revoke role cho user; attach/detach permission cho role; dùng `db.transaction(async tx => ...)` và chỉ query qua `tx.orm` khi cập nhật nhiều quan hệ. Chưa expose API quản trị trước PermissionGuard.
+- Quyết định thiết kế: mặc định permission của user được suy ra qua Role. Chỉ thêm `UserPermission` khi có requirement cấp quyền ngoại lệ trực tiếp.
 - Nếu có `UserPermission`: bắt buộc có `effect: ALLOW | DENY`; quyền hiệu lực = quyền qua Role + direct ALLOW − direct DENY.
 - AI moment: AI đề xuất implicit many-to-many hoặc nested write chưa được Prisma 8 hỗ trợ đầy đủ → host kiểm tra trang relation limitations, chuyển sang explicit junction và transaction trước khi migrate.
 - Thành quả: database biểu diễn được toàn bộ chính sách truy cập. → **pain: có dữ liệu quyền nhưng API vẫn chưa thực thi nó.**
@@ -245,7 +255,7 @@ Definition of done cho từng script migrated:
 - Thành quả: user chỉ thao tác task được phép và thuộc phạm vi của mình. → **pain: nhiều nhánh auth/permission/ownership quá, thử tay không còn đáng tin.**
 - File: `11-tasksmodule-nestjs/11-tasksmodule-rbac-ownership.md`
 
-### EP 12 — Testing phân quyền bằng Vitest và Supertest ⚠️ script cần cập nhật Prisma 8 + đổi Jest sang Vitest
+### EP 12 — Testing phân quyền bằng Vitest và Supertest ✅ script đã cập nhật Prisma 8
 - ← pain: EP11 thay guard hoặc ownership rule là phải thử tay hàng loạt tài khoản và route.
 - Học: Vitest unit test service/guard với mock (Nest CLI 12 scaffold sẵn vitest 4, `globals: true` — API tương thích Jest), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì.
 - Ma trận bắt buộc: user không role; nhiều role; permission trùng qua hai role; revoke role; revoke permission; thiếu permission; ownership sai; direct ALLOW/DENY nếu bật override.
@@ -260,7 +270,7 @@ Definition of done cho từng script migrated:
 - Kết luận: không tạo generic business service; chỉ abstract persistence mechanics khi duplication đã ổn định và abstraction làm code dễ hiểu hơn.
 - File: `13-dry-abstraction-nestjs/13-generic-crud-abstraction-trap.md`
 
-### BONUS 13.5 — Prisma 8 và TypeORM: Có nên dùng BaseEntity? ⚠️ script cần cập nhật
+### BONUS 13.5 — Prisma 8 và TypeORM: Có nên dùng BaseEntity? ✅ script đã cập nhật
 - ← pain: Prisma 8 contract phải lặp `id`, `createdAt`, `updatedAt`, nhưng tạo table inheritance chỉ để né ba dòng là quá nặng.
 - Học: Prisma 8 PSL contract + emitted types + query facade so với TypeORM class/decorator; TypeORM `AbstractEntity`; concrete table inheritance; phân biệt entity reuse với service inheritance.
 - Demo lại User, Role, Permission và explicit join entities bằng TypeORM; `AbstractEntity` nằm ở infrastructure/database, không đặt trong `common/` portable.
@@ -283,7 +293,7 @@ Definition of done cho từng script migrated:
 - Thành quả: nhìn log biết request dừng ở đâu. → **pain: "máy tôi chạy được" — giờ cần người khác chạy được.**
 - File: `15-request-lifecycle-nestjs/15-request-lifecycle-nestjs.md`
 
-### EP 16 — Docker và Deploy NestJS lên Production ⚠️ script cần rewrite Prisma 8
+### EP 16 — Docker và Deploy NestJS lên Production ✅ script đã cập nhật Prisma 8
 - ← pain: 15 tập trước vẫn chỉ chạy localhost — máy thiếu Node/PostgreSQL là không chạy được.
 - Học: Dockerfile Node 24, docker-compose kèm PostgreSQL, commit `contract.json`/`contract.d.ts` và `migrations/`, chạy `prisma migration check` + `prisma db migrate --show` + `prisma db migrate --advance-ref db` trước khi start app, env production, deploy Render/Railway.
 - Prisma 8 không có native query engine và không có bước `prisma generate` trong image. Không dùng `prisma migrate deploy` của Prisma 7.

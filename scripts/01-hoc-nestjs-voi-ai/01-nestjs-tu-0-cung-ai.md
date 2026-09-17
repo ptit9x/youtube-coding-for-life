@@ -1,92 +1,105 @@
-# NestJS #01 — Học NestJS với AI: Xây Users API đầu tiên
+# Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1
 
 - **Series:** Học NestJS bằng AI — tập 1/45
+- **Trạng thái:** ✅ Đã đăng
+- **Title đã đăng:** Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1
+- **YouTube:** https://www.youtube.com/watch?v=7lRvCk_CHLs
+- **Ngày đăng:** 2026-09-15
+- **Thời lượng thực tế:** 10:41
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; có thể thay bằng coding agent khác nhưng giữ nguyên workflow.
-- **Technical baseline:** NestJS 12, Node.js 24 Active LTS, npm, ESM (Nest CLI 12 sinh sẵn `"type": "module"`).
-- **Target runtime:** ~11:15 (khung phù hợp: 10–12 phút)
+- **Technical baseline:** NestJS, Node.js, npm, Vitest và ES module theo lựa chọn trong Nest CLI tại thời điểm quay.
+- **Target runtime:** 10:41 (thời lượng video đã đăng)
 - **Audience:** Dev mới vào nghề / Fresher — lần đầu chạm backend framework.
 - **Outcome chính:** Hiểu đường đi của một request và chạy được Users API trong `src/modules/users` bằng mảng in-memory.
 - **Pain mở tập 2:** DTO khai báo `email` là string nhưng payload số vẫn lọt qua vì chưa có validation runtime.
 
 ---
 
-## PART 1 — SCRIPT
+## PART 1 — TRANSCRIPT VIDEO ĐÃ ĐĂNG (LÀM SẠCH)
 
-AI dựng Users API trong vài giây. Nhưng khi API lỗi, bạn không biết request đã đi qua file nào. Code chạy mà không hiểu vẫn giống tháo dây điện trong phòng tối.
+### 0:00 — Giới thiệu series NestJS cùng AI
 
-Mình từng học framework bằng cách mở tutorial rồi gõ theo. Code chạy thì vui. Nhưng khi đổi tên một file, mọi thứ vỡ và mình không biết vì sao. Lần này ta làm khác. AI có thể viết, nhưng trước đó mình phải hiểu đường đi của code.
+Chào mừng các bạn đến với series học NestJS cùng với AI. Hiện nay có khá nhiều series NestJS ở trên YouTube rồi, nhưng đa số đã làm từ khá lâu và chưa áp dụng AI vào trong quá trình phát triển. Vì vậy mình làm series này để chúng ta vừa học NestJS, vừa biết cách dùng AI như một coding agent.
 
-NestJS là framework backend chạy trên Node.js. Mặc định, nó dùng Express ở bên dưới; bạn cũng có thể đổi sang Fastify. Phần Nest thêm vào là kiến trúc: module gom tính năng, controller nhận request, còn service xử lý logic. Nó giống một bản sơ đồ điện được dán sẵn lên căn nhà. Khi nhiều người cùng sửa, ai cũng biết dây nào đi về đâu.
+### 0:20 — NestJS, Express/Fastify, Module–Controller–Service
 
-Bắt đầu từ terminal. Gõ `node -v`. Với Nest CLI hiện tại, cách an toàn nhất là dùng bản Node Active LTS mới nhất. Máy mình đang dùng phiên bản hiện trên màn hình. Tiếp theo, cài CLI bằng `npm i -g @nestjs/cli`, rồi chạy `nest new nestjs-base-with-ai`.
+NestJS là một framework backend chạy trên Node.js. Ở bên dưới, mặc định nó dùng Express; ngoài ra chúng ta cũng có thể chọn Fastify. NestJS cung cấp cho chúng ta một kiến trúc rõ ràng gồm Module, Controller và Service. Module dùng để gom các thành phần liên quan, Controller tiếp nhận request, còn Service xử lý logic.
 
-CLI hỏi package manager. Nest CLI 12 sinh sẵn ESM, `"type": "module"`, không cần chọn gì thêm. Hai lựa chọn này không thay đổi những khái niệm Nest mà ta sắp học. Cài xong, vào thư mục project và chạy `npm run start:dev`. Browser mở `localhost:3000`. Dòng Hello World xuất hiện.
+### 0:43 — Cài Node.js và Nest CLI
 
-Trước khi thêm code, đây là workflow dùng AI xuyên suốt series. Mình đưa yêu cầu và context. AI chỉ trình plan, chưa được sửa file. Mình đọc, chất vấn và approve. Sau đó AI mới thực hiện. Cuối cùng, mình xem git diff, chạy test và gọi API thật. Sáu bước: yêu cầu, plan, review, approve, thực hiện, kiểm chứng.
+Để bắt đầu, máy của các bạn cần cài Node.js trước. Sau đó chúng ta cài Nest CLI bằng câu lệnh `npm i -g @nestjs/cli`. Nest CLI giúp tạo project và sinh nhanh những thành phần cần thiết trong NestJS.
 
-Giờ trace request Hello World đang chạy. Điểm bắt đầu là `main.ts`. `NestFactory.create` nhận `AppModule` và dựng ứng dụng. `app.listen` mở cổng để chờ request. File này là công tắc tổng: bật hệ thống lên, nhưng không chứa nghiệp vụ.
+### 1:16 — Tạo project, chọn npm, Vitest và ES module
 
-Từ `main.ts`, Nest đi vào `AppModule`. Module là ranh giới của một nhóm tính năng. Nó khai báo controller nào nhận request và provider nào cung cấp logic. App lớn sẽ có một cây module. `AppModule` là gốc; Users, Auth hay Tasks sẽ là các nhánh.
+Bây giờ mình chạy `nest new nestjs-base-with-ai` để tạo project mới. CLI hỏi package manager thì mình chọn npm. Phần observability mình chọn No. Test framework mình chọn Vitest và module system mình chọn ES module.
 
-Series này dùng bốn khu vực chính. `modules` chứa business domain. `common` chứa code cross-cutting đã thật sự được dùng lại. `config` quản lý cấu hình, còn `database` nối ứng dụng với hạ tầng dữ liệu. Ta không tạo hàng loạt folder rỗng ngay hôm nay. Cấu trúc sẽ lớn lên cùng nhu cầu thật của project.
+Sau khi cài đặt xong, mình đi vào thư mục project rồi chạy `npm run start:dev`. Mở trình duyệt tại `localhost:3000`, chúng ta thấy dòng Hello World. Như vậy project NestJS đầu tiên đã chạy thành công.
 
-Dependency cũng phải đi một chiều. Controller gọi service hoặc use-case. Lớp nghiệp vụ phụ thuộc vào repository contract, không phụ thuộc trực tiếp database cụ thể. Infrastructure sẽ implement contract đó và module chịu trách nhiệm nối hai phía. Tập đầu chưa có database, nên ta bắt đầu bằng một module Users đơn giản.
+### 2:37 — Antigravity và coding agent
 
-Tiếp theo là `AppController`. Decorator `@Controller` gắn metadata lên class. Decorator `@Get` nói rằng method bên dưới xử lý request GET. Khi khởi động, Nest đọc metadata này và dựng bảng routing. Chữ @ không phải phép thuật; nó là nhãn để framework hiểu code của mình.
+Trong series này mình sử dụng Antigravity IDE. Các bạn có thể dùng Windsurf, Cursor, Codex, ChatGPT hoặc một coding agent khác. Cá nhân mình thấy làm việc ngay trong IDE khá thuận tiện vì AI có thể đọc project, đưa ra kế hoạch và chỉnh sửa code. Ở những phần sau mình sẽ chuyển sang phiên bản 2.0.
 
-Controller nhận request rồi giao việc cho `AppService`. Logic nằm trong service để nó có thể được dùng lại và test mà không cần khởi động HTTP. Controller càng mỏng, đường đi của request càng dễ đọc.
+### 3:11 — Workflow AI sáu bước
 
-Service đến controller bằng dependency injection. Nhìn vào constructor: `private readonly appService`. Ta không hề gọi `new AppService`. Nest tạo provider, giữ nó trong IoC container rồi tiêm vào nơi cần dùng. Provider mặc định dùng một instance chung trong ứng dụng. Nest cũng hỗ trợ các scope khác khi thật sự cần.
+Workflow dùng AI trong series gồm sáu bước. Đầu tiên là hiểu rõ yêu cầu. Bước hai, yêu cầu AI đưa ra plan. Bước ba, mình review plan đó. Bước bốn, mình approve. Bước năm, AI thực hiện. Và bước cuối cùng là mình kiểm chứng lại kết quả. AI có thể viết code rất nhanh, nhưng người chịu trách nhiệm cuối cùng vẫn là chúng ta.
 
-Bây giờ mới giao việc cho AI. Mình mở agent panel và đưa một yêu cầu có giới hạn rõ ràng:
+### 3:52 — Trace request Hello World
 
-“Đọc project NestJS hiện tại. Tôi cần một Users API dùng mảng in-memory trong `src/modules/users`. Hãy dùng `nest g resource modules/users`, hoàn thiện create, find all và count. DTO chỉ khai báo type, chưa thêm validation. Trước tiên chỉ trình plan: file nào thay đổi, request đi qua đâu và kiểm chứng bằng lệnh nào. Không sửa file trước khi tôi approve.”
+Bây giờ cùng xem request Hello World đang đi như thế nào. Điểm bắt đầu là file `main.ts`. Ở đây `NestFactory.create(AppModule)` tạo ứng dụng NestJS từ `AppModule`, sau đó ứng dụng lắng nghe ở port 3000.
 
-AI trả về plan. Nó sẽ tạo `src/modules/users`, gồm module, controller, service, DTO và entity. `UsersModule` được đăng ký vào `AppModule`. Service giữ một mảng trong RAM. Controller chuyển request xuống service. Mình kiểm tra lại: không database, không ValidationPipe, không tạo sẵn `common` chỉ để cây thư mục trông đẹp.
+Tiếp theo là `AppModule`. Đây là module gốc của ứng dụng, nơi NestJS biết những controller và provider nào đang được sử dụng. Trong `AppController`, decorator `@Controller` khai báo controller, còn `@Get` khai báo endpoint GET.
 
-Có một chi tiết cần kiểm tra: vị trí route `GET /users/count`. Nếu đặt dưới `GET /users/:id` khi dùng Express, chữ `count` có thể bị hiểu thành một id. Plan phải đặt route tĩnh trước route động. AI sửa plan. Bây giờ mình mới approve.
+Khi có request, controller gọi xuống `AppService` để lấy kết quả. Service được đưa vào controller bằng dependency injection. Chúng ta không cần tự viết `new AppService`; NestJS sẽ tạo instance và inject nó qua constructor. Đó là luồng cơ bản: request đi vào controller, controller gọi service và service trả kết quả trở lại.
 
-Agent chạy generator và hoàn thiện code. Mình không nhìn animation rồi tin luôn. Mở git diff. `CreateUserDto` có `name` và `email`. `UsersService` có mảng `users`, một biến tăng id, cùng các method create và findAll. Không có database bí mật nào xuất hiện. Chạy build; terminal xanh. Chạy app; Hello World vẫn còn.
+### 5:42 — Prompt tạo Users API
 
-Nguyên tắc của mình là AI sinh code thì mình phải tự gõ lại ít nhất một phần. Mình thêm `countAll` trong service. Sau đó thêm `@Get('count')` trong controller và đặt nó trước `@Get(':id')`. Watch mode reload, không báo lỗi. Đoạn code ngắn, nhưng mình biết nó nằm ở đó vì sao.
+Bây giờ mình nhờ AI tạo một Users API đơn giản. Yêu cầu là AI đọc project hiện tại, tạo Users API trong một module riêng, lưu dữ liệu bằng mảng in-memory và có các chức năng create, find all và count. DTO mới chỉ dùng type, chưa thêm validation. Trước tiên AI chỉ được đưa ra plan, chưa sửa code.
 
-Đến lúc kiểm chứng. Trong Postman, gửi POST `/users` với tên Richard và một email hợp lệ. Server trả 201 cùng user có id. Gửi GET `/users`, user vừa tạo nằm trong mảng. Gửi GET `/users/count`, kết quả là một. Request đã đi đúng con đường mình vừa trace: controller, service rồi quay về response.
+Mình thường viết prompt bằng tiếng Anh vì ngắn hơn và tiết kiệm token, từ đó cũng giảm chi phí khi sử dụng AI. Nhưng các bạn hoàn toàn có thể dùng tiếng Việt nếu thấy thuận tiện hơn.
 
-Nhưng thử đổi payload thành `{ "name": "Richard", "email": 123 }`. TypeScript nói email phải là string, vậy mà server vẫn nhận. Không phải Nest bị lỗi. Type của TypeScript biến mất khi code chạy, còn DTO hiện chưa có luật kiểm tra runtime.
+AI đọc project và đưa ra kế hoạch: tạo Users module, DTO, entity, controller và service; sau đó import `UsersModule` vào `AppModule`. Service sẽ giữ danh sách user trong RAM, còn controller sẽ expose các endpoint để tạo user, lấy danh sách và đếm số lượng user.
 
-Đó là vết nứt đầu tiên của API này. Tập sau, mình sẽ dùng ValidationPipe để biến hợp đồng DTO thành một cánh cửa thật. Dữ liệu sai phải dừng trước khi chạm vào service.
+### 7:23 — AI tạo module, DTO, entity, controller và service
 
-AI không tự làm bạn giỏi hơn. Quy trình đọc, chất vấn và kiểm chứng code của nó mới làm được điều đó. AI viết, mình hiểu. Đó là cách series này sẽ đi tiếp.
+Sau khi xem plan, mình đồng ý để AI thực hiện. Ban đầu gọi endpoint thì nhận 404 vì phần code chưa được tạo xong. Sau đó AI tạo đầy đủ module, DTO, entity, controller và service. Trong `AppModule` cũng đã có `UsersModule`.
 
-Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại ở NestJS số hai. Mình là Richard. Lập trình là cuộc sống.
+DTO chứa hai field `name` và `email`. Service có một mảng để lưu user trong bộ nhớ. Controller nhận request rồi gọi các method tương ứng trong service. Toàn bộ dữ liệu hiện tại chỉ nằm trong RAM, chưa có database.
+
+### 8:30 — Kiểm chứng bằng Postman
+
+Bây giờ mình mở Postman để kiểm tra. Đầu tiên gọi endpoint đếm user thì kết quả là 0. Tiếp theo gửi POST tạo một user với `name` và `email`. API trả về user vừa tạo. Gọi GET danh sách user thì thấy user đó, còn endpoint count trả về 1.
+
+Như vậy chỉ với một yêu cầu, AI đã giúp tạo ra một Users API khá nhanh. Nhưng mình vẫn phải kiểm tra từng endpoint để chắc chắn code thực sự chạy đúng.
+
+### 10:04 — DTO vẫn nhận `email: 123`
+
+Bây giờ mình thử đổi `email` thành số 123. Mặc dù trong DTO đã khai báo email là string, API vẫn nhận request này. Nguyên nhân là type của TypeScript không tự tạo ra validation ở runtime.
+
+### 10:18 — Teaser ValidationPipe
+
+Ở tập tiếp theo, chúng ta sẽ dùng ValidationPipe để chặn dữ liệu sai trước khi nó đi vào controller. Toàn bộ source code của series mình sẽ đẩy lên GitHub để các bạn có thể theo dõi. Cảm ơn các bạn đã xem video. Hẹn gặp lại ở tập tiếp theo.
 
 ---
 
-## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
+## PART 2 — TIMELINE VIDEO ĐÃ ĐĂNG
 
-**Setup:** Antigravity IDE dark theme, JetBrains Mono ≥18px, ẩn minimap và panel thừa. Agent panel đặt bên phải. Quay 1920×1080, con trỏ có highlight. Không dùng footage AI trong video.
+| Timestamp | Nội dung thực tế |
+|---|---|
+| 0:00 | Giới thiệu series NestJS cùng AI |
+| 0:20 | NestJS, Express/Fastify, Module–Controller–Service |
+| 0:43 | Cài Node.js và Nest CLI |
+| 1:16 | Tạo project, chọn npm, Vitest và ES module |
+| 2:37 | Antigravity và coding agent |
+| 3:11 | Workflow AI sáu bước |
+| 3:52 | Trace request Hello World |
+| 5:42 | Prompt tạo Users API |
+| 7:23 | AI tạo module, DTO, entity, controller và service |
+| 8:30 | Kiểm chứng bằng Postman |
+| 10:04 | DTO vẫn nhận `email: 123` |
+| 10:18 | Teaser ValidationPipe |
 
-| # | Type | Nội dung quay | Thoại khớp | Thời lượng |
-|---|---|---|---|---|
-| 1 | [B-ROLL]+[IDE] | Repo NestJS thật; mở nhanh cây `src`, dừng ở các decorator và constructor | Cold open: repo chạy nhưng không biết request đi đâu | 30s |
-| 2 | [DIAGRAM] | Một lớp Nest nằm trên Express/Fastify; bên phải là Module → Controller → Service | NestJS là gì và giá trị kiến trúc | 35s |
-| 3 | [TERM] | `node -v`, cài CLI, `nest new nestjs-base-with-ai`; chọn npm; từ chối observability nếu CLI hỏi | Setup bằng phiên bản hiện hành | 40s |
-| 4 | [TERM]+[BROWSER] | `npm run start:dev` → `localhost:3000` → Hello World | Chạy trước khi sửa | 25s |
-| 5 | [DIAGRAM] | Dùng ảnh `workflow-ai-6-buoc-video-01.png`: Yêu cầu → AI lên Plan → Review → Approve → Thực hiện → Kiểm chứng | Workflow AI của series | 40s |
-| 6 | [IDE] | `main.ts`; highlight `NestFactory.create(AppModule)` và `listen` | Chặng 1: bootstrap | 45s |
-| 7 | [IDE]+[DIAGRAM] | `app.module.ts`; nối AppModule tới `modules/users`; hiện sơ đồ đích `common/config/database/modules` | Chặng 2: business module và chiều dependency | 65s |
-| 8 | [IDE] | `app.controller.ts` và `app.service.ts` đặt cạnh nhau; highlight `@Controller`, `@Get`, lời gọi service | Chặng 3: controller và service | 45s |
-| 9 | [IDE]+[DIAGRAM] | Zoom constructor; vẽ IoC container tạo và tiêm AppService | Decorator và dependency injection | 55s |
-| 10 | [IDE] | Gõ nguyên prompt Users API; agent chỉ trả plan, chưa sửa code | Yêu cầu → plan → review | 60s |
-| 11 | [IDE] | Host hỏi về `/count` và `/:id`; agent cập nhật plan; host approve | Chất vấn route order | 50s |
-| 12 | [TERM]+[IDE] | `nest g resource modules/users`; cây `src/modules/users`; agent hoàn thiện in-memory service | Thực hiện | 40s |
-| 13 | [IDE]+[TERM] | Xem `git diff`; mở DTO, service, AppModule; chạy build | Kiểm chứng thay đổi | 45s |
-| 14 | [IDE] | Host tự gõ `countAll` và `@Get('count')` trước `@Get(':id')` | Tự gõ để hiểu | 40s |
-| 15 | [BROWSER] | Postman: POST user hợp lệ → 201; GET list; GET count → `{ "count": 1 }` | Thành quả | 35s |
-| 16 | [BROWSER]+[B-ROLL] | POST với `email: 123` vẫn 201; freeze frame payload sai; end card EP02 Validation | Pain mới + CTA | 25s |
-
-**Tổng: 675 giây ≈ 11:15.** Timestamps ở Part 4 bám trực tiếp tổng thời lượng này; sau khi thu voice thật, cập nhật lại theo waveform.
+**Thời lượng thực tế:** 10:41.
 
 ### Command chuẩn bị
 
@@ -94,8 +107,7 @@ Nếu bạn muốn thấy payload bậy bị chặn ngay từ cửa, gặp lại
 node -v
 npm i -g @nestjs/cli
 nest new nestjs-base-with-ai
-# Chọn npm. CLI 12 không hỏi module type — sinh sẵn ESM "type": "module".
-# Nếu CLI hỏi observability (@nestjs/observe), chọn No để giữ project tối giản.
+# Trong video: chọn npm, observability No, Vitest và ES module.
 cd nestjs-base-with-ai
 npm run start:dev
 nest g resource modules/users --no-spec
@@ -206,13 +218,13 @@ findOne(@Param('id') id: string) {
 
 ### 4a. Titles
 
-1. Học NestJS với AI: Xây Users API đầu tiên — EP01 | Lập trình là cuộc sống
+1. Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1
 2. NestJS cho người mới: Module, Controller và Service — EP01 | Lập trình là cuộc sống
 3. Luồng request trong NestJS hoạt động thế nào? — EP01 | Lập trình là cuộc sống
 4. Tạo REST API đầu tiên bằng NestJS — EP01 | Lập trình là cuộc sống
 5. Dùng AI học NestJS mà không copy code — EP01 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 5 cho góc học bằng AI.
+**Title 1 là title đã đăng.** Các title còn lại được giữ làm tư liệu tham khảo.
 
 ### 4b. SEO Description
 
@@ -233,23 +245,19 @@ NestJS docs: https://docs.nestjs.com/
 NestJS CLI: https://docs.nestjs.com/cli/overview
 Source series: https://github.com/ptit9x/youtube-coding-for-life
 
-⏱ Timestamps dự kiến:
-0:00 Repo chạy nhưng không biết request đi đâu
-0:30 NestJS là gì?
-1:05 Cài CLI và tạo project
-1:45 Hello World
-2:10 Workflow AI sáu bước
-2:50 main.ts — công tắc tổng
-3:35 AppModule — business module và chiều dependency
-4:40 Controller và Service
-5:25 Decorator và Dependency Injection
-6:20 Yêu cầu AI trình plan
-7:20 Chất vấn route /count
-8:10 AI thực hiện, mình xem diff
-8:50 Tự gõ endpoint đếm user
-9:35 Postman: POST, GET và count
-10:15 Email là số vẫn lọt qua
-10:50 Teaser ValidationPipe
+⏱ Timestamps thực tế:
+0:00 Giới thiệu series NestJS cùng AI
+0:20 NestJS, Express/Fastify, Module–Controller–Service
+0:43 Cài Node.js và Nest CLI
+1:16 Tạo project, chọn npm, Vitest và ES module
+2:37 Antigravity và coding agent
+3:11 Workflow AI sáu bước
+3:52 Trace request Hello World
+5:42 Prompt tạo Users API
+7:23 AI tạo module, DTO, entity, controller và service
+8:30 Kiểm chứng bằng Postman
+10:04 DTO vẫn nhận email là số
+10:18 Teaser ValidationPipe
 
 #NestJS #HocNestJS #AICoding #Opus #Antigravity #Backend #TypeScript #NodeJS #Fresher #LapTrinhLaCuocSong
 ```

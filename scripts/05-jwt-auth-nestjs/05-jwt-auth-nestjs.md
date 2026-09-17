@@ -1,7 +1,7 @@
 # NestJS #05 — JWT Authentication: Register, Login và AuthGuard
 
 - **Series:** Học NestJS bằng AI — tập 5/45
-- **Target runtime:** ~13 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Register, login, hash password, phát JWT và bảo vệ `/users/me`.
 - **Pain mở EP06:** Chuẩn bị thêm Role và Permission, nhưng convention phải nhắc lại cho AI mỗi lần.
 
@@ -43,11 +43,11 @@ AI đề xuất trả nguyên user sau register. Trong object đó có `password
 
 Register nhận name, email và password. Validation kiểm tra độ dài, còn AuthService gọi bcrypt hash trước khi lưu.
 
-Login tìm user theo email. Bcrypt compare kiểm tra password mà không giải mã hash.
+Login tìm user theo email. Bcrypt compare kiểm tra password mà không giải mã hash. Nếu email không tồn tại, service vẫn chạy một lần compare với dummy hash để giảm chênh lệch timing dễ quan sát giữa “không có user” và “sai password”.
 
 Nếu sai email hoặc password, cả hai cùng nhận một thông báo 401 chung. Client không cần biết tài khoản nào tồn tại.
 
-Khi đúng, JwtService ký payload chỉ có `sub`. Trong JWT, `sub` là subject, ở đây chính là user ID.
+Khi đúng, JwtService ký payload chỉ có `sub`. Trong JWT, `sub` là subject, ở đây chính là user ID. Cấu hình ký và verify khóa cứng algorithm, issuer và audience; không chỉ kiểm tra mỗi secret và expiration.
 
 Mình chưa nhét role hoặc permission vào token. Quyền thay đổi thường xuyên hơn danh tính, và token cũ không tự cập nhật.
 
@@ -57,13 +57,15 @@ Secret không nằm trong source code. Mình mở config boundary đã tạo ở
 
 Nếu thiếu secret, application từ chối khởi động trước khi nhận request.
 
-AuthGuard lấy Bearer token từ header, verify chữ ký và expiration. Payload hợp lệ được gắn vào request.
+AuthGuard lấy Bearer token từ header, verify chữ ký, algorithm, issuer, audience và expiration. Payload hợp lệ được gắn vào request.
+
+Guard được đăng ký toàn cục bằng `APP_GUARD`: mặc định route phải xác thực. Chỉ register, login và health check được đánh dấu `@Public()`. Cách này tránh quên gắn guard khi thêm controller mới.
 
 `@CurrentUser` chỉ giúp controller đọc user hiện tại gọn hơn. Decorator không tự xác thực và không thay guard.
 
 Mình approve plan. Agent implement, rồi mình mở diff theo đường request thay vì đọc ngẫu nhiên từng file.
 
-Đường register là controller, AuthService, UsersRepository rồi PostgreSQL. Đường `/users/me` đi qua AuthGuard trước controller.
+Đường register là route `@Public()`, AuthService, UsersRepository rồi PostgreSQL. Đường `/users/me` tự động đi qua global AuthGuard trước controller.
 
 Đến phần tự gõ, mình viết mapper `toPublicUser`. Type trả về không có `passwordHash`.
 
@@ -124,6 +126,8 @@ Thêm `JWT_ACCESS_SECRET` vào `.env` local và chỉ thêm placeholder đủ d�
 export default registerAs('auth', () => ({
   accessSecret: process.env.JWT_ACCESS_SECRET!,
   accessTtl: process.env.JWT_ACCESS_TTL ?? '15m',
+  issuer: process.env.JWT_ISSUER!,
+  audience: process.env.JWT_AUDIENCE!,
 }));
 ```
 
@@ -132,6 +136,8 @@ Schema từ EP03 được mở rộng để app fail fast:
 ```typescript
 JWT_ACCESS_SECRET: z.string().min(32),
 JWT_ACCESS_TTL: z.string().default('15m'),
+JWT_ISSUER: z.string().min(1),
+JWT_AUDIENCE: z.string().min(1),
 ```
 
 ### Code cốt lõi
@@ -154,7 +160,6 @@ return {
 ```
 
 ```typescript
-@UseGuards(AuthGuard)
 @Get('me')
 findMe(@CurrentUser() actor: AuthenticatedUser) {
   return this.usersService.findPublicById(actor.id);
@@ -170,11 +175,15 @@ Requirements:
 - Add register, login and GET /users/me.
 - Hash passwords with bcrypt and never return passwordHash.
 - Use @nestjs/jwt and a Bearer-token AuthGuard.
+- Register AuthGuard globally with APP_GUARD; only explicit @Public routes bypass authentication.
+- Pin the JWT algorithm and validate issuer, audience and expiration.
 - JWT payload contains sub only for now.
 - Use one generic 401 message for invalid email or password.
+- Perform a dummy password-hash comparison when the email is absent to reduce timing differences.
 - AuthModule may depend on UsersModule; UsersModule must not import AuthModule.
 - Extend the ConfigModule boundary created in EP03 with a typed auth.config.ts.
 - Add JWT_ACCESS_SECRET to startup validation; require at least 32 characters and never provide a secret fallback.
+- Validate JWT_ISSUER and JWT_AUDIENCE at startup.
 - Update .env.example with placeholders only; never commit or print the real secret.
 - First produce a threat model, file plan and verification matrix.
 - Do not edit before approval.

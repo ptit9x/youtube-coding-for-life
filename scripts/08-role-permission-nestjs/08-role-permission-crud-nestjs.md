@@ -1,8 +1,8 @@
 # NestJS #08 — Role và Permission khác nhau thế nào?
 
 - **Series:** Học NestJS bằng AI — tập 8/45
-- **Target runtime:** ~13 phút
-- **Outcome:** CRUD đầy đủ Role và Permission bằng service/repository explicit.
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
+- **Outcome:** Hoàn thiện model, repository, service nội bộ và seed cho Role/Permission; chưa expose API quản trị trước khi có PermissionGuard.
 - **Pain mở EP09:** User, Role và Permission vẫn là các bảng rời, chưa có quan hệ N–N.
 
 ---
@@ -21,11 +21,11 @@ Role giống chức danh trong công ty. Permission là hành động cụ thể
 
 `admin` và `member` là role. `users.read` hoặc `roles.assign` là permission.
 
-Controller sau này nên yêu cầu hành động, không hỏi tên chức danh. Tổ chức đổi role vẫn không phải sửa route.
+Controller sau này nên yêu cầu hành động, không hỏi tên chức danh. Tổ chức đổi role vẫn không phải sửa route. Nhưng controller quản trị chưa xuất hiện trong tập này: nếu expose CRUD trước PermissionGuard, bất kỳ user đã đăng nhập nào cũng có thể sửa chính sách quyền.
 
 Mình dùng Agent Skill từ tập trước để scaffold `roles` và `permissions` trong `modules/access-control`.
 
-Skill chỉ tạo khung. Nó không được tự quyết định rule tạo hoặc xóa dữ liệu.
+Skill chỉ tạo model, repository contract/adapter, service nội bộ và seed. Nó không tạo controller hay route quản trị. Nó cũng không được tự quyết định rule tạo hoặc xóa dữ liệu.
 
 Schema Role có name duy nhất, description và cờ `isSystem`. Permission có code duy nhất, description và cờ tương tự.
 
@@ -49,7 +49,7 @@ Repository contract cũng không sao chép mọi option Prisma. Roles cần `fin
 
 Adapter có thể giống nhau ở mechanics, nhưng contract vẫn nói bằng ngôn ngữ của từng domain.
 
-Mình approve. Agent tạo controller mỏng, service rõ rule và adapter Prisma ở database layer.
+Mình approve. Agent tạo service rõ rule và adapter Prisma 8 ở database layer. Các use case được gọi từ seed và test nội bộ; HTTP boundary sẽ chỉ được thêm sau khi PermissionGuard tồn tại.
 
 Đến phần tự gõ, mình thêm `normalizeRoleName`. Nó trim, lowercase và thay khoảng trắng liên tiếp bằng dấu gạch ngang.
 
@@ -59,15 +59,15 @@ Tiếp theo, mình viết rule không xóa system permission. Đây là nơi Com
 
 Một method delete chung không biết tại sao `permissions.manage` cần được bảo vệ khác một role tự tạo.
 
-Mình chạy migration `create_roles_permissions`, rồi mở SQL kiểm tra hai unique index.
+Mình emit lại contract, lập migration `create_roles_permissions`, rồi mở DDL kiểm tra hai unique index.
 
-Postman tạo role `Project Manager`, response trả name đã normalize. Tạo lại nhận 409.
+Integration test tạo role `Project Manager`, kết quả trả name đã normalize. Tạo lại nhận conflict ở service.
 
-Tạo permission `tasks.create` thành công. Update code của permission nhận 400 vì code là identity ổn định.
+Seed tạo permission `tasks.create` thành công. Test đổi code của permission bị từ chối vì code là identity ổn định.
 
-Xóa permission hệ thống nhận 409. Xóa permission thường thành công.
+Test xóa permission hệ thống nhận conflict. Permission thường có thể bị xóa khi chưa có quan hệ sử dụng.
 
-Hai API đều đủ CRUD, nhưng đường logic không còn giống nhau. Đó chính là lý do chúng cần service riêng.
+Hai service có các thao tác gần giống CRUD, nhưng đường logic không giống nhau. Đó chính là lý do chúng cần service riêng. Việc chưa có endpoint quản trị ở đây là một quyết định bảo mật, không phải phần còn thiếu bị quên.
 
 Hiện tại User, Role và Permission vẫn đứng cạnh nhau như ba danh bạ chưa có số liên lạc.
 
@@ -81,9 +81,9 @@ Tập sau, ta nối chúng bằng explicit join table và giữ cả dữ liệu
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | Hai user login nhưng gọi API giống nhau | 30s |
+| 1 | [DIAGRAM] | Hai user login nhưng hệ thống chưa có policy quyền | 30s |
 | 2 | [DIAGRAM] | Role là chức danh; Permission là hành động | 45s |
-| 3 | [IDE] | Dùng Agent Skill scaffold access-control folders | 55s |
+| 3 | [IDE] | Dùng Agent Skill scaffold access-control, không tạo controller | 55s |
 | 4 | [IDE] | Model Role và Permission cạnh nhau | 55s |
 | 5 | [DIAGRAM] | Permission naming: resource.action | 40s |
 | 6 | [IDE] | Prompt AI lập bảng business rule | 55s |
@@ -91,9 +91,9 @@ Tập sau, ta nối chúng bằng explicit join table và giữ cả dữ liệu
 | 8 | [IDE] | Review hai service explicit | 70s |
 | 9 | [IDE] | Review repository contracts theo domain | 55s |
 | 10 | [IDE] | Host tự gõ normalize role và system delete rule | 65s |
-| 11 | [TERM] | Migration, mở SQL, kiểm tra unique indexes | 55s |
-| 12 | [BROWSER] | Role create/duplicate/update/delete | 60s |
-| 13 | [BROWSER] | Permission create/immutable code/system delete | 65s |
+| 11 | [TERM] | Contract emit, migration plan, mở DDL, kiểm tra unique indexes | 55s |
+| 12 | [TERM]+[IDE] | Integration test Role create/duplicate/update/delete | 60s |
+| 13 | [TERM]+[IDE] | Seed Permission, test immutable code và system delete | 65s |
 | 14 | [B-ROLL]+[DIAGRAM] | Ba bảng rời, teaser join tables | 25s |
 
 **Tổng: 730 giây ≈ 12:10.** Hiện hai service side-by-side; dùng IDE tối và font 18px.
@@ -102,21 +102,21 @@ Tập sau, ta nối chúng bằng explicit join table và giữ cả dữ liệu
 
 ```prisma
 model Role {
-  id          String   @id @default(uuid())
+  id          Uuid     @id @default(uuid())
   name        String   @unique
   description String?
   isSystem    Boolean  @default(false)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   temporal.updatedAt()
 }
 
 model Permission {
-  id          String   @id @default(uuid())
+  id          Uuid     @id @default(uuid())
   code        String   @unique
   description String?
   isSystem    Boolean  @default(false)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  updatedAt   temporal.updatedAt()
 }
 ```
 
@@ -145,6 +145,8 @@ Before implementation, compare their business rules in a table.
 - Each feature has its own explicit service and repository contract.
 - Do not create BaseCrudService, CommonService or generic business hooks.
 - Do not add relations yet.
+- Do not create controllers or expose Role/Permission administration over HTTP yet.
+- Use the Prisma 8 contract, emitted artifacts, database facade and migration workflow.
 - Wait for approval before editing.
 ```
 
@@ -164,7 +166,7 @@ Before implementation, compare their business rules in a table.
 
 1. Role và Permission trong NestJS khác nhau thế nào? — EP08 | Lập trình là cuộc sống
 2. Xây RolesModule và PermissionsModule trong NestJS — EP08 | Lập trình là cuộc sống
-3. CRUD Role và Permission với Prisma — EP08 | Lập trình là cuộc sống
+3. Thiết kế Role và Permission với Prisma 8 — EP08 | Lập trình là cuộc sống
 4. Vì sao không nên dùng BaseCrudService quá sớm? — EP08 | Lập trình là cuộc sống
 5. Thiết kế mã quyền users.read và tasks.create — EP08 | Lập trình là cuộc sống
 
@@ -173,15 +175,16 @@ Before implementation, compare their business rules in a table.
 ### 4b. SEO Description
 
 ```text
-Role và Permission đều có CRUD, nhưng create và delete không mang cùng business semantics. Tập này giữ code explicit để kiến trúc còn dễ hiểu.
+Role và Permission có các thao tác gần giống CRUD, nhưng create và delete không mang cùng business semantics. Tập này giữ code explicit và chưa expose API quản trị trước PermissionGuard.
 
-✅ Tạo RolesModule và PermissionsModule
+✅ Tạo RolesModule và PermissionsModule nội bộ
 ✅ Đặt permission code theo resource.action
 ✅ Unique role name và permission code
 ✅ Bảo vệ system role/permission
 ✅ Giữ controller mỏng và service explicit
 ✅ Không tạo CommonService hoặc BaseCrudService
 ✅ Dùng Agent Skill để scaffold, không quyết định business
+✅ Chưa mở route quản trị trước khi có PermissionGuard
 
 🔗 NestJS Providers: https://docs.nestjs.com/providers
 🔗 Prisma CRUD: https://www.prisma.io/docs/orm/prisma-client/queries/crud
@@ -193,7 +196,7 @@ Role và Permission đều có CRUD, nhưng create và delete không mang cùng 
 ⏱ 5:50 Cái bẫy BaseCrudService
 ⏱ 7:30 Service và repository explicit
 ⏱ 9:20 Migration và unique indexes
-⏱ 10:30 Kiểm chứng CRUD
+⏱ 10:30 Kiểm chứng service và seed
 ⏱ 11:50 Chuẩn bị nối N–N
 
 #NestJS #RBAC #RolePermission #CleanArchitecture #Prisma #TypeScript #Backend #AICoding #LapTrinhLaCuocSong

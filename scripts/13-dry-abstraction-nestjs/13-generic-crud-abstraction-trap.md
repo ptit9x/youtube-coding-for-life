@@ -1,7 +1,7 @@
 # NestJS #13 — DRY: Khi nào không nên dùng BaseCrudService
 
 - **Series:** Học NestJS bằng AI — tập 13/45
-- **Target runtime:** ~13 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Phân biệt duplicate code với duplicate knowledge, tránh generic business service.
 - **Pain mở EP14:** `common/` ổn định nhưng copy sang nhiều dự án sẽ tạo nhiều phiên bản lệch nhau.
 

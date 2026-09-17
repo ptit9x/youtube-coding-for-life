@@ -1,7 +1,7 @@
 # NestJS #11 — RBAC và Ownership: Không cho sửa task người khác
 
 - **Series:** Học NestJS bằng AI — tập 11/45
-- **Target runtime:** ~12 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** TasksModule hoàn chỉnh, permission theo route và ownership theo resource.
 - **Pain mở EP12:** Số nhánh bảo mật đã vượt khả năng kiểm tra thủ công.
 
@@ -67,9 +67,9 @@ Mình đăng nhập bằng User A rồi sửa task của User B. Request vẫn t
 
 AI không thiếu cú pháp. Prompt của chúng ta thiếu chính sách ownership.
 
-Mình bổ sung rule tại service.
+Mình bổ sung rule tại service nhưng không tải task bằng ID rồi mới so owner.
 
-Nếu `task.ownerId` khác `actorId`, service ném `ForbiddenException`.
+Repository tìm bằng cả `id` và `ownerId`. Nếu không có kết quả, service trả 404. Client không biết task không tồn tại hay thuộc người khác, nhờ đó tránh lộ sự tồn tại của resource.
 
 Service là nơi phù hợp vì rule phụ thuộc task cụ thể.
 
@@ -93,11 +93,11 @@ Mình chạy lại bằng hai tài khoản.
 
 User A tạo task, đọc danh sách và sửa task của mình thành công.
 
-User A sửa task của User B và nhận 403.
+User A sửa task của User B và nhận 404.
 
-User thiếu `tasks.update` cũng nhận 403, nhưng bị chặn ngay tại guard.
+User thiếu `tasks.update` nhận 403, bị chặn ngay tại guard.
 
-Cùng status, hai nguyên nhân nằm ở hai tầng khác nhau.
+Hai status nói hai tầng khác nhau: 403 cho thiếu permission, 404 cho resource nằm ngoài scope ownership.
 
 Controller vẫn mỏng. Business rule vẫn nhìn thấy được trong service.
 
@@ -127,30 +127,28 @@ Security không thể dựa vào trí nhớ của người bấm Postman. Mình 
 | 10 | [DIAGRAM] | Guard kiểm tra action, service kiểm tra resource | 55s |
 | 11 | [B-ROLL] | Ma trận test mở ra teaser EP12 | 25s |
 
-**Tổng: 680 giây ≈ 11:20.** Font IDE tối thiểu 18px; che token và dữ liệu cá nhân.
+**Tổng mục tiêu: 8–10 phút.** Font IDE tối thiểu 18px; che token và dữ liệu cá nhân.
 
 ### Code cốt lõi
 
 ```prisma
 model Task {
-  id        Int      @id @default(autoincrement())
+  id        Uuid     @id @default(uuid())
   title     String
   completed Boolean  @default(false)
-  ownerId   Int
+  ownerId   Uuid
   owner     User     @relation(fields: [ownerId], references: [id])
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt temporal.updatedAt()
 
   @@index([ownerId])
 }
 ```
 
 ```ts
-async update(actorId: number, id: number, dto: UpdateTaskDto) {
-  const task = await this.getById(id);
-  if (task.ownerId !== actorId) {
-    throw new ForbiddenException('Bạn không thể sửa task này');
-  }
+async update(actorId: string, id: string, dto: UpdateTaskDto) {
+  const task = await this.tasksRepository.findOwnedById(id, actorId);
+  if (!task) throw new NotFoundException('Không tìm thấy task');
   return this.tasksRepository.update(id, dto);
 }
 ```
@@ -164,7 +162,8 @@ Use the project Agent Skill to plan a TasksModule.
 - Controller declares tasks.create/read/update/delete.
 - Guard checks permission; service checks resource ownership.
 - Repository contract must not import Prisma types.
-- List queries must be scoped by owner.
+- List, read, update and delete queries must be scoped by owner at repository level.
+- Return 404 when a resource is absent from the actor's scope; keep 403 for missing route permission.
 - Show the plan and wait for approval.
 ```
 

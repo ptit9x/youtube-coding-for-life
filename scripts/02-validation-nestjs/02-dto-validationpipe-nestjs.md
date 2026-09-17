@@ -1,10 +1,15 @@
-# NestJS #02 — ValidationPipe: Chặn dữ liệu sai từ DTO
+# NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2
 
 - **Series:** Học NestJS bằng AI — tập 2/45
+- **Trạng thái:** ✅ Đã đăng
+- **Title đã đăng:** NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2
+- **YouTube:** https://www.youtube.com/watch?v=GCWSSb6-qhk
+- **Ngày đăng:** 2026-09-16
+- **Thời lượng thực tế:** 6:45
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; giữ workflow Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng.
 - **Technical baseline:** Tiếp tục project `nestjs-base-with-ai` từ EP01; Users API đang lưu dữ liệu trong RAM.
-- **Target runtime:** ~11:55
+- **Target runtime:** 6:45 (thời lượng video đã đăng)
 - **Audience:** Dev mới vào nghề / Fresher đã xem EP01 hoặc biết controller/service cơ bản.
 - **Outcome chính:** Mọi payload đi vào Users API được kiểm tra trước controller bằng global ValidationPipe.
 - **Cấu trúc mới:** `src/common/pipes/app-validation.pipe.ts` — boundary toàn ứng dụng, không phụ thuộc business domain.
@@ -12,78 +17,93 @@
 
 ---
 
-## PART 1 — SCRIPT
+## PART 1 — TRANSCRIPT VIDEO ĐÃ ĐĂNG (LÀM SẠCH)
 
-Cuối tập trước, DTO nói `email` phải là string. Nhưng mình gửi số 123, server vẫn trả 201. TypeScript nhìn thấy lỗi khi mình viết code. Người gọi API thì chẳng cần quan tâm TypeScript nghĩ gì.
+### 0:00 — DTO khai báo string nhưng API vẫn nhận `123`
 
-Đây là một nhầm lẫn rất phổ biến. Type không phải validation. TypeScript chỉ bảo vệ lúc compile. Khi ứng dụng chạy, request từ internet chỉ là một object JavaScript. Nếu không có người kiểm tra ở cửa, dữ liệu nào cũng có thể đi vào service.
+Ở tập trước, trong DTO mình đã khai báo `email` là string. Nhưng khi gửi request với giá trị 123, API vẫn nhận và tạo user bình thường. TypeScript có thể báo lỗi khi chúng ta viết code, nhưng người gọi API từ bên ngoài không quan tâm kiểu dữ liệu trong source code của mình.
 
-Mục tiêu tập này rất rõ: dữ liệu sai phải dừng trước controller. Controller không nên tự viết hàng loạt câu `if`. UsersService càng không nên đoán payload đã sạch hay chưa. Ta cần một boundary dùng chung cho toàn ứng dụng.
+### 0:28 — TypeScript type khác runtime validation
 
-Mình vẫn bắt đầu bằng workflow sáu bước. Yêu cầu, plan, review, approve, thực hiện và kiểm chứng. Lần này phần kiểm chứng không chỉ có một payload đúng. Mình sẽ nhờ AI nghĩ như một người đang cố phá API.
+Type không phải là validation. TypeScript chỉ kiểm tra ở compile time. Khi ứng dụng chạy, request gửi lên chỉ là một plain JavaScript object. Nếu không có runtime validation thì dữ liệu sai vẫn có thể đi vào ứng dụng.
 
-Prompt của mình như sau:
+### 0:42 — Mục tiêu chặn dữ liệu trước controller
 
-“Users API hiện nhận `name` và `email`, nhưng chưa có runtime validation. Hãy lập plan dùng `class-validator`, `class-transformer` và global ValidationPipe. Pipe đặt trong `src/common/pipes`, không được import UsersModule. DTO vẫn nằm trong Users. Hãy đề xuất bảng payload có cả trường hợp hợp lệ và dữ liệu bậy. Phải gồm sai type, sai email, thiếu field, thừa field và chuỗi toàn dấu cách. Chưa sửa code trước khi tôi approve.”
+Mục tiêu của tập này là chặn dữ liệu sai trước khi nó đi vào controller. Mình không muốn viết nhiều câu `if/else` trong controller hay service. Thay vào đó, chúng ta sẽ tạo một lớp kiểm tra dùng chung.
 
-AI trả về ba nhóm thay đổi. Một: cài hai package validation. Hai: tạo `AppValidationPipe` dùng cho toàn app. Ba: thêm rule vào `CreateUserDto`. Nó cũng đưa ra sáu payload để test. Mình kiểm tra chiều dependency: common chỉ import Nest, không biết Users là ai. Users được phép dùng decorator từ package validation. Không có import ngược từ common vào business module. Plan ổn, mình approve.
+### 0:57 — Workflow sáu bước và prompt
 
-Terminal chạy `npm i class-validator class-transformer`. Hai package có hai nhiệm vụ khác nhau. `class-transformer` biến plain object thành instance phù hợp ở runtime. `class-validator` đọc decorator trên DTO rồi kiểm tra từng field.
+Mình tiếp tục sử dụng workflow sáu bước: yêu cầu, plan, review, approve, thực hiện và kiểm chứng.
 
-Trong `src/common/pipes`, AI tạo `AppValidationPipe`. Bên trong có ba option. `transform` bật việc chuyển đổi payload. `whitelist` xác định field nào được phép đi tiếp. `forbidNonWhitelisted` biến field thừa thành lỗi 400, thay vì âm thầm bỏ qua.
+Prompt lần này nói rõ Users API đang có `name` và `email` nhưng chưa có runtime validation. AI cần lập kế hoạch dùng `class-validator`, `class-transformer` và global `ValidationPipe`; pipe đặt trong `src/common`, không import `UsersModule`, còn DTO vẫn nằm trong module Users. Trước tiên chỉ đưa ra plan, chưa sửa code.
 
-Pipe nằm trong common vì đây là boundary áp dụng cho toàn ứng dụng, không thuộc riêng Users hay Auth. Nó không chứa business rule như “email công ty phải có domain nào”. Những rule đó vẫn phải ở module sở hữu nghiệp vụ.
+### 2:10 — Review kế hoạch
 
-Mở `main.ts`. Chỉ cần một dòng `app.useGlobalPipes(new AppValidationPipe())`. Từ lúc này, mọi HTTP endpoint đi qua chiếc cổng chung trước khi controller được gọi. Nếu payload sai, service thậm chí không biết request đó từng tồn tại.
+AI đề xuất cài `class-validator` và `class-transformer`, tạo một validation pipe dùng chung, thêm decorator validation vào DTO rồi đăng ký pipe toàn cục trong `main.ts`. Mình review lại kế hoạch trước khi cho AI thực hiện. Global pipe sẽ áp dụng cho tất cả module chứ không chỉ riêng Users.
 
-Quay lại `CreateUserDto`. `name` có `IsString`, `IsNotEmpty` và giới hạn độ dài. `email` có `IsString` và `IsEmail`. Mỗi decorator có message tiếng Việt để client hiểu field nào sai. Đây vẫn là DTO của Users, vì cấu trúc dữ liệu đầu vào thuộc boundary của business module này.
+### 2:51 — Duyệt command AI
 
-Đến lúc kiểm chứng. Payload đầu tiên có name Richard và email hợp lệ. Server trả 201. Payload thứ hai đổi email thành số 123. Lần này response là 400, còn `UsersService.create` không hề chạy.
+Khi AI muốn chạy command, công cụ yêu cầu mình duyệt. Các bạn nên đọc command trước khi bấm Yes để biết AI sắp cài package hay thay đổi điều gì trong project.
 
-Payload thứ ba dùng chuỗi `richard-at-example.com`. Vẫn là string, nhưng không phải email. `IsEmail` chặn nó. Payload thứ tư bỏ hẳn name. `IsNotEmpty` trả lỗi rõ ràng. Type và format là hai lớp kiểm tra khác nhau; thiếu một lớp, dữ liệu bẩn vẫn lọt.
+### 3:20 — Decorator validation trong DTO
 
-Payload thứ năm thêm `role: "admin"`. Nếu chỉ bật whitelist, field này sẽ bị bỏ đi. Nhưng mình đã bật `forbidNonWhitelisted`, nên API trả 400. Với dữ liệu nhạy cảm, từ chối rõ ràng thường dễ quan sát hơn âm thầm sửa request của client.
+Trong `CreateUserDto`, AI thêm các decorator validation cho `name` và `email`. `IsString` kiểm tra đúng kiểu chuỗi, `IsEmail` kiểm tra định dạng email, còn `IsNotEmpty` bảo đảm giá trị không bị bỏ trống.
 
-Còn payload cuối: name chỉ gồm ba dấu cách. AI dự đoán nó sẽ bị chặn. Thực tế server vẫn trả 201. `IsNotEmpty` thấy đây là một string có ba ký tự. Nó không hiểu ba ký tự đó chẳng tạo thành tên người.
+### 3:36 — Ba option của ValidationPipe
 
-Đây là lý do mình không dừng ở câu “AI đã viết xong”. Bộ fuzz test vừa tìm ra lỗ hổng trong chính plan của AI. Mình tự thêm `Transform` để trim name trước validation. Chạy lại payload cũ. Sau khi ba dấu cách trở thành chuỗi rỗng, `IsNotEmpty` mới chặn đúng.
+ValidationPipe có ba option chính. `transform` hỗ trợ chuyển đổi dữ liệu đầu vào. `whitelist` chỉ giữ lại những field đã được khai báo. `forbidNonWhitelisted` sẽ trả lỗi nếu request gửi thêm field không được phép.
 
-Bây giờ xem git diff. Common có một pipe không phụ thuộc domain. Users DTO giữ rule của Users. `main.ts` chỉ đăng ký boundary toàn cục. Chạy build, rồi chạy lại toàn bộ sáu payload. Một payload hợp lệ trả 201. Năm payload sai đều trả 400.
+### 3:57 — Chặn field thừa
 
-Validation đã đóng được cửa trước. Nhưng còn một vấn đề khác. Tạo một user, restart server rồi GET `/users`. Danh sách lại rỗng. Dữ liệu vẫn nằm trong một mảng RAM, nên mỗi lần server khởi động là một lần mất trí nhớ.
+Ví dụ nếu người dùng gửi thêm một field khác ngoài `name` và `email`, API sẽ chặn request đó thay vì âm thầm cho dữ liệu đi tiếp.
 
-Tập sau, ta sẽ đưa Users vào PostgreSQL bằng Prisma. Quan trọng hơn, business logic sẽ không phụ thuộc trực tiếp Prisma. Controller gọi service, service phụ thuộc repository contract, còn database chỉ là adapter được Nest nối vào.
+### 4:07 — Đăng ký pipe trong `main.ts`
 
-AI có thể đề xuất rule. Chỉ dữ liệu thật và những test khó chịu mới cho biết rule đó có đứng vững hay không. AI viết, mình hiểu — và mình vẫn kiểm chứng.
+Trong `main.ts`, chúng ta đăng ký pipe bằng `app.useGlobalPipes(new AppValidationPipe())`. Từ đây, mọi request HTTP đều phải đi qua bước validation trước khi tới controller.
 
-Nếu bạn muốn thấy user sống sót sau một lần restart, gặp lại ở NestJS số ba. Mình là Richard. Lập trình là cuộc sống.
+### 4:20 — Trim khoảng trắng
+
+Bây giờ mình kiểm tra trường hợp người dùng nhập khoảng trắng ở đầu hoặc cuối. Giá trị này ban đầu vẫn đi qua, nên mình yêu cầu xử lý `trim` cho `name` và `email`. Sau khi sửa, dữ liệu gửi lên được loại bỏ khoảng trắng trước khi kiểm tra và lưu lại.
+
+### 4:56 — Message lỗi tiếng Việt
+
+Tiếp theo mình muốn thông báo lỗi dễ hiểu hơn. Mình yêu cầu AI thêm message tiếng Việt vào các decorator, chẳng hạn `IsNotEmpty`. Khi gửi dữ liệu không hợp lệ, response trả về đúng message tiếng Việt để client biết field nào có vấn đề.
+
+### 5:41 — Kiểm tra độ dài
+
+Mình kiểm tra thêm giới hạn độ dài. Nếu chuỗi vượt quá 100 ký tự thì validation sẽ trả lỗi. Như vậy ngoài type và format, DTO còn kiểm soát được độ dài dữ liệu đầu vào.
+
+### 6:09 — Restart làm mất dữ liệu
+
+Sau khi tạo user thành công, mình restart server rồi gọi lại danh sách. Dữ liệu đã biến mất vì hiện tại user chỉ được lưu trong một mảng ở RAM.
+
+### 6:25 — Teaser PostgreSQL và Prisma
+
+Ở tập tiếp theo, chúng ta sẽ kết nối PostgreSQL và dùng Prisma để lưu dữ liệu thật vào database. Khi server restart, user vẫn còn. Cảm ơn các bạn đã xem video và hẹn gặp lại ở tập tiếp theo.
 
 ---
 
-## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
+## PART 2 — TIMELINE VIDEO ĐÃ ĐĂNG
 
-**Setup:** Tiếp tục đúng project và theme từ EP01. Font JetBrains Mono ≥18px. Agent panel bên phải, Postman hoặc REST client bên trái khi test. Quay 1920×1080, con trỏ có highlight.
+| Timestamp | Nội dung thực tế |
+|---|---|
+| 0:00 | DTO khai báo string nhưng API vẫn nhận `123` |
+| 0:28 | TypeScript type khác runtime validation |
+| 0:42 | Mục tiêu chặn dữ liệu trước controller |
+| 0:57 | Workflow sáu bước và prompt |
+| 2:10 | Review kế hoạch |
+| 2:51 | Duyệt command AI |
+| 3:20 | Decorator validation trong DTO |
+| 3:36 | Ba option của ValidationPipe |
+| 3:57 | Chặn field thừa |
+| 4:07 | Đăng ký pipe trong `main.ts` |
+| 4:20 | Trim khoảng trắng |
+| 4:56 | Message lỗi tiếng Việt |
+| 5:41 | Kiểm tra độ dài |
+| 6:09 | Restart làm mất dữ liệu |
+| 6:25 | Teaser PostgreSQL và Prisma |
 
-| # | Type | Nội dung quay | Thoại khớp | Thời lượng |
-|---|---|---|---|---|
-| 1 | [BROWSER]+[IDE] | Replay POST từ EP01 với `email: 123` nhưng vẫn 201; đặt cạnh DTO `email!: string` | Cold open: type vẫn để payload sai lọt qua | 35s |
-| 2 | [DIAGRAM] | Hai cột: compile time có TypeScript; runtime nhận plain JavaScript object | Type không phải validation | 45s |
-| 3 | [DIAGRAM] | Request → Global Pipe → Controller → Service; dấu chặn đỏ trước controller | Mục tiêu boundary toàn app | 35s |
-| 4 | [IDE] | Gõ prompt validation; agent chỉ trình plan và test matrix | Yêu cầu → Plan | 55s |
-| 5 | [IDE] | Review plan, highlight dependency `common` không import `modules/users`; approve | Review → Approve | 55s |
-| 6 | [TERM] | `npm i class-validator class-transformer`; mở package diff | Hai package, hai nhiệm vụ | 55s |
-| 7 | [IDE] | Tạo `common/pipes/app-validation.pipe.ts`; highlight ba option | Global ValidationPipe | 55s |
-| 8 | [IDE] | `main.ts` đăng ký pipe; diagram request bị chặn trước controller | Đăng ký boundary | 50s |
-| 9 | [IDE] | `CreateUserDto`; highlight rule của name và email cùng message tiếng Việt | Rule nằm trong Users | 50s |
-| 10 | [BROWSER] | POST hợp lệ → 201; `email: 123` → 400 | Test type | 45s |
-| 11 | [BROWSER] | Email sai định dạng; thiếu name; đọc response message | Test format và field bắt buộc | 45s |
-| 12 | [BROWSER] | Thêm `role: "admin"` → 400; đối chiếu `forbidNonWhitelisted` | Test field thừa | 45s |
-| 13 | [BROWSER]+[IDE] | `name: "   "` bất ngờ trả 201; zoom `IsNotEmpty` | Fuzz test bắt blind spot | 40s |
-| 14 | [IDE] | Host tự gõ `@Transform` trim name; watch mode reload; payload cũ → 400 | Tự sửa và kiểm chứng | 35s |
-| 15 | [IDE]+[TERM] | `git diff`, `npm run build`; chạy lại test matrix, bảng 1 xanh + 5 đỏ | Verification | 40s |
-| 16 | [TERM]+[BROWSER] | Tạo user → restart server → GET `/users` trả `[]`; end card EP03 Prisma | Pain mới + CTA | 30s |
-
-**Tổng: 715 giây ≈ 11:55.** Sau khi thu voice, chỉnh timestamp theo waveform thật.
+**Thời lượng thực tế:** 6:45.
 
 ### Command chuẩn bị
 
@@ -189,13 +209,13 @@ export class CreateUserDto {
 
 ### 4a. Titles
 
-1. ValidationPipe NestJS: Chặn dữ liệu sai từ DTO — EP02 | Lập trình là cuộc sống
+1. NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2
 2. DTO và ValidationPipe khác nhau thế nào? — EP02 | Lập trình là cuộc sống
 3. Kiểm tra email và payload trong NestJS — EP02 | Lập trình là cuộc sống
 4. Cấu hình Global ValidationPipe trong NestJS — EP02 | Lập trình là cuộc sống
 5. Vì sao TypeScript không chặn dữ liệu API sai? — EP02 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 4 cho search và Title 5 cho misconception.
+**Title 1 là title đã đăng.** Các title còn lại được giữ làm tư liệu tham khảo.
 
 ### 4b. SEO Description
 
@@ -216,23 +236,22 @@ NestJS Validation: https://docs.nestjs.com/techniques/validation
 class-validator: https://github.com/typestack/class-validator
 Source series: https://github.com/ptit9x/youtube-coding-for-life
 
-⏱ Timestamps dự kiến:
-0:00 DTO nói string, API vẫn nhận số
-0:35 Type khác validation
-1:20 Validation phải đứng trước controller
-1:55 Prompt AI và test matrix
-2:50 Review chiều dependency
-3:45 Cài class-validator và class-transformer
-4:40 AppValidationPipe trong common
-5:35 Rule cho name và email
-6:25 Test email là số
-7:15 Test email sai và thiếu field
-8:00 Chặn field role thừa
-8:45 Ba dấu cách vẫn lọt
-9:30 Tự thêm Transform để trim
-10:10 Chạy lại toàn bộ test
-10:45 Restart server — dữ liệu biến mất
-11:25 Teaser Prisma + PostgreSQL
+⏱ Timestamps thực tế:
+0:00 DTO khai báo string nhưng API vẫn nhận 123
+0:28 TypeScript type khác runtime validation
+0:42 Chặn dữ liệu trước controller
+0:57 Workflow sáu bước và prompt
+2:10 Review kế hoạch
+2:51 Duyệt command AI
+3:20 Decorator validation trong DTO
+3:36 Ba option của ValidationPipe
+3:57 Chặn field thừa
+4:07 Đăng ký pipe trong main.ts
+4:20 Trim khoảng trắng
+4:56 Message lỗi tiếng Việt
+5:41 Kiểm tra độ dài
+6:09 Restart làm mất dữ liệu
+6:25 Teaser PostgreSQL và Prisma
 
 #NestJS #ValidationPipe #ClassValidator #TypeScript #Backend #AICoding #Opus #Antigravity #Fresher #LapTrinhLaCuocSong
 ```

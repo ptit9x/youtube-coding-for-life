@@ -1,7 +1,7 @@
-# NestJS #12 — Testing phân quyền bằng Jest và Supertest
+# NestJS #12 — Testing phân quyền bằng Vitest và Supertest
 
 - **Series:** Học NestJS bằng AI — tập 12/45
-- **Target runtime:** ~14 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Unit test, integration test và e2e bảo vệ auth, RBAC, ownership.
 - **Pain mở EP13:** Test làm duplication lộ rõ và tạo cám dỗ refactor quá tay.
 
@@ -19,7 +19,7 @@ Không ai nhớ thử lại mọi role, permission và owner sau mỗi lần s�
 
 Security không được kiểm tra bằng niềm tin. Nó cần một ma trận có thể chạy lại.
 
-Mình chưa mở Jest ngay. Trước hết, mình liệt kê các nhánh quan trọng.
+Mình chưa mở Vitest ngay. Trước hết, mình liệt kê các nhánh quan trọng.
 
 Không token phải trả 401. Thiếu permission trả 403. Đúng owner thành công, còn sai owner bị chặn.
 
@@ -39,7 +39,7 @@ Integration test kiểm tra repository với database test thật.
 
 E2E test đi từ HTTP tới database và quay về response.
 
-PermissionGuard phù hợp với unit test. Prisma repository cần integration test.
+PermissionGuard phù hợp với unit test. Repository adapter dùng Prisma 8 cần integration test với database facade thật.
 
 Luồng login rồi sửa task phù hợp với e2e.
 
@@ -85,7 +85,7 @@ Trước suite, chạy migration. Trước mỗi test, dọn các bảng theo th
 
 Không dùng production secret. Không copy dữ liệu thật vào test.
 
-Repository integration test xác nhận unique constraint và transaction.
+Repository integration test xác nhận unique constraint, explicit junction write và transaction Prisma 8.
 
 Mock Prisma không thể chứng minh database thật xử lý đúng những điều đó.
 
@@ -120,12 +120,12 @@ Tập sau, ta refactor bằng bằng chứng thay vì cảm giác. Mình là Ric
 | 5 | [IDE] | Mutation guard nhưng test vẫn xanh | 80s |
 | 6 | [IDE] | Host viết assertion status và side effect | 100s |
 | 7 | [IDE] | Test revoke bằng access token cũ | 75s |
-| 8 | [TERMINAL] | Chạy database test độc lập | 80s |
+| 8 | [TERMINAL] | Chạy database test Prisma 8 độc lập | 65s |
 | 9 | [IDE] | Phá ownership rule và nhìn test đỏ | 70s |
 | 10 | [DIAGRAM] | Coverage khác chất lượng assertion | 45s |
 | 11 | [B-ROLL] | BaseCrudService xuất hiện như chiếc bẫy | 30s |
 
-**Tổng: 710 giây ≈ 11:50.** Dành thêm hai phút giải thích output Jest; font tối thiểu 18px.
+**Tổng mục tiêu: 8–10 phút.** Chỉ giải thích output Vitest liên quan trực tiếp tới assertion; font tối thiểu 18px.
 
 ### Code cốt lõi
 
@@ -137,12 +137,23 @@ it('forbids updating another user task', async () => {
     .send({ title: 'Hacked' })
     .expect(403);
 
-  const saved = await prisma.task.findUniqueOrThrow({
-    where: { id: otherTask.id },
-  });
+  const saved = await tasksRepository.findById(otherTask.id);
+  if (!saved) throw new Error('Expected task to exist');
   expect(saved.title).toBe('Original');
 });
 ```
+
+Repository integration test được phép đi qua Prisma 8 database facade để chứng minh adapter và PostgreSQL hoạt động cùng nhau:
+
+```ts
+const saved = await db.orm.public.Task
+  .where({ id: otherTask.id })
+  .first();
+
+expect(saved?.title).toBe('Original');
+```
+
+Không import `@prisma/client`, không khởi tạo client cũ và không mock hành vi thuộc về PostgreSQL.
 
 ```ts
 it('applies a revoked permission immediately', async () => {
@@ -164,6 +175,9 @@ Every test must assert exact status, response shape and important side effects.
 Include missing role, duplicate permission, revoke, wrong owner and direct DENY.
 Use an isolated test database.
 Do not mock behavior that belongs to PostgreSQL.
+Use Vitest globals from the Nest CLI scaffold and Supertest for HTTP e2e.
+Test repositories through their contract; use the Prisma 8 database facade only in repository integration setup/assertions.
+Use contract emit and the Prisma 8 migration workflow for the isolated test database.
 Show how one deliberate mutation proves each security test is meaningful.
 ```
 
@@ -172,7 +186,7 @@ Show how one deliberate mutation proves each security test is meaningful.
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
 
 1. `A cinematic red security test matrix turning green row by row on a dark monitor, developer watching closely, neon code reflections, subject right, empty left space, 16:9, photorealistic, no text, no logos.`
-2. `A dramatic broken permission guard caught by a glowing Jest safety net, dark server room, red alert and neon green tests, cinematic lighting, 16:9, photorealistic, no text.`
+2. `A dramatic broken permission guard caught by a glowing Vitest safety net, dark server room, red alert and neon green tests, cinematic lighting, 16:9, photorealistic, no text.`
 3. `A cinematic close-up of a developer pressing one key as dozens of authorization paths light up, dark IDE, green and red nodes, 16:9, photorealistic, no text.`
 
 ---
@@ -181,7 +195,7 @@ Show how one deliberate mutation proves each security test is meaningful.
 
 ### 4a. Titles
 
-1. Testing phân quyền NestJS bằng Jest và Supertest — EP12 | Lập trình là cuộc sống
+1. Testing phân quyền NestJS bằng Vitest và Supertest — EP12 | Lập trình là cuộc sống
 2. Viết E2E Test cho RBAC và Ownership — EP12 | Lập trình là cuộc sống
 3. Test PermissionGuard trong NestJS — EP12 | Lập trình là cuộc sống
 4. Unit Test, Integration Test và E2E khác nhau thế nào? — EP12 | Lập trình là cuộc sống
@@ -196,7 +210,7 @@ Coverage 100% vẫn có thể bỏ lọt bug authorization. Tập này biến au
 
 ✅ Vẽ authorization test matrix
 ✅ Chia unit, integration và e2e test
-✅ Dùng Jest và Supertest
+✅ Dùng Vitest và Supertest
 ✅ Assert status lẫn database side effect
 ✅ Test revoke với access token cũ
 ✅ Cô lập PostgreSQL dành cho test
@@ -210,13 +224,13 @@ Coverage 100% vẫn có thể bỏ lọt bug authorization. Tập này biến au
 ⏱ 8:45 Database test độc lập
 ⏱ 10:40 Mutation và payoff
 
-#NestJS #Jest #Supertest #Testing #RBAC #Authorization #Prisma #LapTrinhLaCuocSong
+#NestJS #Vitest #Supertest #Testing #RBAC #Authorization #Prisma8 #LapTrinhLaCuocSong
 ```
 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs testing, jest nestjs, supertest nestjs, rbac testing, authorization test matrix, permission guard test, ownership testing, prisma integration test, e2e nestjs, test coverage, mutation testing, nestjs tiếng việt, nestjs tập 12, lập trình là cuộc sống
+nestjs testing, vitest nestjs, supertest nestjs, rbac testing, authorization test matrix, permission guard test, ownership testing, prisma 8 integration test, e2e nestjs, test coverage, mutation testing, nestjs tiếng việt, nestjs tập 12, lập trình là cuộc sống
 ```
 
 ---

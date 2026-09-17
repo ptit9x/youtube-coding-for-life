@@ -1,7 +1,7 @@
 # NestJS #14 — Tách common thành thư viện dùng cho nhiều dự án
 
 - **Series:** Học NestJS bằng AI — tập 14/45
-- **Target runtime:** ~14 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Một package cross-cutting có public API, version và hai consumer thật.
 - **Pain mở EP15:** Quá nhiều cross-cutting layer khiến request lỗi trước controller mà không rõ bị chặn ở đâu.
 

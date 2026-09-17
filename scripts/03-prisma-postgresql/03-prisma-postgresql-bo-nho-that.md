@@ -1,6 +1,11 @@
-# NestJS #03 — Kết nối PostgreSQL bằng Prisma 8
+# NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
 
 - **Series:** Học NestJS bằng AI — tập 3/45
+- **Trạng thái:** ✅ Đã đăng
+- **Title đã đăng:** NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
+- **YouTube:** Chưa có URL công khai để đối chiếu
+- **Ngày đăng:** Chưa có dữ liệu công khai để đối chiếu
+- **Thời lượng thực tế:** Chưa có dữ liệu công khai để đối chiếu
 - **Target runtime:** 14–16 phút
 - **Outcome:** Dựng PostgreSQL local không hardcode Compose config; cấu hình ENV có validation; thay Users in-memory bằng PostgreSQL qua Prisma 8 và repository contract.
 - **Technical baseline:** NestJS 12, Node.js 24.11+, TypeScript 5.9+, ESM, PostgreSQL, Prisma ORM 8.
@@ -674,13 +679,13 @@ Ba prompt tuân theo visual preset của series: NestJS red `#E0234E`, trắng, 
 
 ### 4a. Titles
 
-1. Kết nối NestJS với PostgreSQL bằng Prisma 8 — EP03 | Lập trình là cuộc sống
+1. NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
 2. Prisma 8 ĐÃ KHÁC: Lưu User từ NestJS vào PostgreSQL — EP03
 3. Repository Pattern với Prisma 8 trong NestJS — EP03
 4. Từ RAM đến PostgreSQL: NestJS + Prisma 8 — EP03
 5. Contract và Migration đầu tiên với Prisma 8 — EP03
 
-**Khuyên dùng:** Title 1 cho search intent. A/B Title 2 cho curiosity và Title 3 cho architecture intent.
+**Title 1 là title đã đăng.** Các title còn lại được giữ làm tư liệu tham khảo.
 
 ### 4b. SEO Description
 

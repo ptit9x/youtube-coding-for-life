@@ -1,7 +1,7 @@
 # NestJS #06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án
 
 - **Series:** Học NestJS bằng AI — tập 6/45
-- **Target runtime:** ~10 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Tạo repo-scoped Agent Skill để scaffold feature đúng kiến trúc, không generic hóa business logic.
 - **Pain mở EP07:** Access token ngắn hạn an toàn nhưng buộc người dùng đăng nhập lại liên tục.
 
@@ -33,9 +33,9 @@ Mình yêu cầu AI đọc Users và Auth, rồi đề xuất phần nào đủ 
 
 AI muốn ghi cả rule `register phải hash password`. Rule đó chỉ thuộc Users/Auth, không thuộc mọi feature.
 
-Mình loại nó. Skill chỉ giữ file layout, dependency direction, workflow plan-first và lệnh verify.
+Mình loại nó. Skill chỉ giữ file layout, dependency direction, workflow plan-first và lệnh verify. Vì TaskFlow dùng Prisma 8, skill còn phải buộc agent đọc release status cùng tài liệu Prisma 8 trước mọi thay đổi database.
 
-Nó được phép scaffold module, controller, service, DTO, repository contract và adapter. Nó không được tự tạo BaseCrudService.
+Nó được phép scaffold module, controller, service, DTO, repository contract và adapter. Nó không được tự tạo BaseCrudService. Nó cũng không được dùng `@prisma/client`, `PrismaClient`, client generation hay migration command của Prisma 7.
 
 Một Skill tốt giảm công sức lặp lại. Nó không biến quyết định business thành template cứng.
 
@@ -49,13 +49,13 @@ Không cần nhồi mọi kiến thức vào một file. Progressive disclosure 
 
 Đến phần tự gõ, mình viết rule quan trọng nhất: controller mỏng, business rule nằm trong service hoặc use case.
 
-Rule thứ hai: code phụ thuộc domain không được đưa vào common. Rule thứ ba: luôn chạy lint, test và xem diff.
+Rule thứ hai: code phụ thuộc domain không được đưa vào common. Rule thứ ba: database code phải dùng contract, facade và migration workflow Prisma 8. Rule thứ tư: luôn chạy contract emit, migration check, lint, test và xem diff theo đúng phạm vi thay đổi.
 
 Giờ kiểm chứng trong conversation mới. Mình yêu cầu scaffold Roles và Permissions theo convention TaskFlow.
 
 Agent nhận đúng skill, đọc cấu trúc repo và chỉ đưa plan. Nó không sửa file trước khi mình approve.
 
-Plan đúng folder `modules/access-control`. Repository contract không import Prisma, còn adapter nằm gần database.
+Plan đúng folder `modules/access-control`. Repository contract không import Prisma, còn adapter nằm gần database. Plan dùng `contract.prisma`, emitted contract và database facade; không lặp lại snippet Prisma 7 phổ biến trên search result.
 
 Mình thử một prompt không liên quan: sửa typo trong README. Skill không được kích hoạt.
 
@@ -119,7 +119,10 @@ Before editing, read `references/architecture.md` and the nearest completed feat
 4. Keep business rules explicit in services or use cases.
 5. Keep repository contracts independent from Prisma.
 6. Never create a generic business CRUD service.
-7. Run lint, tests and show the diff summary.
+7. For database work, read the Prisma 8 release status and current Prisma 8 docs first.
+8. Use contract.prisma, emitted contract artifacts, the Prisma 8 database facade and the Prisma 8 migration workflow.
+9. Never use @prisma/client, PrismaClient, client generation, schema.prisma, migrate dev or migrate deploy.
+10. Run contract emit and migration check when the contract changes; then run lint, tests and show the diff summary.
 ```
 
 ### Prompt kiểm chứng
@@ -166,6 +169,7 @@ Mỗi lần nhờ AI tạo feature, structure lại trôi sang một kiểu. Age
 ✅ Tách reference để tiết kiệm context
 ✅ Bắt AI plan trước, chờ approve rồi mới code
 ✅ Scaffold boilerplate nhưng giữ business service explicit
+✅ Chặn snippet Prisma 7 và buộc đối chiếu release status Prisma 8
 ✅ Test cả trường hợp skill không nên kích hoạt
 
 🔗 OpenAI Docs — Build skills: https://developers.openai.com/codex/skills

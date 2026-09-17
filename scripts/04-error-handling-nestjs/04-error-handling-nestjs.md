@@ -1,7 +1,7 @@
 # NestJS #04 — Error Handling: Trả đúng lỗi 400, 404 và 409
 
 - **Series:** Học NestJS bằng AI — tập 4/45
-- **Target runtime:** ~11 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Chuẩn hóa lỗi 400, 404, 409 và che chi tiết nội bộ khỏi client.
 - **Pain mở EP05:** API trả lỗi đẹp nhưng bất kỳ ai vẫn gọi được endpoint riêng tư.
 
@@ -47,15 +47,15 @@ Response có `statusCode`, `error`, `message`, `path`, `timestamp` và `requestI
 
 Filter không gửi stack trace cho client. Stack vẫn được log ở server với context cần thiết.
 
-Lỗi phụ thuộc Prisma không được nhét vào common. `PrismaExceptionFilter` nằm gần database vì nó biết mã lỗi của Prisma.
+Lỗi phụ thuộc Prisma không được nhét vào common. `PrismaExceptionFilter` nằm gần database vì nó hiểu error envelope của Prisma 8 và lỗi do PostgreSQL driver trả về.
 
-Đây là ranh giới đáng giữ. Common có thể mang sang dự án khác; mã `P2002` thì không.
+Đây là ranh giới đáng giữ. Common có thể mang sang dự án khác; mã lỗi của ORM và `sqlState` của PostgreSQL thì không.
 
 Mình approve. Agent implement, rồi mình mở git diff từng filter.
 
 Đến phần tự gõ, mình thêm case 409 cho unique constraint. Mình không so chuỗi message vì message có thể đổi.
 
-Mình dùng type và code chính thức của Prisma. Mapping hẹp hơn, nhưng ít vỡ âm thầm hơn.
+Với Prisma 8, không dùng error class hay mã lỗi của Prisma Client cũ. Error do Prisma 8 tạo được nhận diện bằng `isStructuredError` và `error.code` dạng namespace/subcode. Riêng unique constraint từ PostgreSQL đi qua driver có `sqlState` là `23505`. Mapping hai nguồn lỗi này phải tường minh, hẹp và có test.
 
 Giờ kiểm chứng bằng bốn request. Email sai nhận 400 từ ValidationPipe.
 
@@ -149,6 +149,35 @@ Before editing:
 | Email trùng | 409 |
 | Database/nghiệp vụ lỗi bất ngờ | 500 |
 
+### Prisma 8 error mapping cốt lõi
+
+```typescript
+import { isStructuredError } from
+  '@prisma/orm-postgres/utils/structured-error';
+
+function isPostgresUniqueViolation(error: unknown): boolean {
+  return typeof error === 'object'
+    && error !== null
+    && 'sqlState' in error
+    && (error as { sqlState?: unknown }).sqlState === '23505';
+}
+
+function mapDatabaseError(error: unknown): never {
+  if (isPostgresUniqueViolation(error)) {
+    throw new ConflictException('Email đã được sử dụng');
+  }
+
+  if (isStructuredError(error)) {
+    // Chỉ map những code Prisma 8 đã được review cho use case này.
+    // Lỗi ngoài dự kiến phải được log ở server rồi trả 500 sạch.
+  }
+
+  throw error;
+}
+```
+
+Khi quay, đối chiếu code thật với Prisma 8 Error Reference. Không match theo `message`, không dùng `instanceof` và không đoán mã lỗi.
+
 ---
 
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
@@ -185,7 +214,7 @@ Email trùng chỉ là xung đột dữ liệu, nhưng API lại trả 500 như 
 ✅ Chạy error matrix bằng request thật
 
 🔗 NestJS Exception Filters: https://docs.nestjs.com/exception-filters
-🔗 Prisma Error Reference: https://www.prisma.io/docs/orm/reference/error-reference
+🔗 Prisma 8 Error Reference: https://docs.prisma.io/docs/orm/v8/reference/error-reference
 
 ⏱ 0:00 Email trùng nhưng nhận 500
 ⏱ 1:10 Cái bẫy try/catch mọi nơi
@@ -202,7 +231,7 @@ Email trùng chỉ là xung đột dữ liệu, nhưng API lại trả 500 như 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs error handling, nestjs exception filter, prisma p2002 nestjs, conflict exception nestjs, not found exception nestjs, http status code api, lỗi 500 nestjs, api error response, nestjs tiếng việt, học nestjs, nestjs tập 4, backend error handling, validationpipe exception, prisma unique constraint, typescript backend, backend fresher, ai coding mentor, lập trình là cuộc sống
+nestjs error handling, nestjs exception filter, prisma 8 structured error, postgres sqlstate 23505, conflict exception nestjs, not found exception nestjs, http status code api, lỗi 500 nestjs, api error response, nestjs tiếng việt, học nestjs, nestjs tập 4, backend error handling, validationpipe exception, prisma unique constraint, typescript backend, backend fresher, ai coding mentor, lập trình là cuộc sống
 ```
 
 ---
@@ -220,8 +249,8 @@ nestjs error handling, nestjs exception filter, prisma p2002 nestjs, conflict ex
 - Hình: stack trace bị khóa sau lớp kính.
 
 ### Option 3
-- `P2002` — WHITE
+- `UNIQUE ERROR` — WHITE
 - `PHẢI LÀ 409` — NEON GREEN `#00FF41`
-- Hình: mã Prisma đi qua filter thành response sạch.
+- Hình: PostgreSQL `23505` đi qua filter thành response sạch.
 
 **Typography chung:** Canvas 1280×720, Anton và JetBrains Mono, chữ trái chiếm một phần ba khung, stroke đen 8px, glow 10px. Typeset trong Canva và giữ bản nền không chữ.

@@ -1,7 +1,7 @@
 # NestJS #15 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
 
 - **Series:** Học NestJS bằng AI — tập 15/45
-- **Target runtime:** ~12 phút
+- **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Đọc đúng thứ tự middleware, guard, interceptor, pipe, handler và filter.
 - **Pain mở EP16:** Ứng dụng rõ luồng nhưng vẫn chỉ chạy trên máy lập trình viên.
 
