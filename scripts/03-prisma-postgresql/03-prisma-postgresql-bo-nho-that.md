@@ -727,6 +727,58 @@ Restart NestJS một lần, toàn bộ user trong RAM biến mất. Ta sẽ đư
 ⏱ 13:30 Migrate, verify và restart
 ⏱ 14:35 Email trùng tạo lỗi 500
 
+📋 PROMPT DÙNG TRONG VIDEO (copy thoải mái):
+
+▶ Prompt 1 — Chuẩn hóa ENV và Docker Compose:
+Audit and standardize environment configuration for this NestJS 12, Prisma 8 and local Docker Compose project.
+
+Before editing:
+1. Inventory every process.env read and every environment-specific value hardcoded in docker-compose.postgres.yml.
+2. Classify each variable as application runtime, Prisma CLI, or local Compose-only configuration.
+3. Show the proposed .env keys, safe .env.example placeholders, affected files and verification commands.
+
+Requirements:
+- Use the project-root .env as the single local-development value source for Docker Compose interpolation, Prisma CLI and Nest runtime.
+- Keep .env ignored. Commit .env.example with the same key names and no real secrets.
+- Move the PostgreSQL image, user, password, database name and host port out of docker-compose.postgres.yml.
+- Use required Compose interpolation (${VAR:?message}); do not silently substitute empty strings or secret defaults.
+- Keep PostgreSQL's container port 5432 fixed; only the host port is configurable.
+- Let Compose validate Compose-only variables. Nest startup validation should cover only application runtime variables such as NODE_ENV, PORT and DATABASE_URL.
+- Keep DATABASE_URL explicit. Do not rely on nested .env interpolation; verify that it matches the local PostgreSQL credentials and host port.
+- prisma.config.ts may load dotenv for Prisma CLI. Nest must load .env with ConfigModule and pass typed config into the database factory.
+- Do not read process.env from controllers, business services or repository adapters.
+- Validate the Compose model with `docker compose -f docker-compose.postgres.yml config --quiet` so secrets are not printed.
+- Never print DATABASE_URL or POSTGRES_PASSWORD in the answer, terminal recording or logs.
+- Show the audit and plan first. Do not edit until I approve.
+
+▶ Prompt 2 — Câu hỏi Prisma ngây thơ (để xem AI trả lời sai thế nào):
+Read this NestJS project. Replace the in-memory Users store with PostgreSQL using Prisma.
+Keep the current UsersService and controller behavior.
+Show a plan first, do not edit any file until I approve.
+
+▶ Prompt 3 — Sửa lại đúng Prisma 8:
+Read the current NestJS 12 ESM project and the installed Prisma 8 skill.
+Plan replacing the in-memory Users store with PostgreSQL through Prisma ORM 8.
+
+Constraints:
+- Verify the installed Prisma CLI and @prisma/orm-postgres versions first.
+- Use only Prisma 8 APIs and the current Prisma 8 release-status page.
+- Keep the PSL source and emitted artifacts under src/prisma as scaffolded.
+- Commit contract.json, contract.d.ts and migrations/app.
+- Put Nest integration and adapters under src/database.
+- UsersService must depend on a UsersRepository contract.
+- PrismaUsersRepository receives the Prisma 8 db facade through an explicit DI token.
+- Use db.orm.public.User, not PrismaClient or @prisma/client.
+- Use contract emit, migration plan, migration check, db migrate --advance-ref db and db verify.
+- Do not use schema.prisma, prisma generate, migrate dev, migrate deploy, P2002 or $transaction.
+- Do not create Tasks, Roles or Permissions yet.
+- Keep the existing DTO validation behavior.
+- Preserve the approved ENV and Docker Compose boundary from Prompt 1.
+- Change the Prisma runtime singleton into a factory that receives the validated URL through DI.
+- Do not read process.env from controllers, business services or repository adapters.
+- First show the file plan, dependency direction, contract, migration workflow and verification commands.
+- Do not edit until I approve.
+
 #NestJS #Prisma8 #PostgreSQL #ConfigModule #RepositoryPattern #TypeScript #Backend #AICoding #LapTrinhLaCuocSong
 ```
 

@@ -303,77 +303,89 @@ Definition of done cho từng script migrated:
 
 ## SEASON 2 — CỨNG CÁP (EP 17–26): production thật sự
 
-### EP 17 — Swagger docs: API tự viết hồ sơ
+### EP 17 — Swagger docs: API tự viết hồ sơ ✅ script đã viết
 - ← pain: EP16 public xong, người dùng cứ hỏi endpoint nhận gì và cần permission nào.
 - Học: `@nestjs/swagger`, `@ApiTags`, `@ApiOperation`, bearer auth, response/error schema, annotate DTO.
 - AI moment: nhờ AI annotate toàn bộ controller → host rà annotation nào nói khác code và permission nào bị bỏ sót.
 - Thành quả: `/docs` mô tả được cả auth và RBAC. → **pain: REST client phải gọi nhiều endpoint để ghép một màn hình.**
+- File: `17-swagger-openapi-nestjs/17-swagger-api-docs-nestjs.md`
 
-### BONUS 17.5 — Cùng một Service, hai API: REST vs GraphQL
+### BONUS 17.5 — Cùng một Service, hai API: REST vs GraphQL ✅ script đã viết
 - ← pain: dashboard cần user, tasks và permissions; REST client phải tự ghép nhiều response.
 - Học: `@nestjs/graphql` code-first, resolver là transport boundary, reuse Users/Tasks/AccessControl service; guard với GraphQL execution context.
 - AI moment: AI copy business logic sang resolver → host kéo logic về service và chứng minh REST/GraphQL dùng chung một use case.
 - Thành quả: hiểu GraphQL mà không biến series thành một course GraphQL khác.
+- File: `bonus-17-5-rest-vs-graphql-nestjs/bonus-17-5-rest-vs-graphql-nestjs.md`
 
-### EP 18 — Rate limiting & Helmet: dạy API tự vệ
+### EP 18 — Rate limiting & Helmet: dạy API tự vệ ✅ script đã viết
 - ← pain: docs công khai trở thành bản đồ cho bot spam login và API quản trị.
 - Học: `@nestjs/throttler`, giới hạn theo IP/user/route, Helmet, bảo vệ login khác endpoint thường.
 - AI moment: AI viết script spam chính API → host quan sát 429 rồi chất vấn cách attacker đổi IP hoặc tài khoản.
 - Thành quả: spam bị giới hạn, security headers bật đủ. → **pain: bị spam nhưng log rời rạc, không truy nổi một request.**
+- File: `18-rate-limiting-helmet-nestjs/18-rate-limiting-helmet-nestjs.md`
 
-### EP 19 — Structured logging + Correlation ID
+### EP 19 — Structured logging + Correlation ID ✅ script đã viết
 - ← pain: EP18 xảy ra lỗi lúc 2h sáng — hàng nghìn dòng log không biết dòng nào cùng request.
 - Học: pino structured logging, correlation ID đi suốt request, log level, redaction; tuyệt đối không log password/token.
 - AI moment: cho AI đọc log rối và tóm tắt sự cố → host kiểm tra lại theo correlation ID thay vì tin bản tóm tắt.
 - Thành quả: một request có một dấu vết đầu cuối. → **pain: log cho biết có lỗi nhưng không chỉ ra method nào đang chậm.**
+- File: `19-structured-logging-correlation-id/19-structured-logging-correlation-id.md`
 
-### EP 20 — NestJS Observe: nhìn xuyên request production
+### EP 20 — NestJS Observe: nhìn xuyên request production ✅ script đã viết
 - ← pain: EP19 có log nhưng vẫn phải đoán request chậm ở Guard, Service, Prisma hay queue.
 - Học: `@nestjs/observe`, auto-instrument request/job/error/trace, trace waterfall, latency p95, release và error context.
 - AI moment: tạo một endpoint chậm → đưa telemetry thật cho AI phân tích → host verify span gây chậm trước khi sửa.
 - Không biến MCP thành điều kiện bắt buộc: flow chính dùng dashboard/copy agent prompt; MCP read-only chỉ là nhánh tùy gói dịch vụ.
 - Thành quả: chẩn đoán dựa trên telemetry, không đoán từ code. → **pain: user báo lỗi task nhưng không gắn được ảnh minh họa.**
+- File: `20-nestjs-observe/20-nestjs-observe-production.md`
 
-### BONUS 20.5 — Observe vs Sentry/OpenTelemetry: chọn công cụ theo nhu cầu
+### BONUS 20.5 — Observe vs Sentry/OpenTelemetry: chọn công cụ theo nhu cầu ✅ script đã viết
 - So sánh Nest-aware instrumentation, error tracking, open standard, self-hosting, chi phí và vendor lock-in.
 - Không cài ba stack vào cùng project; dùng decision matrix và một trace/error giống nhau để so sánh.
+- File: `bonus-20-5-observability-tools/bonus-20-5-observe-sentry-opentelemetry.md`
 
-### EP 21 — File upload: avatar và attachment cho task
+### EP 21 — File upload: avatar và attachment cho task ✅ script đã viết
 - ← pain: EP20 thấy lỗi rõ rồi, nhưng task vẫn không đính kèm được ảnh hoặc file.
 - Học: Multer, `@UploadedFile`, validate loại/dung lượng, local vs object storage, serve file an toàn.
 - AI moment: hỏi AI nếu file giả danh `.jpg` thì sao → học magic bytes, không tin extension.
 - Thành quả: task có attachment hợp lệ. → **pain: dữ liệu và file tăng, GET `/tasks` trả hàng nghìn dòng.**
+- File: `21-file-upload-nestjs/21-file-upload-attachment-nestjs.md`
 
-### EP 22 — Pagination, filtering, sorting
+### EP 22 — Pagination, filtering, sorting ✅ script đã viết
 - ← pain: EP21 xong, task 5 nghìn dòng làm response lớn và client treo.
 - Học: offset vs cursor, query filter, sort, metadata page; Prisma 8 chain `.orderBy(...).skip(...).take(...).all()` và cursor ổn định có `id` làm tiebreaker.
 - AI moment: chất vấn offset pagination khi dữ liệu chèn liên tục → hiểu vì sao cursor.
 - Thành quả: danh sách task tải theo phần. → **pain: task vẫn là danh sách phẳng, chưa nhóm theo dự án.**
+- File: `22-pagination-filtering-sorting/22-pagination-filtering-sorting-prisma8.md`
 
-### EP 23 — Quan hệ dữ liệu: Project, Label và many-to-many
+### EP 23 — Quan hệ dữ liệu: Project, Label và many-to-many ✅ script đã viết
 - ← pain: EP22 xong nhưng task chưa thuộc project và chưa có label.
 - Học: quan hệ 1–N, N–N trong Prisma 8, migration khi đã có data, `.include(...)` vs `.select(...)`, explicit junction khi cần metadata, module Project/Label.
 - AI moment: AI thiết kế schema → host chất vấn cascade hay restrict trước khi migrate.
 - Thành quả: task thuộc project và gắn nhiều label. → **pain: tạo task kèm label hỏng giữa chừng làm data lệch.**
+- File: `23-project-label-relations/23-project-label-many-to-many-prisma8.md`
 
-### EP 24 — Transactions: làm trọn vẹn hoặc không làm
+### EP 24 — Transactions: làm trọn vẹn hoặc không làm ✅ script đã viết
 - ← pain: EP23 tạo task xong nhưng attach label fail, hệ thống còn nửa trạng thái.
 - Học: Prisma 8 `db.transaction(async tx => ...)`, query qua `tx.orm`, rollback khi callback throw, transaction boundary, race condition, khi nào không nên giữ transaction lâu. Không dạy `$transaction` của Prisma 7.
 - Giới hạn phiên bản: không trình bày transaction isolation level như một API đã ổn định nếu release status vẫn ghi chưa hỗ trợ.
 - AI moment: AI dựng hai request chạy đồng thời → host chạy demo và quan sát dữ liệu lệch trước khi sửa.
 - Thành quả: hoặc toàn bộ thành công, hoặc quay về như chưa có gì. → **pain: dashboard join nhiều bảng, gọi liên tục làm DB nặng.**
+- File: `24-transactions-prisma8/24-transactions-prisma8.md`
 
-### EP 25 — Caching với Redis: học cách quên
+### EP 25 — Caching với Redis: học cách quên ✅ script đã viết
 - ← pain: EP24 đúng dữ liệu nhưng dashboard query nặng và lặp lại.
 - Học: cache-aside, key design, invalidate khi data/quyền đổi, TTL và stale data.
 - AI moment: hỏi AI khi nào cache là kẻ thù → cố tình tạo bug quyền cũ còn trong cache rồi sửa invalidation.
 - Thành quả: dashboard nhanh hơn mà revoke permission vẫn có hiệu lực. → **pain: gửi mail nhắc deadline ngay trong request làm user chờ.**
+- File: `25-redis-cache-nestjs/25-cache-aside-redis-nestjs.md`
 
-### EP 26 — Background jobs với BullMQ: việc nặng để sau
+### EP 26 — Background jobs với BullMQ: việc nặng để sau ✅ script đã viết
 - ← pain: EP25 xong, gửi mail trong request vẫn bị phụ thuộc mail server.
 - Học: BullMQ + Redis, retry/backoff, failed job, dead-letter strategy, idempotent job cơ bản.
 - AI moment: host tắt mail server giữa chừng → quan sát retry rồi quyết định khi nào bỏ cuộc.
 - Thành quả: response về ngay, mail chạy nền. Recap Season 2. → **pain: queue có worker nhưng chưa ai tạo job nhắc việc mỗi sáng.**
+- File: `26-bullmq-background-jobs/26-bullmq-background-jobs-nestjs.md`
 
 ## SEASON 3 — CHUYÊN SÂU (EP 27–37): modular monolith thực thụ
 
