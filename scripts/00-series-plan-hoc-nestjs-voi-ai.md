@@ -176,9 +176,9 @@ Definition of done cho từng script migrated:
 - File: `02-validation-nestjs/02-dto-validationpipe-nestjs.md`
 
 ### EP 03 — NestJS + Prisma 8: Lưu User vào PostgreSQL | #3 — ✅ Đã đăng
-- **YouTube:** Chưa có URL công khai để đối chiếu
-- **Ngày đăng:** Chưa có dữ liệu công khai để đối chiếu
-- **Thời lượng thực tế:** Chưa có dữ liệu công khai để đối chiếu
+- **YouTube:** https://www.youtube.com/watch?v=kUXmQxjecNE
+- **Ngày đăng:** 2026-09-20
+- **Thời lượng thực tế:** 14:19
 - ← pain: EP02 xong, restart server, dữ liệu bốc hơi.
 - Học: khởi tạo Prisma 8 trong Nest app bằng `prisma orm init --target postgres --authoring psl`; phân biệt contract với database schema; emit contract; plan/review/apply migration; tạo `DatabaseModule`, Prisma provider, repository contract và Prisma adapter. Đồng thời dựng ConfigModule, Zod env validation và `.env.example` để cả Prisma CLI lẫn Nest runtime dùng một nguồn `DATABASE_URL` an toàn. Chỉ persist User, chưa tạo Tasks hay Access Control trong tập này.
 - File sinh ra: `src/prisma/contract.prisma`, `contract.json`, `contract.d.ts`, `db.ts`, `prisma.config.ts` và `migrations/app/`; đồng thời thêm `src/config/app.config.ts`, `database.config.ts`, `env.validation.ts` và `.env.example`. Commit emitted contract artifacts và migration package.

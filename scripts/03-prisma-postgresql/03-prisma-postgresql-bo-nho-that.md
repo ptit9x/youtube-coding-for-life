@@ -3,10 +3,10 @@
 - **Series:** Học NestJS bằng AI — tập 3/45
 - **Trạng thái:** ✅ Đã đăng
 - **Title đã đăng:** NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
-- **YouTube:** Chưa có URL công khai để đối chiếu
-- **Ngày đăng:** Chưa có dữ liệu công khai để đối chiếu
-- **Thời lượng thực tế:** Chưa có dữ liệu công khai để đối chiếu
-- **Target runtime:** 14–16 phút
+- **YouTube:** https://www.youtube.com/watch?v=kUXmQxjecNE
+- **Ngày đăng:** 2026-09-20
+- **Thời lượng thực tế:** 14:19
+- **Target runtime:** 14:19 (thời lượng video đã đăng)
 - **Outcome:** Dựng PostgreSQL local không hardcode Compose config; cấu hình ENV có validation; thay Users in-memory bằng PostgreSQL qua Prisma 8 và repository contract.
 - **Technical baseline:** NestJS 12, Node.js 24.11+, TypeScript 5.9+, ESM, PostgreSQL, Prisma ORM 8.
 - **Pain mở EP04:** Email trùng chạm unique constraint và biến thành lỗi 500 khó hiểu.
@@ -14,203 +14,134 @@
 
 ---
 
-## PART 1 — SCRIPT
+## PART 1 — TRANSCRIPT VIDEO ĐÃ ĐĂNG (LÀM SẠCH)
 
-Một lần restart server, toàn bộ user vừa tạo biến mất.
+### 0:00 — Restart server làm mất toàn bộ user
 
-API trả 201 rất đẹp. Nhưng trí nhớ của nó chỉ tồn tại cùng process Node.js.
+Chào mọi người. Ở video trước, mỗi lần restart server thì toàn bộ user vừa tạo đều biến mất. API trả 201 rất đẹp nhưng khi gọi lại danh sách thì mảng đã rỗng.
 
-Mảng trong UsersService nằm trong RAM. Process dừng, vùng nhớ được giải phóng, dữ liệu cũng đi theo.
+Mảng trong `UsersService` nằm trong RAM nên vùng nhớ được giải phóng khi application khởi động lại. Chính vì thế, chúng ta cần PostgreSQL hoặc một database khác để lưu dữ liệu. Trong video hôm nay, mình sẽ chia sẻ cách kết nối NestJS với PostgreSQL.
 
-Ta cần PostgreSQL. Nhưng thay database không có nghĩa UsersService phải biết mọi chi tiết của Prisma.
+### 0:43 — Yêu cầu AI tạo Docker Compose cho PostgreSQL
 
-Bước ngoặt nằm ở một contract rất nhỏ.
+Mình yêu cầu AI viết một file Docker để chạy PostgreSQL ngay trong thư mục source code. Sau khi file được tạo, chúng ta chạy lệnh `docker compose up`. Để dùng được lệnh này, máy cần cài Docker trước; các bạn có thể tải tại docker.com.
 
-UsersService chỉ biết nó cần lưu và tìm user. Prisma 8 đứng phía sau thực hiện những việc đó.
+### 1:15 — Đọc cấu hình container PostgreSQL
 
-Repository giống quầy giao nhận. Nhân viên chỉ đưa yêu cầu, không cần biết kho vận hành bằng loại xe nào.
+Trong file vừa tạo, Docker sẽ pull một PostgreSQL image từ Docker Hub. Có thể hiểu đơn giản image là bộ cài đã được đóng gói; Docker chạy image đó thành một container chứa database.
 
-Trước tiên, mình cần một PostgreSQL chạy thật trên máy.
+File cấu hình trên màn hình cũng chứa các thông tin dùng để kết nối database gồm username, password, tên database và port `5432`.
 
-Không cài qua installer. Một file `docker-compose.postgres.yml` trong project là đủ.
+### 1:59 — Tách file Docker cho môi trường development
 
-Image `postgres:18-alpine` được pin qua `POSTGRES_IMAGE`. Compose từ chối chạy nếu biến bắt buộc bị thiếu.
+`docker-compose.yml` mặc định sau này còn được dùng để đóng gói và deploy application. Vì file hiện tại chỉ chạy PostgreSQL cho development, mình đổi tên thành `docker-compose.postgres.yml` và cập nhật README với lệnh khởi động tương ứng.
 
-Dữ liệu nằm trong Docker volume nên container tắt vẫn còn.
+Khi development, chúng ta dùng file PostgreSQL riêng này. Đến lúc triển khai production hoặc môi trường test, mình sẽ tạo file Docker Compose phù hợp sau.
 
-Một lệnh duy nhất: `docker compose -f docker-compose.postgres.yml up -d`.
+### 2:39 — PostgreSQL đã chạy trên máy
 
-Vài giây sau, healthcheck chuyển xanh. Host port trong `POSTGRES_PORT` đã sẵn sàng trên máy.
+Sau khi chạy lệnh, container PostgreSQL đã được khởi động trên máy. Như vậy phần database local đã sẵn sàng.
 
-Connection string ghi vào file `.env` với tên `DATABASE_URL`. File này không bao giờ lên git.
+### 2:52 — Prompt chuẩn hóa biến môi trường
 
-Server đã sống. Giờ mới đến lượt ORM.
+Username, password và tên database đều là cấu hình nhạy cảm nên không nên hardcode. Mình dùng một prompt đã chuẩn bị sẵn, yêu cầu AI tìm toàn bộ biến môi trường và giá trị hardcode trong project, sau đó chuyển chúng sang file môi trường.
 
-Trước khi cài, mình kiểm tra Node, TypeScript, Nest và Prisma ngay trên màn hình.
+### 3:31 — Review kế hoạch cấu hình của AI
 
-Prisma 8 đang thay đổi nhanh. Video này không đoán phiên bản và cũng không âm thầm dùng latest.
+AI audit trạng thái hiện tại và nhận ra project mới chỉ đọc một biến môi trường trong `main.ts`, chưa có `ConfigModule`, `ConfigService` hay thư viện `@nestjs/config`. Kế hoạch cũng bổ sung các biến database và file `.env.example`.
 
-Nếu bản stable đã phát hành, mình khóa đúng bản stable. Nếu chưa, mình khóa chính xác bản release candidate đã kiểm chứng.
+Thứ tự thực hiện khá hợp lý: cài phần cấu hình cho NestJS trước rồi mới chuyển các giá trị sang biến môi trường.
 
-Package lock được commit. Mọi tập sau dùng cùng baseline cho đến khi có một lần nâng cấp có chủ đích.
+### 4:35 — Chỉnh lại vị trí thư mục config
 
-Prisma 8 không còn là Prisma Client quen thuộc trong nhiều tutorial cũ.
+Trong plan ban đầu, AI muốn đặt config dưới `src/common`. Mình không đồng ý vì `common` chỉ nên chứa những thành phần thật sự dùng chung. Có project dùng PostgreSQL, nhưng cũng có project dùng MySQL hoặc MongoDB; database config không phù hợp để nhét vào `common`.
 
-Không còn `schema.prisma`, `prisma generate` hay `prisma migrate dev` trong workflow mới.
+Mình yêu cầu tạo `src/config` ngang cấp với `src/common`, đồng thời tách rõ biến nào thuộc application và biến nào thuộc database. Sau khi AI cập nhật plan, cấu trúc gồm phần validation, application config và database config đã hợp lý hơn.
 
-Thay vào đó, mình khởi tạo Prisma 8 ngay trong Nest project đang có.
+### 5:42 — Approve plan và tạo các file config
 
-Project dùng ESM. Prisma tạo `contract.prisma`, `db.ts`, config và các file type được emit.
+Mình approve để AI thực hiện. Các file config và môi trường mới được tạo theo đúng cấu trúc vừa thống nhất.
 
-Lúc này có một chi tiết dễ bỏ qua. Tạo `.env` chưa có nghĩa mọi process sẽ tự đọc nó.
+### 6:09 — Cách review code khi AI viết ngày càng nhanh
 
-Prisma CLI và Nest runtime dùng chung một giá trị, nhưng mỗi bên phải nạp nó rõ ràng.
+Với tốc độ phát triển của AI, việc đọc kỹ từng dòng code mà agent sinh ra ngày càng khó trong công việc thực tế. Mình thường kiểm tra cấu trúc tổng thể, review các file quan trọng và đặt ra những quy tắc rõ ràng để AI tiếp tục sửa code đúng hướng.
 
-Mình yêu cầu AI audit toàn bộ config trước khi sửa. Nó tìm cả giá trị đang hardcode trong Docker Compose.
+### 6:33 — Prompt thay in-memory store bằng Prisma
 
-Mình review danh sách biến, cách validate và `.env.example`, rồi mới approve.
+Đây là phần quan trọng nhất của video. Mình yêu cầu AI đọc project và thay in-memory Users store bằng PostgreSQL sử dụng Prisma. Trước tiên, mình cố tình dùng một prompt khá ngắn để xem AI sẽ xử lý như thế nào.
 
-Image PostgreSQL, user, password, database và host port được chuyển thành biến bắt buộc trong `.env`.
+### 6:59 — Kế hoạch Prisma ban đầu
 
-Compose dùng chúng để nội suy file YAML. Nest không validate các biến chỉ dành cho Compose.
+AI tìm thấy User entity, DTO, controller, module và cấu hình database hiện có. Kế hoạch của nó là tạo Prisma schema, cài các thư viện cần thiết và chạy migration. Nhìn tổng thể plan có vẻ ổn nên mình cho chạy thử.
 
-`prisma.config.ts` nạp `.env` cho command Prisma. Nest dùng `ConfigModule` làm boundary của application.
+### 7:52 — AI bắt đầu với Prisma 7 rồi phát hiện Prisma 8
 
-Mình thêm `.env.example` chỉ chứa giá trị mẫu, rồi kiểm tra `.env` đã nằm trong `.gitignore`.
+Trong package, Prisma Client đang ở phiên bản 7.10 trở lên. Sau đó AI phát hiện Prisma có thêm phiên bản 8, tạo tài liệu riêng cho V8 và hỏi có nên xóa phần Prisma cũ hay không. Khả năng tự phát hiện thay đổi phiên bản này khá ấn tượng.
 
-Trong `AppModule`, ConfigModule ép kiểu port và validate `DATABASE_URL` ngay khi startup.
+### 9:12 — Kiểm tra release status của Prisma
 
-Mình cố tình xóa biến đó. App dừng trước request đầu tiên và chỉ đúng field đang thiếu.
+Mình mở tài liệu phiên bản hiện tại của Prisma để kiểm tra. Trang release status cho thấy ORM 7 đang được support đầy đủ, còn ORM 8 mới ở trạng thái candidate.
 
-Không có fallback database URL bí mật. Config bắt buộc phải fail fast.
+Prisma 7 hoàn toàn có thể dùng trong production. Vấn đề ở đây là prompt của mình chưa chỉ định rõ phiên bản, khiến AI cài V7, phát hiện V8, xóa rồi tạo lại. Workflow đó tạo ra rework không cần thiết, nên mình reject và làm lại.
 
-`src/prisma/db.ts` được đổi từ singleton đọc `process.env` thành factory nhận URL đã validate.
+### 10:33 — Viết lại prompt rõ ràng cho Prisma 8
 
-Database provider gọi factory qua DI. UsersService không biết `.env`, `ConfigService` hay connection string tồn tại.
+Prompt mới yêu cầu AI đọc codebase hiện tại và sử dụng Prisma ORM 8. Mình vẫn giữ nguyên quy tắc: trước khi chỉnh sửa file, AI phải đưa ra plan để mình review.
 
-Contract là lời hứa giữa application và database.
+Prompt càng rõ thì càng tiết kiệm token, chi phí và thời gian. Nếu yêu cầu mơ hồ, một tác vụ có thể phải làm lại nhiều lần và phần rework còn đắt hơn việc chuẩn bị đúng ngay từ đầu.
 
-Database schema là cấu trúc thật đang tồn tại trong PostgreSQL.
+### 11:25 — Review kế hoạch Prisma 8
 
-Hai khái niệm này gần nhau, nhưng không phải một.
+Trong plan mới, AI chuyển dependency từ V7 sang V8 và dùng package PostgreSQL runtime thay cho Prisma Client cũ. Nó cũng vẽ lại architecture và cho thấy các thay đổi về thư viện cũng như cú pháp. Sau khi review, mình cho AI tiếp tục.
 
-Mình chỉ khai báo model User. ID là UUID, email unique, cùng thời điểm tạo và cập nhật. Với Prisma 8, timestamp cập nhật dùng `temporal.updatedAt()`.
+### 12:02 — Áp dụng Prisma 8 và repository pattern
 
-Không có Role, Permission hay Task trong tập này. Một migration nhỏ luôn dễ review hơn một migration chứa cả tương lai.
+Package đã được đổi từ Prisma Client sang PostgreSQL runtime của Prisma ORM 8. Prisma cũng tạo một Users repository.
 
-Sau khi sửa contract, mình chạy `prisma contract emit`.
+Có thể hiểu repository giống như một quầy giao nhận. `UsersService` cần tìm kiếm hoặc lưu dữ liệu user thì Prisma đứng phía sau thực hiện công việc đó thông qua repository. Service không cần làm việc trực tiếp với chi tiết database.
 
-Lệnh này tạo `contract.json` cho runtime và `contract.d.ts` cho TypeScript.
+### 12:39 — Tự kiểm tra API bằng Postman
 
-Hai file đó được commit. Prisma 8 không cần generate client package trong lúc build hoặc deploy.
+AI bắt đầu chạy test nhưng mình dừng lại để tự kiểm tra. Khi gọi API bằng Postman, dữ liệu user mà AI vừa tạo đã xuất hiện và ID tiếp tục tăng, cho thấy dữ liệu đang được lưu trong PostgreSQL thay vì mảng RAM.
 
-Tiếp theo, mình yêu cầu Prisma lập kế hoạch migration tên `create_users`.
+### 13:13 — Email trùng trả lỗi 500
 
-Plan chỉ tạo file. Nó chưa chạm vào database.
+Khi gửi lại request với cùng email, API trả lỗi 500. Prisma định nghĩa model User tương ứng với các cột trong database và email có unique constraint, vì vậy database từ chối bản ghi bị trùng.
 
-Đây là khoảng dừng quan trọng cho con người.
+Database đang bảo vệ dữ liệu đúng, nhưng API chưa biết diễn giải lỗi kỹ thuật đó cho client.
 
-Mình đọc `migration.ts`, `ops.json` và DDL preview trước khi apply.
+### 14:02 — Teaser Error Handling
 
-Primary key có đúng UUID không. Unique constraint có nằm trên email không. Timestamp có đúng kiểu không.
-
-ORM giúp ta viết query nhanh hơn. Nó không thay trách nhiệm hiểu database sắp thay đổi thế nào.
-
-Quay lại agent panel, mình đưa yêu cầu tích hợp Prisma. AI vẫn chỉ được lên plan, chưa được sửa code.
-
-Nó trả về một đoạn quen thuộc: tạo PrismaClient rồi inject thẳng vào UsersService.
-
-Code đó có thể đúng với Prisma cũ. Nhưng trong project này, nó sai cả phiên bản lẫn boundary.
-
-Mình yêu cầu AI đọc release status, Prisma 8 skill và contract vừa emit.
-
-Plan mới có ba phần.
-
-UsersRepository là contract. PrismaUsersRepository là adapter. Prisma database facade đi vào adapter qua DI token.
-
-Contract chỉ có `create`, `findAll`, `findById` và `findByEmail`.
-
-Nó diễn tả nhu cầu của Users. Nó không sao chép toàn bộ query API của Prisma.
-
-Nếu repository lộ mọi filter và option của ORM, ta chỉ đổi tên dependency chứ chưa tạo boundary.
-
-Sau khi approve, agent tạo DatabaseModule, Prisma provider và adapter.
-
-Provider giữ một database facade dùng chung. Khi application shutdown, pool mới được đóng.
-
-Không mở rồi đóng kết nối trong từng request. Làm vậy chỉ biến connection pool thành máy chạy bộ.
-
-Trong adapter, câu lệnh tạo user bắt đầu bằng `db.orm.public.User.create`.
-
-Prisma 8 không còn object `data` bọc bên ngoài như Prisma 7.
-
-Tìm user dùng `.where(...).first()`. Lấy danh sách dùng `.all()`.
-
-Trong UsersModule, token `USERS_REPOSITORY` nối contract với PrismaUsersRepository.
-
-Nest container sẽ đưa adapter vào UsersService lúc runtime.
-
-Mình mở git diff.
-
-`db.orm` chỉ xuất hiện trong database adapter. Nó không xuất hiện trong UsersService hay controller.
-
-Đây là bằng chứng cho dependency direction, không phải một sơ đồ đẹp để ngắm.
-
-Mình chạy migration check, rồi apply migration vào PostgreSQL với `--advance-ref db` để lần plan tiếp theo bắt đầu từ đúng trạng thái vừa áp dụng.
-
-Cuối cùng, `prisma db verify` xác nhận database thật đang khớp với contract đã emit.
-
-Ứng dụng khởi động. Mình POST một user, GET danh sách, rồi dừng server.
-
-Khoảnh khắc kiểm chứng thật sự đến sau khi server chạy lại.
-
-GET `/users` vẫn trả đúng user vừa tạo.
-
-RAM đã quên. PostgreSQL thì chưa.
-
-Nhưng mình gửi lại đúng email đó.
-
-PostgreSQL từ chối unique constraint. Prisma 8 trả một structured error, còn client nhận lỗi 500 lạnh lùng.
-
-Database đang bảo vệ dữ liệu đúng. API chỉ chưa biết kể lỗi đó bằng ngôn ngữ của người gọi.
-
-Tập sau, mình sẽ map lỗi kỹ thuật thành 400, 404 hoặc 409 rõ ràng.
-
-Một boundary tốt không làm database biến mất. Nó chỉ ngăn quyết định hạ tầng lan vào nơi chứa nghiệp vụ.
-
-Theo dõi series nếu bạn muốn nhìn lỗi 500 này được bóc tách đến tận nguyên nhân. Mình là Richard. Lập trình là cuộc sống.
+Trong tập sau, mình sẽ map lỗi kỹ thuật thành các status 400, 404 hoặc 409 rõ ràng. Theo dõi series nếu bạn muốn thấy lỗi 500 này được bóc tách đến tận nguyên nhân. Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
-## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
+## PART 2 — TIMELINE VIDEO ĐÃ ĐĂNG
 
-| # | Type | Nội dung quay | Thời lượng |
-|---|---|---|---:|
-| 1 | [BROWSER]+[TERM] | Tạo user, restart Nest app, GET lại thành mảng rỗng | 30s |
-| 2 | [DIAGRAM] | RAM nằm trong Node process; PostgreSQL nằm ngoài process | 25s |
-| 3 | [TERM]+[IDE] | Tạo `docker-compose.postgres.yml`; `up -d`; đợi healthcheck xanh; `psql` ping được | 50s |
-| 4 | [TERM] | Hiện Node, TypeScript, Nest, Prisma dist-tags và package tree | 40s |
-| 5 | [BROWSER] | Mở Prisma 8 release status; highlight runtime và feature limitations | 30s |
-| 6 | [TERM] | Pin exact Prisma 8 CLI/runtime; chạy `prisma orm init` trong Nest project | 50s |
-| 7 | [IDE] | Review `contract.prisma`, `db.ts`, `prisma.config.ts` và package scripts | 40s |
-| 8 | [AI]+[IDE]+[TERM] | Gõ Prompt 1 audit ENV; chuyển giá trị Compose sang biến bắt buộc; thêm ConfigModule, Zod và `.env.example` | 70s |
-| 9 | [IDE] | Đổi `db.ts` thành factory nhận URL đã validate; review DI boundary | 40s |
-| 10 | [IDE] | Viết model User; zoom UUID, unique email và timestamps | 40s |
-| 11 | [TERM]+[IDE] | `contract emit`; mở `contract.json` và `contract.d.ts` | 35s |
-| 12 | [TERM]+[IDE] | `migration plan`; review `migration.ts`, `ops.json`, DDL preview | 60s |
-| 13 | [IDE] | Gõ Prompt 2 (ngây thơ); AI đề xuất PrismaClient và inject thẳng vào service | 35s |
-| 14 | [DIAGRAM] | UsersService → UsersRepository ← PrismaUsersRepository → Prisma 8 db | 40s |
-| 15 | [IDE] | Host bắt lỗi xong gõ Prompt 3; review config, contract, DI tokens và lifecycle provider trước khi approve | 60s |
-| 16 | [IDE] | Agent implement adapter bằng `db.orm.public.User` | 55s |
-| 17 | [IDE] | Host tự gõ `findByEmail`; kiểm tra git diff và import boundary | 40s |
-| 18 | [TERM] | `migration check`, `db migrate --advance-ref db`, `db verify`, build và test | 55s |
-| 19 | [BROWSER] | POST, GET, restart app, GET lại vẫn có dữ liệu | 50s |
-| 20 | [BROWSER]+[TERM] | POST email trùng → 500 và Prisma 8 structured error | 35s |
-| 21 | [B-ROLL] | Desk tối, freeze error code, teaser EP04 | 15s |
+| Timestamp | Nội dung thực tế |
+|---|---|
+| 0:00 | Restart server làm mất toàn bộ user |
+| 0:43 | Yêu cầu AI tạo Docker Compose cho PostgreSQL |
+| 1:15 | Đọc cấu hình container PostgreSQL |
+| 1:59 | Tách file Docker cho môi trường development |
+| 2:39 | PostgreSQL đã chạy trên máy |
+| 2:52 | Prompt chuẩn hóa biến môi trường |
+| 3:31 | Review kế hoạch cấu hình của AI |
+| 4:35 | Chỉnh lại vị trí thư mục config |
+| 5:42 | Approve plan và tạo các file config |
+| 6:09 | Cách review code khi AI viết ngày càng nhanh |
+| 6:33 | Prompt thay in-memory store bằng Prisma |
+| 6:59 | Kế hoạch Prisma ban đầu |
+| 7:52 | AI bắt đầu với Prisma 7 rồi phát hiện Prisma 8 |
+| 9:12 | Kiểm tra release status của Prisma |
+| 10:33 | Viết lại prompt rõ ràng cho Prisma 8 |
+| 11:25 | Review kế hoạch Prisma 8 |
+| 12:02 | Áp dụng Prisma 8 và repository pattern |
+| 12:39 | Tự kiểm tra API bằng Postman |
+| 13:13 | Email trùng trả lỗi 500 |
+| 14:02 | Teaser Error Handling |
 
-**Tổng: 895 giây ≈ 14:55.** Cắt toàn bộ thời gian chờ cài package, pull image và migrate.
-
-Dùng One Dark Pro, JetBrains Mono tối thiểu 18px cho video ngang. Khi quay lại cảnh dọc cho Shorts, tăng lên 24px và giữ code trong safe zone giữa màn hình.
+**Thời lượng thực tế:** 14:19.
 
 ### Cổng kiểm tra phiên bản trước khi quay
 
@@ -714,18 +645,27 @@ Restart NestJS một lần, toàn bộ user trong RAM biến mất. Ta sẽ đư
 🔗 Prisma 8 Writing Data: https://www.prisma.io/docs/orm/fundamentals/writing-data
 🔗 Docker Compose interpolation: https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/
 
-⏱ 0:00 Restart và mất sạch user
-⏱ 1:10 PostgreSQL nằm ngoài process
-⏱ 2:10 Dựng PostgreSQL local bằng Docker
-⏱ 3:20 ConfigModule và fail fast DATABASE_URL
-⏱ 4:40 Khóa phiên bản Prisma 8
-⏱ 5:50 Contract thay cho schema.prisma
-⏱ 7:10 Emit và review migration plan
-⏱ 8:45 AI dùng nhầm Prisma 7
-⏱ 10:00 Repository boundary và DI token
-⏱ 12:00 Query bằng db.orm.public.User
-⏱ 13:30 Migrate, verify và restart
-⏱ 14:35 Email trùng tạo lỗi 500
+⏱ Timestamps thực tế:
+0:00 Restart server làm mất toàn bộ user
+0:43 Tạo Docker Compose cho PostgreSQL
+1:15 Đọc cấu hình container PostgreSQL
+1:59 Tách file Docker cho development
+2:39 PostgreSQL đã chạy trên máy
+2:52 Prompt chuẩn hóa biến môi trường
+3:31 Review kế hoạch cấu hình của AI
+4:35 Chỉnh lại vị trí thư mục config
+5:42 Approve plan và tạo các file config
+6:09 Cách review code do AI tạo
+6:33 Prompt thay in-memory store bằng Prisma
+6:59 Kế hoạch Prisma ban đầu
+7:52 AI bắt đầu với Prisma 7 rồi phát hiện Prisma 8
+9:12 Kiểm tra release status của Prisma
+10:33 Viết lại prompt rõ ràng cho Prisma 8
+11:25 Review kế hoạch Prisma 8
+12:02 Áp dụng Prisma 8 và repository pattern
+12:39 Tự kiểm tra API bằng Postman
+13:13 Email trùng trả lỗi 500
+14:02 Teaser Error Handling
 
 📋 PROMPT DÙNG TRONG VIDEO (copy thoải mái):
 
