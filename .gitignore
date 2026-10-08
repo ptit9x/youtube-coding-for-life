@@ -1,4 +1,16 @@
 /videos/
+series-9router/videos/
+series-nestjs-ai/04-error-handling-nestjs/videos/
 
 # Weekly channel report local state (scrape snapshots)
 scripts/.channel-snapshots.json
+
+
+# Video / Audio / Screen recordings
+*.mp4
+*.mov
+*.m4a
+*.wav
+*.avi
+*.mkv
+*.webm
