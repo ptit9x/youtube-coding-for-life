@@ -56,6 +56,18 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   - Ý nghĩa: miễn phí là chiến lược — "bạn là một phần của sản phẩm"
 - **Variant:** Học bằng LLM
 
+### BONUS 1.5 — Đăng ký Muse bằng ChatGPT: cửa sau khi VPN đã chết — QUAY SỚM (mẹo có thể bị vá)
+- **Thời lượng mục tiêu:** ~6 phút (~540 từ)
+- **Nội dung chính:** VPN miễn phí bị Muse blacklist + region gate chấm môi trường trình duyệt → waitlist;
+  mở muse.ai/join qua trình duyệt điều khiển của ChatGPT Work mode (hạ tầng mây Mỹ, không cần VPN);
+  email sạch (chưa dính Muse/Facebook) + mã PIN; xử lý remote browser timeout; vào xong đăng nhập
+  trình duyệt thường không VPN + nhập ref trong 48h. Nói thẳng: mẹo cộng đồng không chính thức,
+  không nhập thẻ qua browser ChatGPT, acc thật. Tease EP02 cuối video.
+- **Nguồn đã verify 09/10/2026:** Tinhte thread 4182001 (gốc), VOZ 1282837, khuyendung.net
+  (cơ chế cloud webview), YouTube KR rHCJ6uAiYM4 (timeout case), freemuseai/cnelecar (region gate).
+- **File:** `bonus-1-5-dang-ky-muse-qua-chatgpt/script.md`
+- **Variant:** Học bằng LLM
+
 ### EP02 — Trải nghiệm Muse AI trên Mac: Code Review, Connectors & Sự Thật
 - **Thời lượng mục tiêu:** ~5–6 phút (~500–550 từ)
 - **Nội dung chính:**
