@@ -17,7 +17,7 @@ Vì sao Muse phải siết? Vì cửa cũ bị lạm dụng. Referral cho mỗi 
 
 Cửa mới nằm ở một chỗ ít ai ngờ: ChatGPT. Chế độ Work của ChatGPT có trình duyệt điều khiển được, chạy trên hạ tầng đám mây của OpenAI ở Mỹ. VPN giống mặc áo Mỹ nhưng giọng vẫn Việt — bị nhận mặt. Trình duyệt mây là người Mỹ thật bước vào mở cửa giúp bạn. Muse thấy một phiên Mỹ sạch, không phải proxy.
 
-Bước một — và nói thẳng luôn: cách này cần ChatGPT Plus trở lên. Vì chìa khóa là trình duyệt mây của chế độ Work — chạy trên server Mỹ của OpenAI. Đó là tính năng trả phí. Bản miễn phí cũng có Work, nhưng chỉ trong app desktop, với trình duyệt chạy ngay trên máy bạn — IP vẫn Việt Nam, vẫn waitlist. Plus hai mươi đô một tháng; nếu chỉ cần đăng ký một lần, mượn bạn một buổi cũng là một lựa chọn.
+Bước một — và nói thẳng luôn: cách này cần ChatGPT Plus trở lên. Vì chìa khóa là trình duyệt mây của chế độ Work — chạy trên server Mỹ của OpenAI. Đó là tính năng trả phí. Bản miễn phí cũng có Work, nhưng chỉ trong app desktop, với trình duyệt chạy ngay trên máy bạn — IP vẫn Việt Nam, vẫn waitlist. Plus hai mươi đô một tháng; nếu chỉ cần đăng ký một lần, mượn bạn một buổi cũng là một lựa chọn. Ai đã có Google AI Pro hay Ultra thì Gemini Spark cũng có trình duyệt mây tương tự — dùng được thay thế.
 
 Có Plus rồi thì đơn giản. Cuộc trò chuyện mới, chọn Work, gõ đúng câu: mở muse.ai slash join, và cho quyền điều khiển web. ChatGPT hỏi cấp quyền điều khiển trình duyệt — cho phép. Khung trình duyệt mây mở ra, muse.ai load sạch sẽ. Từ đây điền form như bình thường.
 
@@ -66,6 +66,9 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 ```text
 Prompt 1 (mở Muse qua ChatGPT Work):
 Mở https://muse.ai/join rồi cho quyền điều khiển web
+
+Prompt 1b (phương án Gemini Spark — cho ai có Google AI Pro/Ultra):
+Mở https://muse.ai/join trong trình duyệt từ xa và cho mình đăng ký tài khoản.
 
 Prompt 2 (khi remote browser timeout):
 Kết nối lại muse.ai trong trình duyệt từ xa bằng mọi cách được không,
@@ -216,4 +219,10 @@ Bạn thử cách này kết quả thế nào? Vào thẳng / waitlist / lỗi g
   app desktop với built-in browser chạy LOCAL trên máy user → IP vẫn VN → không qua được
   region gate. Cloud browser không nhập được credential/thanh toán (docs) — nhưng form signup
   công khai + PIN email hoạt động theo báo cáo Tinhte/KR; giữ rule "thẻ chỉ nhập ở máy mình".
+- **Gemini Spark (verify 09/10/2026):** remote browser chạy trên cloud Google (đọc web công
+  khai, giữ cookie giữa phiên, submit form cần xác nhận) — cơ chế tương đương cloud browser
+  ChatGPT. Yêu cầu Google AI Pro/Ultra ($20+), tài khoản cá nhân 18+, Keep Activity ON; VN
+  KHÔNG nằm trong danh sách loại trừ (chỉ EEA/UK/CH/Nigeria) — support.google.com/gemini/17094507.
+  Điểm khác: Chrome auto browse (dùng Chrome local) chỉ US — nhưng remote browser thì đúng phạm vi
+  Spark toàn cầu. Chưa có báo cáo cộng đồng test Spark + Muse — cần test thật trước khi quay.
 - **Trạng thái cửa:** mẹo hoạt động theo báo cáo cộng đồng đầu 10/2026 — KHÔNG phải tính năng chính thức, Meta có thể vá bất cứ lúc nào; quay sớm.
