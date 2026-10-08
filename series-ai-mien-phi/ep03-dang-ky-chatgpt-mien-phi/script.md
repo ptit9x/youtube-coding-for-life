@@ -22,24 +22,24 @@ Câu hỏi đầu tiên mình từng hỏi nó: giải thích hàm này cho mìn
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~5–5.5 phút (~500 từ @ ~100 wpm)**
+**Tổng thời lượng mục tiêu: ~5:40 (340s visuals, ~510 từ @ ~100 wpm, fill ~90%)**
 
 **Cài đặt chung:** Dark mode toàn bộ (browser + ChatGPT dark theme), font ≥18px, ẩn bookmark bar, đóng tab thừa. Blur email/số điện thoại cá nhân khi edit. Dùng account demo riêng để quay — đừng dùng account chính có lịch sử cá nhân.
 
 | # | Thời lượng | Loại | Narration tương ứng | Footage | Ghi chú cắt ghép |
 |---|-----------|------|---------------------|---------|-----------------|
-| | 1 | 12s | **[BROWSER]** | "Ba tin đồn cũ...năm phút là xong." | Mở chatgpt.com → zoom nút Plus + giá "20 USD/tháng" → 3 badge text hiện lần lượt: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" rồi gạch ngang đỏ | Hook 2 nhịp — KHÔNG intro, không chào; giữ 2s ở lúc gạch ngang |
-| | 2 | 35s | **[BROWSER]** | "Làm luôn...không một bước nào hỏi tiền." | Quay thật: chatgpt.com → Sign up → "Continue with Google" → chọn Gmail demo → Allow → form tên + ngày sinh (blur thông tin thật) | Speed-up 1.5x phần chờ load, giữ tốc độ thật phần bấm nút. Quay cảnh **không có field thẻ tín dụng** — điểm nhấn |
-| | 3 | 20s | **[BROWSER]** | "Bạn vừa có trong tay...hỏi được việc." | Giao diện chat mới: hover model picker, icon search web, nút upload file, nút tạo ảnh; mở app điện thoại 2s cho câu cuối | Nền tối; cuộn chậm rãi, không vội |
-| | 4 | 15s | **[BROWSER]** | "Khi chạm trần, nó mời bạn đợi reset..." | Staged: thông báo giới hạn hàng ngày (screenshot từ help docs của OpenAI hoặc tự mô phỏng overlay) | KHÔNG bịa UI — không có screenshot thật thì dùng overlay text neutral: "giới hạn hàng ngày → reset sau XX giờ" |
-| | 5 | 12s | **[B-ROLL]** | "Giờ mới nói vì sao...thường nằm ở đó." | Tay cầm điện thoại scroll tin nhắn group (staged) hoặc máy tính scroll Reddit/Facebook | Quick cuts 3 nhịp — mỗi nhịp một "tin đồn" hiện overlay: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" |
-| | 6 | 15s | **[DIAGRAM]** | "Đúng y free tier của cloud...reset định kỳ." | Excalidraw: thanh quota ngày (thanh neon xanh đầy → vơi → reset mũi tên vòng) | Metaphor duy nhất của video — vẽ tối giản |
-| | 7 | 25s | **[IDE]** | "Ba thói quen tiết kiệm quota...học và tự lừa dối mình." | VS Code (One Dark, JetBrains Mono 18px): copy đúng 1 hàm Node.js ngắn → paste vào ChatGPT với prompt "giải thích hàm này như cho người mới" → câu trả lời hiện ra | Chia 3 jump cuts tương ứng 3 thói quen. Cảnh "dán cả file 500 dòng" diễn bằng scroll nhanh file dài rồi undo |
-| | 8 | 15s | **[BROWSER]** | "Nói thẳng luôn...mất luôn lịch sử chat." | Mở nhanh trang Compare plans (bảng Free vs Plus) → đóng tab sau 2s (beat humor). Overlay text cảnh báo "email ảo = rủi ro khóa" | Đóng tab dứt khoát — đúng nhịp narration "bản free đủ" |
-| | 9 | 15s | **[BROWSER]** | "Câu hỏi đầu tiên mình từng hỏi...nút thanh toán." | Cuộc chat đầu tiên hoàn chỉnh: câu hỏi + câu trả lời từng bước + mình gõ follow-up ngắn | Zoom vào câu trả lời đang stream — cảm giác "click" |
-| | 10 | 10s | **[B-ROLL]** | "Hai mươi đô mua được tốc độ...không nơi nào bán được." | Desk night: cà phê + bàn phím cơ + monitor glow, city bokeh qua cửa sổ | Fade to black chậm |
+| 1 | 20s | **[BROWSER]** | "Ba tin đồn cũ...năm phút là xong." | Mở chatgpt.com → zoom nút Plus + giá "20 USD/tháng" → 3 badge text hiện lần lượt: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" rồi gạch ngang đỏ | Hook 2 nhịp — KHÔNG intro, không chào; giữ 2s ở lúc gạch ngang |
+| 2 | 75s | **[BROWSER]** | "Làm luôn...không một bước nào hỏi tiền." | Quay thật: chatgpt.com → Sign up → "Continue with Google" → chọn Gmail demo → Allow → form tên + ngày sinh (blur thông tin thật) | Speed-up 1.5x phần chờ load, giữ tốc độ thật phần bấm nút. Quay cảnh **không có field thẻ tín dụng** — điểm nhấn |
+| 3 | 35s | **[BROWSER]** | "Bạn vừa có trong tay...hỏi được việc." | Giao diện chat mới: hover model picker, icon search web, nút upload file, nút tạo ảnh; mở app điện thoại 2s cho câu cuối | Nền tối; cuộn chậm rãi, không vội |
+| 4 | 20s | **[BROWSER]** | "Khi chạm trần, nó mời bạn đợi reset..." | Staged: thông báo giới hạn hàng ngày (screenshot từ help docs của OpenAI hoặc tự mô phỏng overlay) | KHÔNG bịa UI — không có screenshot thật thì dùng overlay text neutral: "giới hạn hàng ngày → reset sau XX giờ" |
+| 5 | 20s | **[B-ROLL]** | "Giờ mới nói vì sao...thường nằm ở đó." | Tay cầm điện thoại scroll tin nhắn group (staged) hoặc máy tính scroll Reddit/Facebook | Quick cuts 3 nhịp — mỗi nhịp một "tin đồn" hiện overlay: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" |
+| 6 | 20s | **[DIAGRAM]** | "Đúng y free tier của cloud...reset định kỳ." | Excalidraw: thanh quota ngày (thanh neon xanh đầy → vơi → reset mũi tên vòng) | Metaphor duy nhất của video — vẽ tối giản |
+| 7 | 50s | **[IDE]** | "Ba thói quen tiết kiệm quota...học và tự lừa dối mình." | VS Code (One Dark, JetBrains Mono 18px): copy đúng 1 hàm Node.js ngắn → paste vào ChatGPT với prompt "giải thích hàm này như cho người mới" → câu trả lời hiện ra | Chia 3 jump cuts tương ứng 3 thói quen. Cảnh "dán cả file 500 dòng" diễn bằng scroll nhanh file dài rồi undo |
+| 8 | 25s | **[BROWSER]** | "Nói thẳng luôn...mất luôn lịch sử chat." | Mở nhanh trang Compare plans (bảng Free vs Plus) → đóng tab sau 2s (beat humor). Overlay text cảnh báo "email ảo = rủi ro khóa" | Đóng tab dứt khoát — đúng nhịp narration "bản free đủ" |
+| 9 | 35s | **[BROWSER]** | "Câu hỏi đầu tiên mình từng hỏi...nút thanh toán." | Cuộc chat đầu tiên hoàn chỉnh: câu hỏi + câu trả lời từng bước + mình gõ follow-up ngắn | Zoom vào câu trả lời đang stream — cảm giác "click" |
+| 10 | 40s | **[B-ROLL]** | "Hai mươi đô mua được tốc độ...không nơi nào bán được." | Desk night: cà phê + bàn phím cơ + monitor glow, city bokeh qua cửa sổ | Fade to black chậm |
 
-**Tổng: ~174s visuals + breathing pauses ≈ 5–5.5 phút**
+**Tổng: 340s visuals + breathing pauses ≈ 5:40**
 
 **Lưu ý quay:**
 - Quay account demo từ đầu đến cuối trong 1 session — đừng ghép account khác nhau (email khác nhau lộ cut).
@@ -125,3 +125,49 @@ A cinematic photograph, a developer's face in profile lit by monitor glow in a d
 - Mỗi line cao 110–140px. Line spacing 0.85. Text block bên trái.
 - Neon glow: duplicate layer, blur 10px, opacity 60–70%. Black outline 8px.
 - KHÔNG đè text lên mặt người. Scan-line overlay. Giữ bản text-free.
+
+---
+
+## PART 6 — YOUTUBE SEO
+
+### Description
+
+```
+Ba tin đồn cũ khiến dev Việt không dám bấm Sign up: cần thẻ Visa, cần số điện thoại Mỹ, cần VPN. Sự thật: bản miễn phí của ChatGPT không cần cái nào trong ba cái đó.
+
+Video này cho bạn thấy:
+⏩ 0:00 — Ba tin đồn cũ
+⏩ 0:20 — Đăng ký ChatGPT free: walkthrough thật, không thẻ, không VPN
+⏩ 1:35 — Bản free có gì: model mới nhất, search web, đọc file
+⏩ 2:50 — Vì sao nhiều người vẫn chưa bấm nút
+⏩ 3:10 — Ba thói quen tiết kiệm quota mỗi ngày
+⏩ 4:00 — Có nên nâng Plus không? Nói thẳng luôn
+⏩ 4:25 — Câu hỏi đầu tiên bạn nên hỏi AI
+⏩ 5:00 — Rào cản thật sự không phải là tiền
+
+━━━━━━━━━━━━━━━━━━━━━━
+🔗 XEM TIẾP SERIES AI MIỄN PHÍ
+━━━━━━━━━━━━━━━━━━━━━━
+▸ EP01 — Lấy 1 tỷ token Muse AI miễn phí: https://youtu.be/hQzSDxDhX6s
+
+#ChatGPT #AIMienPhi #LapTrinhLaCuocSong #AI #Developer #FreeTools
+```
+
+### Tags (paste vào YouTube Studio)
+
+```
+ChatGPT miễn phí, đăng ký ChatGPT, chatgpt free 2026, chatgpt không cần thẻ, chatgpt việt nam, cách dùng ChatGPT free, ChatGPT free vs Plus, nên mua ChatGPT Plus không, tiết kiệm quota ChatGPT, AI miễn phí cho dev, trợ lý AI miễn phí, dev mới ra trường, fresher dùng AI, học code với AI, AI cho sinh viên IT, lập trình là cuộc sống
+```
+
+### Hashtags (3 hiển thị trên tiêu đề)
+
+```
+#ChatGPT #AIMienPhi #LapTrinhLaCuocSong
+```
+
+### Pinned Comment (ghim lên đầu)
+
+```
+Bạn đang dùng bản free của AI nào? Nó đủ cho công việc hằng ngày của bạn không?
+Comment chia sẻ — mình sẽ tổng hợp và làm video so sánh free tier AI cho dev Việt 👇
+```

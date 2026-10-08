@@ -1,170 +1,219 @@
-# EP02 — Trải Nghiệm Muse AI Trên Mac: Code Review, Connectors & Sự Thật
+# EP02 — Muse AI Một Tuần Sau: Code Review, Schedule, Tiếng Việt, Ảnh & Video
+
+- **Series:** AI Miễn Phí — EP02, tiếp nối EP01 đã phát hành ("Cách sử dụng VPN Free để lấy 1 TỶ Token Muse AI", https://youtu.be/hQzSDxDhX6s).
+- **Target runtime:** ~7:50 (468s visuals, ~690 từ @ 100 wpm, fill ~88%).
+- **Outcome:** Người xem biết Muse làm được gì ngoài chat: review code thật, đặt lịch agent tự chạy, TTS tiếng Việt (giới hạn giọng), gen ảnh, gen ảnh thành video — và tiêu token thế nào.
+- **Nguyên tắc:** Thẳng thắn, không tô hồng — giới hạn thật được nói rõ (không diff view, TTS thiếu giọng Nam, media gen đốt token nhanh).
 
 ---
 
 ## PART 1 — SCRIPT
 
-Video trước mình đã hướng dẫn bạn đăng ký Muse AI, nhận một tỷ token. Giờ câu hỏi thật: nó code được không? Mình vừa cài App Muse trên Mac, và thử luôn.
+Video trước bạn đã có một tỷ token. Câu hỏi hôm nay: token đó làm được gì ngoài chat? Mình dùng Muse trên Mac một tuần, và thử năm việc: review code, đặt lịch, đọc tiếng Việt, vẽ ảnh, và biến ảnh thành video.
 
-Cùng xem Muse code như thế nào nhé.
+Việc đầu tiên, quen thuộc: review code. Mình chuẩn bị sẵn một prompt review bằng Chát-gi-pi-ti, yêu cầu Muse quét toàn bộ dự án React cộng Supabase: lỗi bảo mật, code smell, và plan fix. Dán vào, submit.
 
-Đầu tiên, mình chuẩn bị sẵn một prompt review code bằng Chát-gi-pi-ti. Prompt yêu cầu Muse quét toàn bộ dự án React cộng Supabase, tìm lỗi bảo mật, code smell, và đề xuất plan fix. Dán prompt vào, submit.
+Và đây — Muse reaction tin nhắn của mình bằng emoji. Hàng Facebook có khác. Vừa hay vừa hơi rợn, y như video trước mình nói.
 
-Và đây — Muse reaction tin nhắn của mình bằng emoji. Hàng Facebook có khác. Cái này vừa hay vừa hơi rợn, y như video trước mình nói.
+Khoan. Nó báo App chưa có quyền đọc ghi file. Vào Settings, bật quyền đọc ghi cho nó, rồi chat lại.
 
-Nhưng khoan. Nó báo App không có quyền đọc ghi file. Vào Settings, bật quyền đọc ghi cho nó.
+Chờ khá lâu — response của Muse chậm hơn mấy AI mình quen. Nhưng cứ chờ. Plan trả về: liệt kê rõ từng file, từng issue, mức độ nghiêm trọng. Đặc biệt một quả critical: lộ API key của Supabase khi gọi từ client. Cái này dev nào cũng từng dính.
 
-Xong. Chat lại để nó tiếp tục.
+Ra lệnh fix. Nó sửa xong — nhưng đây là điểm trừ lớn nhất: ở màn hình chat, bạn không review được diff. Không thấy nó sửa dòng nào, thay gì bằng gì. Claude hay Chát-gi-pi-ti đều xem được diff ngay trong giao diện. Muse thì chưa. Mình mở Antigravity review lại — kết quả ổn, commit.
 
-Chờ khá lâu. Nói thật, response của Muse chậm hơn mấy AI mình quen dùng. Nhưng cứ chờ.
+Kiểm tra token: mất vài phần trăm. Với một tỷ, chưa đáng lo.
 
-OK, plan trả về rồi. Nhìn qua khá ổn. Nó liệt kê rõ từng file, từng issue, mức độ nghiêm trọng.
+Tiếp, phần Connectors: kết nối app bên ngoài. Mình connect Gmail, rồi hỏi: hôm nay có email gì đặc biệt không. Kết quả về khá nhanh. Thử xóa thư rác — không được, nó bắt cấp thêm quyền ghi. Và đó là điều tốt. Với email, mình chỉ dám cấp quyền đọc thôi.
 
-Đặc biệt có một quả critical: lộ API key của Supabase khi gọi từ client. Cái này dev nào cũng từng dính ít nhất một lần.
+Giờ tới tính năng mình thích nhất: Schedule. Mình đặt lịch cho agent: mỗi sáng tám giờ, đọc tin công nghệ trong hai mươi tư giờ qua, chọn năm mục đáng đọc cho dev, gửi digest lại cho mình. Đặt xong, khởi động lại máy — job vẫn nằm đó. Nó chạy trên tài khoản, không phải trên máy bạn.
 
-Giờ mình ra lệnh cho nó fix cái critical này.
+Sáng hôm sau, đúng tám giờ, tin nhắn tới. Không ai bấm nút. Đây là khác biệt giữa chatbot và agent: chatbot trả lời khi bạn hỏi — agent làm việc khi bạn không có mặt.
 
-Nó lại reaction tiếp. Khá thú vị.
+Thử tiếp phần đọc — text to speech. Mình nhờ Muse đọc một đoạn tiếng Việt. Nghe thử nhé. Nghe được: ngữ điệu rõ, không còn giọng robot hồi xưa. Nhưng nói thẳng: chọn giọng thì tiếng Việt hiện chưa có giọng miền Nam. Anh em miền Nam nghe sẽ thấy hơi bắc. Làm nội dung cần giọng Nam thì phải dùng tool khác — miễn phí không có nghĩa là đủ mọi thứ.
 
-Rồi, nó sửa xong. Nhưng đây là điểm trừ lớn nhất: ở màn hình chat này, bạn không review được diff — không thấy nó sửa dòng nào, thay gì bằng gì. Claude hay Chát-gi-pi-ti hiện tại đều cho xem diff ngay trong giao diện. Muse thì chưa.
+Giờ tới phần vẽ. Một prompt: bàn dev ban đêm, hai màn hình, ánh neon xanh. Khoảng một phút sau, ảnh trả về — đúng subject, composition ổn, làm thumbnail hay minh họa slide là dư sức. Lưu ý: gen media đốt token nhanh hơn chat text nhiều — vài ảnh là thấy hạn mức nhảy. Miễn phí có giá của nó.
 
-Đương nhiên, nó mới. Mình tin bản cập nhật sẽ cải thiện sớm.
+Và chiêu cuối: biến chính ảnh vừa vẽ thành video. Upload lại ảnh, thêm một câu: camera chậm rãi zoom vào màn hình bên trái. Vài phút sau, Muse trả về một đoạn video ngắn có chuyển động. Chưa đủ làm quảng cáo, nhưng làm B-roll mở đầu video thì quá ổn. Từ text sang ảnh sang video, toàn bộ trong một app miễn phí — hai năm trước việc này phải ghép ba công cụ trả phí.
 
-Giờ mình mở Antigravity lên, prompt nhanh để review lại chất lượng code mà Muse vừa sửa.
+Nói nhanh ba cái tên cho ai mới vào: Muse là app mình đang dùng. Muse Spark là model — bộ não bên dưới. Muse Code là công cụ dòng lệnh cho dev.
 
-Kết quả trả về. Nhìn qua khá ổn. AI khác không chê gì luôn. Mình sẽ commit lên, chạy thử rồi báo anh em sau.
-
-Kiểm tra token thì thấy mất khoảng vài phần trăm. Với một tỷ trong tay, chưa đáng lo.
-
-Tiếp. Muse có phần Connectors — kết nối với app bên ngoài. Facebook, Gmail, Calendar... Giờ mình thử connect Gmail nhé.
-
-Bấm Connect, cấp quyền cho app. Xong. Prompt thử: thống kê xem hôm nay có email gì đặc biệt không.
-
-Kết quả trả về khá nhanh. Nhanh hơn mình nghĩ.
-
-Giờ thử yêu cầu nó xóa thư rác. Không được — nó bắt cấp thêm quyền ghi. Và đó là điều tốt. Với email, mình chỉ dám cấp quyền đọc và thống kê hàng ngày thôi.
-
-Connectors của Muse đủ để quản lý Gmail, Facebook cơ bản ngay trên một giao diện. Khá tiện cho ai muốn gom mọi thứ về một chỗ.
-
-Một điều nói thẳng: tại thời điểm quay video, mình chưa thấy cách nào để kết nối Muse qua các AI Router như 9Router — nghĩa là chưa đưa được vào pipeline tự động hay IDE bên ngoài. Hi vọng Meta mở sớm.
-
-À, còn một điều. Ngoài Muse — cái app mình vừa dùng — Meta còn có Muse Spark và Muse Code. Muse Spark là phiên bản nhẹ, chat nhanh, không cần cài app. Còn Muse Code là AI coding agent dành riêng cho developer — miễn phí, chạy trực tiếp trong IDE. Ba cái tên nghe giống nhau nhưng khác mục đích.
-
-Nếu bạn đã trải nghiệm rồi thì comment cho mình biết nhé.
-
-Vậy là mình đã dùng thử Muse trên Mac: code review thì được việc, connectors thì tiện, nhưng giao diện review code còn thiếu. Nếu bạn thấy hay, dùng mã Ref của mình để có thêm một tỷ token — link ở phần mô tả.
+Một tuần với Muse: code review được việc, schedule đáng tiền nhất, ảnh và video là bonus. Nếu bạn thấy hữu ích, dùng mã Ref của mình để có thêm một tỷ token — link ở phần mô tả.
 
 ---
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~5–6 phút (~500–550 từ @ ~100 wpm)**
+**Tổng thời lượng mục tiêu: ~7:50 (468s visuals, ~690 từ @ 100 wpm ≈ 88% fill).**
 
-**Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar cá nhân. Quay bằng App Muse for Mac (đã cài sẵn). IDE theme Monokai/Dracula. Antigravity mở sẵn.
+**Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar cá nhân. App Muse for Mac cài sẵn. IDE theme Monokai/Dracula. Antigravity mở sẵn.
 
 | # | Thời lượng | Loại | Narration tương ứng | Footage | Ghi chú |
-|---|-----------|------|---------------------|---------|----|
-| 1 | 12s | **[BROWSER]** | "Video trước...thử luôn." | Flash lại thumbnail EP01 (1s) → App Muse trên Mac mở lên, dark mode | Hook nhanh — nhắc EP01 rồi vào luôn |
-| 2 | 15s | **[IDE]** | "Đầu tiên, mình chuẩn bị...submit." | Mở ChatGPT → show prompt review code → copy → paste vào Muse chat → bấm submit | Zoom vào prompt cho viewer đọc kịp 2–3s |
-| 3 | 8s | **[BROWSER]** | "Và đây — Muse reaction...mình nói." | Muse chat: emoji reaction hiện trên tin nhắn vừa gửi | Zoom vào emoji reaction — beat humor |
-| 4 | 15s | **[BROWSER]** | "Nhưng khoan...tiếp tục." | Muse báo lỗi quyền đọc file → vào Settings → bật toggle Read/Write → quay lại chat gõ tiếp | Quay rõ toggle settings |
-| 5 | 20s | **[BROWSER]** | "Chờ khá lâu...mức độ nghiêm trọng." | Màn hình Muse đang loading (giữ nguyên, timer nhỏ góc) → response hiện dần → scroll plan | KHÔNG cắt thời gian chờ — giữ thật |
-| 6 | 12s | **[BROWSER]** | "Đặc biệt...ít nhất một lần." | Zoom vào critical issue: lộ Supabase API key | Highlight dòng critical bằng khoanh đỏ nhẹ khi edit |
-| 7 | 15s | **[BROWSER]** | "Giờ mình ra lệnh...Khá thú vị." | Gõ prompt fix critical → submit → Muse reaction lại | Beat humor nhẹ |
-| 8 | 20s | **[BROWSER]** | "Rồi, nó sửa xong...Muse thì chưa." | Muse trả về kết quả fix → scroll tìm diff → KHÔNG có diff view → split screen so sánh Claude/ChatGPT diff view (screenshot) | Điểm trừ chính — beat thẳng thắn |
-| 9 | 8s | **[BROWSER]** | "Đương nhiên...cải thiện sớm." | Giữ nguyên màn Muse, text overlay "MỚI — SẼ CẢI THIỆN" fade in nhẹ | Tone cân bằng — không chê quá |
-| 10 | 25s | **[IDE]** | "Giờ mình mở Antigravity...báo anh em sau." | Mở Antigravity → paste prompt review → submit → kết quả hiện → scroll nhanh → terminal: `git add . && git commit` | Beat hứng khởi — AI review AI |
-| 11 | 10s | **[BROWSER]** | "Kiểm tra token...chưa đáng lo." | Muse Settings → Token usage → highlight % đã dùng | Zoom vào số |
-| 12 | 25s | **[BROWSER]** | "Tiếp. Muse có phần Connectors...đặc biệt không." | Sidebar Connectors → danh sách apps (Facebook, Gmail...) → bấm Connect Gmail → OAuth consent → prompt thống kê email → kết quả | Quay liền mạch |
-| 13 | 15s | **[BROWSER]** | "Kết quả trả về khá nhanh...về một chỗ." | Kết quả thống kê email → prompt xóa rác → Muse báo cần quyền ghi → highlight thông báo | Beat thẳng thắn + humor |
-| 14 | 15s | **[BROWSER]** | "Một điều nói thẳng...Meta mở sớm." | Muse Connectors list → overlay text "9Router? ❌ CHƯA HỖ TRỢ" | Beat thẳng thắn |
-| 15 | 15s | **[B-ROLL]** | "Vậy là mình đã dùng thử...phần mô tả." | Night desk: monitor glow Muse app, tách cà phê, bàn phím → fade to black với text Ref code | CTA nhẹ — không giục |
+|---|-----------|------|---------------------|---------|---------|
+| 1 | 15s | **[BROWSER]** | "Video trước...ảnh thành video." | Flash thumbnail EP01 (1s) → App Muse Mac mở, dark mode; overlay 5 icon hiện dần: code / clock / speaker / image / film | Hook nhanh — liệt kê 5 việc tạo expectation |
+| 2 | 25s | **[IDE]** | "Việc đầu tiên...dán vào, submit." | ChatGPT show Prompt 1 → copy → paste vào Muse chat → submit | Zoom prompt 2–3s cho viewer đọc kịp |
+| 3 | 8s | **[BROWSER]** | "Và đây — Muse reaction...mình nói." | Emoji reaction hiện trên tin nhắn vừa gửi | Beat humor |
+| 4 | 15s | **[BROWSER]** | "Khoan...chat lại." | Báo lỗi quyền → Settings → bật toggle Read/Write → quay lại chat | Quay rõ toggle |
+| 5 | 35s | **[BROWSER]** | "Chờ khá lâu...dev nào cũng từng dính." | Loading giữ nguyên (timer nhỏ góc) → plan hiện → scroll → zoom critical Supabase API key | KHÔNG cắt thời gian chờ; khoanh đỏ critical |
+| 6 | 15s | **[BROWSER]** | "Ra lệnh fix." | Gõ Prompt 2 → submit → reaction lại | Nhanh, gọn |
+| 7 | 25s | **[BROWSER]** | "Nó sửa xong...Muse thì chưa." | Kết quả fix → scroll tìm diff → KHÔNG có → split screen screenshot diff view Claude/ChatGPT | Điểm trừ chính — beat thẳng thắn |
+| 8 | 25s | **[IDE]** | "Mình mở Antigravity...commit." | Antigravity paste prompt review → kết quả → terminal `git add . && git commit` | Beat hứng khởi — AI review AI |
+| 9 | 10s | **[BROWSER]** | "Kiểm tra token...chưa đáng lo." | Muse Settings → Token usage → highlight % đã dùng | Zoom số |
+| 10 | 30s | **[BROWSER]** | "Tiếp, phần Connectors...quyền đọc thôi." | Sidebar Connectors → Connect Gmail → OAuth → prompt thống kê → kết quả; prompt xóa rác → báo cần quyền ghi → highlight | Quay liền mạch; blur email cá nhân |
+| 11 | 50s | **[BROWSER]** | "Giờ tới tính năng...không phải trên máy bạn." | Tạo Schedule (Prompt 3): chọn 8:00, nhập yêu cầu → job tạo xong → restart app/Mac → job vẫn còn | Cảnh mới — quay theo UI thật; caption "CHẠY TRÊN TÀI KHOẢN, KHÔNG PHẢI TRÊN MÁY" |
+| 12 | 40s | **[BROWSER + MOBILE]** | "Sáng hôm sau...không có mặt." | Đúng 8:00 tin nhắn digest tới (quay màn hình lock/Telegram); scroll digest 5 mục | Cảnh "tiền" — nếu không chờ qua đêm: đặt job +2 phút cho demo same-day + chèn screenshot digest sáng thật |
+| 13 | 40s | **[BROWSER]** | "Thử tiếp phần đọc...đủ mọi thứ." | Muse TTS: dán đoạn văn tiếng Việt (Prompt 4) → chọn giọng → play; zoom danh sách giọng: có các giọng vi, KHÔNG có giọng Nam → overlay "GIỌNG MIỀN NAM: CHƯA CÓ" | Nghe thật ít nhất 1 câu; beat thẳng thắn |
+| 14 | 45s | **[BROWSER]** | "Giờ tới phần vẽ...giá của nó." | Prompt 5 → chờ gen (timer góc, giữ thật ~15s rồi speed-up) → ảnh trả về → Settings token usage nhảy | Zoom ảnh kết quả; caption "MEDIA ĂN TOKEN NHANH HƠN TEXT" |
+| 15 | 50s | **[BROWSER]** | "Và chiêu cuối...ba công cụ trả phí." | Upload lại ảnh vừa gen → Prompt 6 → chờ (speed-up phần dài) → video ngắn play loop 2 nhịp | Cảnh kết demo — video chạy loop 2 nhịp |
+| 16 | 20s | **[DIAGRAM]** | "Nói nhanh ba cái tên...cho dev." | 3 hộp: MUSE (app) → MUSE SPARK (model) → MUSE CODE (CLI) | Fix định nghĩa — khớp EP01 + fact-sheet |
+| 17 | 20s | **[B-ROLL]** | "Một tuần với Muse...phần mô tả." | Night desk: monitor glow, tách cà phê, bàn phím → fade to black + text Ref code | CTA nhẹ — không giục |
 
-**Tổng: ~240–280s visuals + breathing pauses ≈ 5–6 phút**
+**Tổng: 468s visuals + breathing pauses ≈ 7:50.**
+
+### Prompt trên màn hình (verbatim)
+
+```text
+Prompt 1 (review, soạn trong ChatGPT):
+Review toàn bộ dự án React + Supabase này: quét lỗi bảo mật, code smell,
+và đề xuất plan fix theo mức độ nghiêm trọng. Liệt kê rõ từng file và dòng.
+
+Prompt 2 (fix critical):
+Fix critical issue số 1: lộ Supabase API key khi gọi từ client.
+Giải thích cách sửa trước khi sửa.
+
+Prompt 3 (schedule):
+Mỗi sáng 8:00, đọc tin công nghệ nổi bật trong 24 giờ qua, chọn 5 mục
+đáng đọc nhất cho developer Việt, mỗi mục 1 câu + link, gửi digest cho tôi.
+
+Prompt 4 (TTS tiếng Việt):
+Đọc to đoạn sau bằng giọng tiếng Việt: "Lập trình là cuộc sống.
+Hôm nay chúng ta thử một trợ lý AI mới, và nó nói tiếng Việt đấy."
+
+Prompt 5 (gen ảnh):
+Một bàn dev ban đêm, hai màn hình sáng, ánh neon xanh cyan,
+phong cách cinematic, tỷ lệ 16:9.
+
+Prompt 6 (ảnh thành video, kèm ảnh từ Prompt 5):
+Camera chậm rãi zoom vào màn hình bên trái.
+```
 
 **Lưu ý quay:**
-- Bạn đã quay xong footage → dùng shot list này để sắp xếp clip khi edit. Nếu thiếu scene nào (vd split screen so sánh Claude), chụp screenshot bổ sung.
-- Giữ nguyên thời gian chờ response của Muse — đó là sự thật, cắt sẽ mất tính chân thực.
-- Blur email cá nhân trong phần Gmail Connectors.
-- Font ≥18px toàn bộ. Dark mode.
-- Ref code để ở description — nhắc viewer mã 48h nên check link mới nhất.
+- Cảnh 2–10 đã có footage từ lần quay trước — dùng shot list sắp xếp lại khi edit, bổ sung split screen diff (cảnh 7) nếu thiếu.
+- Cảnh 11–15 là cảnh MỚI: quay theo UI thật tại thời điểm quay; narration không đọc tên nút cứng nên vẫn đúng khi Meta đổi UI.
+- Schedule demo: nếu không quay qua đêm, đặt job chạy sau 2 phút để có tin nhắn tới trong cùng session; khoe thêm screenshot digest 8:00 thật của buổi sáng hôm trước.
+- TTS: verify danh sách giọng trước 30 phút quay — nếu Muse đã có giọng miền Nam, cập nhật narration và fact này.
+- Giữ nguyên độ trễ response khi edit — đó là sự thật, cắt sẽ mất tính chân thực.
+- Ref code để ở description + pinned comment; nhắc viewer mã hết hạn 48h.
 
 ---
 
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
 
-**Prompt 1:**
-A cinematic photograph of a developer's hands on a mechanical keyboard in a dark room, a large monitor showing the Muse AI chat interface with a glowing green emoji reaction floating above a code review message, dramatic neon green and cyan rim lighting, code syntax highlighting visible on a second monitor in the background, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a high-end tech commercial or developer documentary. Not a screenshot, not a tutorial, not cartoon.
+**Prompt 1 (code review — khớp assets sẵn `thumbnail-01-code-review.jpg`):**
+A cinematic photograph of a developer's hands on a mechanical keyboard in a dark room, a large monitor showing the Muse AI chat interface with a glowing green emoji reaction floating above a code review message, dramatic neon green and cyan rim lighting, code syntax highlighting visible on a second monitor in the background, shallow depth of field, bokeh city lights through window, 8k, photorealistic. Not a screenshot, not a tutorial, not cartoon.
 
-**Prompt 2:**
-A cinematic photograph of a MacBook in a dark moody room showing a chat interface connected to multiple app icons (email, social media) via glowing neon green connection lines radiating outward, dramatic low-key lighting with purple ambient glow, coffee cup with steam catching cyan light, shallow depth of field, city bokeh through rain-streaked window, 8k, photorealistic, like a developer documentary. Not a screenshot, not a tutorial, not cartoon.
+**Prompt 2 (ảnh → video):**
+A cinematic photograph of a developer's hand hovering over a trackpad in a dark room, a large monitor showing a single still photo of a neon-lit desk transforming into a video timeline with a subtle glowing play button, motion streaks flowing from the static image into moving light, dramatic low-key lighting with purple ambient glow, shallow depth of field, bokeh city lights through rain-streaked window, 8k, photorealistic, like a developer documentary. Not a screenshot, not cartoon.
 
-**Prompt 3:**
-A cinematic close-up photograph of a monitor in a dark room displaying a code diff view with green additions and red deletions glowing intensely, a large question mark made of neon particles floating beside the screen, dramatic contrast between bright code and deep shadows, mechanical keyboard in soft foreground blur, purple and cyan ambient glow, 8k, photorealistic, like a high-end tech commercial. Not a screenshot, not a tutorial, not cartoon.
+**Prompt 3 (schedule — agent tự dậy):**
+A cinematic photograph of a smartphone on a nightstand lighting up at dawn with a notification badge while the developer sleeps out of focus in the background, a subtle holographic clock floating above the phone showing 8:00, warm amber dawn light mixed with cyan glow from the screen, shallow depth of field, 8k, photorealistic, like a high-end tech commercial. Not a screenshot, not cartoon.
 
 ---
 
 ## PART 4 — TITLES (10)
 
-1. Muse AI review code dự án thật — kết quả bất ngờ | Lập trình là cuộc sống
-2. 1 tỷ token Meta: mình thử code review và đây là sự thật | Lập trình là cuộc sống
-3. Muse AI trên Mac: code tốt, nhưng thiếu 1 thứ quan trọng | Lập trình là cuộc sống
-4. Thử Muse AI fix bug bảo mật — rồi nhờ AI khác chấm điểm | Lập trình là cuộc sống
-5. Muse AI Connectors: quản lý Gmail ngay trong AI chat? | Lập trình là cuộc sống
-6. Dùng thử 1 tỷ token Muse — mất bao nhiêu cho 1 code review? | Lập trình là cuộc sống
-7. Muse AI của Meta code có giỏi không? Mình thử luôn | Lập trình là cuộc sống
-8. AI của Facebook review code React: lộ API key ngay lập tức | Lập trình là cuộc sống
-9. Muse AI thiếu diff view — điểm trừ lớn nhất mà dev cần biết | Lập trình là cuộc sống
-10. Trải nghiệm Muse AI trên Mac: code review + Gmail trong 5 phút | Lập trình là cuộc sống
+1. Muse AI làm được gì ngoài chat? Review code, đặt lịch, đọc tiếng Việt, vẽ ảnh, dựng video | Lập trình là cuộc sống
+2. AI tự dậy 8 giờ sáng gửi tin cho bạn — Muse Schedule | Lập trình là cuộc sống
+3. 1 tỷ token Muse: một tuần sau, điều đáng tiền nhất không phải là code review | Lập trình là cuộc sống
+4. Muse AI đọc tiếng Việt: nghe thử rồi quyết định — và giọng miền Nam thì chưa có | Lập trình là cuộc sống
+5. Biến ảnh thành video ngay trong Muse AI — miễn phí | Lập trình là cuộc sống
+6. Từ text sang ảnh sang video, tất cả trong 1 app miễn phí của Meta | Lập trình là cuộc sống
+7. Muse AI review code React: lộ API key ngay lần đầu | Lập trình là cuộc sống
+8. Trợ lý AI của Meta: review code, đọc Gmail, đặt lịch, vẽ ảnh — một app | Lập trình là cuộc sống
+9. 5 việc bạn nên thử ngay khi có 1 tỷ token Muse | Lập trình là cuộc sống
+10. Muse AI một tuần sau: điểm đáng tiền nhất và điểm trừ lớn nhất | Lập trình là cuộc sống
+
+**Khuyên dùng:** Title 2 (schedule là hook khác biệt nhất so với mọi video Muse review khác) hoặc Title 6 (text→ảnh→video dễ viral). A/B test Title 1 cho người cần overview.
 
 ---
 
 ## PART 5 — THUMBNAIL PACKAGE (3 options)
 
-### Option 1 — "Code Review Bất Ngờ"
+### Option 1 — "AI Tự Thức Dậy" (khuyên dùng — image Prompt 3)
 
-**5a. Image prompt:**
-A cinematic photograph, a developer silhouette sitting at a dark desk facing a large monitor displaying a code review with glowing neon green checkmarks and one large red warning icon, dramatic neon green and purple lighting, dark moody background with city bokeh through window, extreme contrast between the glowing screen and deep black shadows, dramatic rim lighting on the silhouette, deep shadows, vivid saturated neon colors, silhouette positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+**5b. Text spec:**
+- Line 1: **8:00 SÁNG** — `#FFFFFF` white
+- Line 2: **AI TỰ THỨC DẬY** — `#00FF41` neon green
+- Line 3 (small badge): **KHÔNG AI BẤM NÚT** — `#00D4FF` cyan, nền badge `#1a1a2e` viền neon
+
+### Option 2 — "Ảnh Thành Video" (image Prompt 2)
+
+**5b. Text spec:**
+- Line 1: **ẢNH** — `#FFFFFF` white
+- Line 2: **THÀNH VIDEO** — `#00FF41` neon green
+- Line 3 (small badge): **TRONG 1 APP** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+
+### Option 3 — "Code Review" (assets sẵn `thumbnail-01-code-review.jpg` / `thumbnail-03-critical-bug.jpg`)
 
 **5b. Text spec:**
 - Line 1: **MUSE AI** — `#FFFFFF` white
 - Line 2: **REVIEW CODE** — `#00FF41` neon green
-- Line 3 (small badge): **KẾT QUẢ BẤT NGỜ** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+- Line 3 (small badge): **LỘ API KEY** — `#FF4444` neon red, nền badge `#1a1a2e` viền neon
 
-**5c. Typography specs:**
-- Canvas 1280×720. Font **Anton** (Google Fonts, free).
-- Mỗi line cao 110–140px. Line spacing 0.85. Text block bên trái ~1/3 khung.
-- Neon glow: duplicate layer, blur 10–12px, opacity 60–70% màu trùng chữ. Black outline 6–10px.
-- KHÔNG đè text lên màn hình monitor. Scan-line/noise overlay nhẹ. Giữ bản text-free.
+**Typography chung (cả 3 option):** Canvas 1280×720. Font **Anton** cho line 1–2, **JetBrains Mono** cho badge. Mỗi line cao 110–140px. Line spacing 0.85. Text block bên trái ~1/3 khung. Neon glow: duplicate layer, blur 10–12px, opacity 60–70% màu trùng chữ. Black outline 8px. KHÔNG đè text lên subject. Scan-line overlay nhẹ. Giữ bản text-free.
 
-### Option 2 — "Lộ API Key"
+---
 
-**5a. Image prompt:**
-A cinematic photograph, dramatic close-up of a monitor in a dark room showing code with a glowing red highlighted line containing an API key, neon warning particles emanating from the screen, dramatic low-key lighting with neon green and red contrast, dark moody background with deep shadows, high contrast, dramatic rim lighting, vivid saturated neon colors, monitor positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+## PART 6 — YOUTUBE SEO
 
-**5b. Text spec:**
-- Line 1: **LỘ API KEY** — `#FF4444` neon red
-- Line 2: **MUSE TÌM RA** — `#00FF41` neon green
-- Line 3 (small badge): **TRONG 30 GIÂY** — `#FFFFFF` white, nền badge `#1a1a2e` viền neon
+### Description
 
-**5c. Typography specs:**
-- Canvas 1280×720. Font **JetBrains Mono** cho line 1–2, **Anton** cho badge.
-- Mỗi line cao 110–130px. Line spacing 0.85. Text block bên trái.
-- Neon glow: duplicate layer, blur 8–12px, opacity 65%. Black outline 8px.
-- Scan-line overlay. Giữ bản text-free.
+```
+1 tỷ token rồi làm gì? Mình dùng Muse AI của Meta một tuần: review code dự án thật, đặt lịch cho agent tự chạy mỗi sáng, đọc tiếng Việt, vẽ ảnh và biến ảnh thành video.
 
-### Option 3 — "Connectors Tiện Quá"
+Video này cho bạn thấy:
+⏩ 0:00 — Muse làm được gì ngoài chat?
+⏩ 0:15 — Code review dự án React + Supabase thật
+⏩ 1:53 — Điểm trừ lớn nhất: không có diff view
+⏩ 2:53 — Connectors: đọc Gmail ngay trong AI chat
+⏩ 3:23 — Schedule: AI tự dậy 8:00 sáng gửi digest
+⏩ 4:53 — TTS tiếng Việt: nghe thử (chưa có giọng miền Nam)
+⏩ 5:33 — Gen ảnh từ text
+⏩ 6:18 — Biến ảnh thành video
 
-**5a. Image prompt:**
-A cinematic photograph, over-the-shoulder view of a developer looking at a dark screen showing a chat interface with multiple connected app icons (email, social media, calendar) linked by glowing neon green connection lines forming a web, dramatic low-key lighting with cyan ambient glow, dark moody background with purple fog, high contrast, dramatic rim lighting, deep shadows, vivid saturated neon colors, developer positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+━━━━━━━━━━━━━━━━━━━━━━
+🎁 NHẬN 1 TỶ TOKEN MUSE MIỄN PHÍ
+━━━━━━━━━━━━━━━━━━━━━━
+👉 Code: 16NESL
+👉 Đăng ký tại: https://muse.ai/join
+⚠️ Bạn cần nhập mã trong vòng 48 giờ sau khi tạo tài khoản Muse!
 
-**5b. Text spec:**
-- Line 1: **GMAIL** — `#FFFFFF` white
-- Line 2: **TRONG AI CHAT** — `#00FF41` neon green
-- Line 3 (small badge): **CONNECTORS MUSE** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+━━━━━━━━━━━━━━━━━━━━━━
+🔗 LINK HỮU ÍCH
+━━━━━━━━━━━━━━━━━━━━━━
+▸ Video trước — đăng ký Muse AI từ VN: https://youtu.be/hQzSDxDhX6s
+▸ Muse AI: https://muse.ai
 
-**5c. Typography specs:**
-- Canvas 1280×720. Font **Anton** (Google Fonts, free).
-- Mỗi line cao 110–130px. Line spacing 0.85. Text block bên trái ~1/3 khung.
-- Neon glow: duplicate layer, blur 10px, opacity 60–70%. Black outline 8px.
-- KHÔNG đè text lên developer. Scan-line overlay. Giữ bản text-free.
+#MuseAI #Meta #AIAgent #Schedule #TTS #TextToImage #LapTrinhLaCuocSong #AIMienPhi
+```
+
+### Tags (paste vào YouTube Studio)
+
+```
+Muse AI, Meta Muse, Muse AI review, Muse AI schedule, AI tự động chạy, AI agent đặt lịch, Muse TTS tiếng Việt, muse text to speech việt nam, giọng đọc AI miền nam, Muse gen ảnh, Muse image generation, muse ảnh thành video, image to video AI, 1 tỷ token Muse, Muse referral code, Muse code review, AI review code React, Muse connectors, Muse Gmail, AI miễn phí cho dev, trợ lý AI Meta, lập trình là cuộc sống
+```
+
+### Hashtags (3 hiển thị trên tiêu đề)
+
+```
+#MuseAI #AIAgent #AIMienPhi
+```
+
+### Pinned Comment (ghim lên đầu)
+
+```
+📌 Mã giới thiệu Muse: 16NESL
+👉 Đăng ký: https://muse.ai/join
+⏰ Nhập mã trong Cài đặt → Quy đổi mã lời mời, trong vòng 48 giờ sau khi tạo tài khoản → cả hai cùng được 1 TỶ token!
+
+Bạn đang dùng Muse làm gì? Comment chia sẻ — mình test trong video sau 👇
+```

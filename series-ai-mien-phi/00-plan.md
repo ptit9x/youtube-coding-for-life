@@ -23,13 +23,15 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
 - Mọi con số (giá, quota, token) phải verify lại trên màn hình ngay trước khi
   quay — số liệu AI thay đổi từng tháng.
 
-**Số tập:** 3 tập đầu đã có script (EP01, EP02, EP03). Roadmap mở rộng lên 9+.
+**Số tập:** 3 tập đầu đã có script (EP01 đã phát hành, EP02, EP03). Roadmap mở rộng lên 9+.
+
+**EP01 đã phát hành:** "Cách sử dụng VPN Free để lấy 1 TỶ Token Muse AI" — https://youtu.be/hQzSDxDhX6s (3:27, đăng 08/10/2026). Bản final rút gọn từ script 8–9 phút: bỏ phần Muse Code/bảng giá, tập trung walkthrough VPN + referral. Script repo là bản mở rộng — mô tả video thật dùng ref code 16NESL.
 
 ---
 
 ## Danh sách tập
 
-### EP01 — Muse AI của Meta & sự thật "1 tỷ token free" — QUAY TRƯỚC (bắt trending)
+### EP01 — Muse AI của Meta & sự thật "1 tỷ token free" — ✅ ĐÃ PHÁT HÀNH 08/10/2026
 - **Thời lượng mục tiêu:** ~6 phút (~630 từ)
 - **Nội dung chính:**
   - Hook 2 câu (dev không chờ): 1 tỷ token thật nhưng VN chưa mở + phải nhập
@@ -68,6 +70,12 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
     thêm quyền ghi — điều tốt)
   - Thẳng thắn: chưa có cách kết nối qua 9Router/AI Router
   - CTA nhẹ: ref code ở description
+- **Nội dung mới (rewrite 09/10/2026):** schedule (agent 8:00 gửi digest, khác biệt
+  chatbot vs agent), TTS tiếng Việt (nghe được nhưng chưa có giọng miền Nam — nói thẳng),
+  gen ảnh từ text (đốt token nhanh hơn text), gen ảnh thành video (image-to-video).
+  Giữ code review React+Supabase + connectors Gmail từ footage đã quay.
+  Đã sửa: định nghĩa Muse Spark = model (bản cũ sai "phiên bản nhẹ"), pacing 88% fill,
+  timestamps tính lại từ shot-list, thêm PART 6 SEO.
 - **Variant:** Học bằng LLM
 
 ### EP03 — Đăng ký ChatGPT miễn phí: không cần thẻ, không cần VPN
