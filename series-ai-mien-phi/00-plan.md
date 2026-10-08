@@ -62,7 +62,9 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   mở muse.ai/join qua trình duyệt điều khiển của ChatGPT Work mode (hạ tầng mây Mỹ, không cần VPN);
   email sạch (chưa dính Muse/Facebook) + mã PIN; xử lý remote browser timeout; vào xong đăng nhập
   trình duyệt thường không VPN + nhập ref trong 48h. Nói thẳng: mẹo cộng đồng không chính thức,
-  không nhập thẻ qua browser ChatGPT, acc thật. Tease EP02 cuối video.
+  không nhập thẻ qua browser ChatGPT, acc thật. Beat "chợ acc": acc Muse chứa hàng nghìn tỷ
+  token (farm referral) được rao bán — mua acc = mất trắng khi chủ acc rút mật khẩu/Meta quét.
+  Tease EP02 cuối video.
 - **Nguồn đã verify 09/10/2026:** Tinhte thread 4182001 (gốc), VOZ 1282837, khuyendung.net
   (cơ chế cloud webview), YouTube KR rHCJ6uAiYM4 (timeout case), freemuseai/cnelecar (region gate).
 - **File:** `bonus-1-5-dang-ky-muse-qua-chatgpt/script.md`
