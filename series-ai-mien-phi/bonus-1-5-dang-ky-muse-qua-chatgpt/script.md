@@ -1,8 +1,8 @@
 # BONUS 1.5 — Đăng Ký Muse AI Bằng ChatGPT: Cửa Sau Khi VPN Đã Chết
 
 - **Series:** AI Miễn Phí — bonus giữa EP01 (đã phát hành 08/10/2026) và EP02. Đăng ký trước EP02 vì đang trending, cửa có thể bị Meta vá bất cứ lúc nào.
-- **Target runtime:** ~7:35 (455s visuals, ~694 từ @ 100 wpm, fill ~92%).
-- **Outcome:** Người xem hiểu vì sao VPN miễn phí giờ bị Muse chặn (region gate chấm điểm môi trường trình duyệt + blacklist IP), tự đăng ký được Muse qua trình duyệt điều khiển của ChatGPT Work mode, và biết ba điều cần nói thẳng (không chính thức / không nhập thẻ qua browser người khác / email thật).
+- **Target runtime:** ~8:25 (505s visuals, ~763 từ @ 100 wpm, fill ~91%).
+- **Outcome:** Người xem hiểu vì sao VPN miễn phí giờ bị Muse chặn (farm acc + region gate), tự đăng ký được Muse qua cloud browser của ChatGPT Work (cần Plus trở lên — nói rõ ngay từ đầu), và biết ba điều cần nói thẳng (không chính thức / không nhập thẻ qua browser người khác / đừng góp phần đóng cửa).
 - **Nguyên tắc:** Thẳng thắn — đây là mẹo cộng đồng, không phải tính năng chính thức; nói rõ rủi ro và thời hạn sống của nó.
 
 ---
@@ -17,7 +17,9 @@ Vì sao Muse phải siết? Vì cửa cũ bị lạm dụng. Referral cho mỗi 
 
 Cửa mới nằm ở một chỗ ít ai ngờ: ChatGPT. Chế độ Work của ChatGPT có trình duyệt điều khiển được, chạy trên hạ tầng đám mây của OpenAI ở Mỹ. VPN giống mặc áo Mỹ nhưng giọng vẫn Việt — bị nhận mặt. Trình duyệt mây là người Mỹ thật bước vào mở cửa giúp bạn. Muse thấy một phiên Mỹ sạch, không phải proxy.
 
-Bước một: cần tài khoản ChatGPT có chế độ Work — nếu chưa có ChatGPT, xem video này trước, link ở màn hình. Cuộc trò chuyện mới, chọn Work, rồi gõ đúng câu: mở muse.ai slash join, và cho quyền điều khiển web. ChatGPT hỏi cấp quyền điều khiển trình duyệt — cho phép. Khung trình duyệt mở ra, muse.ai load sạch sẽ. Từ đây điền form như bình thường.
+Bước một — và nói thẳng luôn: cách này cần ChatGPT Plus trở lên. Vì chìa khóa là trình duyệt mây của chế độ Work — chạy trên server Mỹ của OpenAI. Đó là tính năng trả phí. Bản miễn phí cũng có Work, nhưng chỉ trong app desktop, với trình duyệt chạy ngay trên máy bạn — IP vẫn Việt Nam, vẫn waitlist. Plus hai mươi đô một tháng; nếu chỉ cần đăng ký một lần, mượn bạn một buổi cũng là một lựa chọn.
+
+Có Plus rồi thì đơn giản. Cuộc trò chuyện mới, chọn Work, gõ đúng câu: mở muse.ai slash join, và cho quyền điều khiển web. ChatGPT hỏi cấp quyền điều khiển trình duyệt — cho phép. Khung trình duyệt mây mở ra, muse.ai load sạch sẽ. Từ đây điền form như bình thường.
 
 Bước hai: email sạch. Chưa từng dùng đăng Muse, và tốt nhất là chưa từng dính Facebook — email có dấu vết Facebook dễ bị xếp vào hàng chờ. Muse gửi mã PIN về hộp thư; không thấy thì lục mục thư rác.
 
@@ -39,25 +41,25 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~7:35 (455s visuals, ~694 từ @ ~100 wpm, fill ~92%).**
+**Tổng thời lượng mục tiêu: ~8:25 (505s visuals, ~763 từ @ ~100 wpm, fill ~91%).**
 
 **Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar. Tài khoản ChatGPT demo có Work mode + email Gmail demo sạch (chuẩn bị trước). Không bật VPN ở bất kỳ cảnh nào — điểm nhấn của video.
 
 | # | Thời lượng | Loại | Narration tương ứng | Footage | Ghi chú |
 |---|-----------|------|---------------------|---------|---------|
 | 1 | 20s | **[BROWSER]** | "VPN Mỹ, VPN Canada... làm luôn." | Màn hình waitlist thật: "Join the waitlist for Muse / You're on the waitlist" (nếu không quay được mới, dùng screenshot cộng đồng, ghi nguồn) + flash 2 icon VPN gạch X đỏ | Hook 2 nhịp — KHÔNG intro |
-| 2 | 60s | **[DIAGRAM]** | "Video trước... đóng dần." | Excalidraw nền tối: hàng loạt acc ảo ùa qua cổng VPN (icon clone) → cổng "region gate" phản ứng: bảng đen IP + kiểm "browser environment" → user thật rơi vào waitlist | Beat cơ chế — vẽ to, chữ ≥20px |
+| 2 | 70s | **[DIAGRAM]** | "Video trước... đóng dần." | Excalidraw nền tối: hàng loạt acc ảo ùa qua cổng VPN (icon clone) → cổng "region gate" phản ứng: bảng đen IP + kiểm "browser environment" → user thật rơi vào waitlist | Beat cơ chế — vẽ to, chữ ≥20px |
 | 3 | 45s | **[DIAGRAM]** | "Cửa mới nằm... không phải proxy." | Sơ đồ: VPN = áo cờ Mỹ nhưng tag "giọng Việt" bị nhận mặt; browser mây OpenAI (cờ Mỹ sạch) bước vào cổng → thẳng form | Metaphor chính của video |
-| 4 | 55s | **[BROWSER]** | "Bước một... điền form như bình thường." | ChatGPT: cuộc trò chuyện mới → chọn Work → gõ Prompt 1 (zoom 2–3s) → popup cấp quyền điều khiển trình duyệt → Allow → khung browser trái mở muse.ai/join load sạch | Cảnh "tiền" #1 — quay UI thật, theo flow tại thời điểm quay |
-| 5 | 50s | **[BROWSER]** | "Bước hai... mục thư rác." | Trong browser ChatGPT: điền email demo → submit →cut sang Gmail demo: mã PIN tới → quay lại nhập PIN | Blur email; chia 2 jump cuts |
+| 4 | 70s | **[BROWSER]** | "Bước một...điền form như bình thường." | Overlay bảng plan: FREE = browser local (IP VN) ❌ / PLUS = cloud browser server Mỹ ✅ → ChatGPT: cuộc trò chuyện mới → chọn Work → gõ Prompt 1 (zoom 2–3s) → Allow → khung browser mây mở muse.ai/join load sạch | Cảnh "tiền" #1 — nói thẳng yêu cầu Plus NGAY từ đầu, tránh viewer free mất thời gian |
+| 5 | 60s | **[BROWSER]** | "Bước hai... mục thư rác." | Trong browser ChatGPT: điền email demo → submit →cut sang Gmail demo: mã PIN tới → quay lại nhập PIN | Blur email; chia 2 jump cuts |
 | 6 | 25s | **[BROWSER]** | "Bước ba... mình đi tiếp." | Timeout thật (hoặc tái hiện): khung browser đứng → gõ Prompt 2 → nối lại → điền tên + ngày sinh → vào | Beat "trục trặc thật" — tăng độ tin |
-| 7 | 35s | **[BROWSER]** | "Vào được rồi... một tỷ token." | Đóng khung ChatGPT → mở Chrome thường (không VPN, biểu tượng VPN tắt rõ) → muse.ai → đăng nhập OK → Settings → Redeem code → hạn mức 1 tỷ | Zoom biểu tượng VPN OFF + màn 1 tỷ |
+| 7 | 45s | **[BROWSER]** | "Vào được rồi... một tỷ token." | Đóng khung ChatGPT → mở Chrome thường (không VPN, biểu tượng VPN tắt rõ) → muse.ai → đăng nhập OK → Settings → Redeem code → hạn mức 1 tỷ | Zoom biểu tượng VPN OFF + màn 1 tỷ |
 | 8 | 40s | **[BROWSER]** | "Giờ nói thẳng... kẻo bị vá." → đoạn "Một" | Text overlay 3 dòng hiện lần lượt: "KHÔNG CHÍNH THỨC — CÓ THỂ BỊ VÁ" / "THẺ: CHỈ NHẬP Ở MÁY MÌNH" / "TÀI KHOẢN THẬT" | Beat thẳng thắn — tông lạnh, không nhạc |
 | 9 | 50s | **[DIAGRAM]** | "Hai:... nơi mình kiểm soát." | Sơ đồ: browser ChatGPT có ô "🔑 thẻ?" gạch X đỏ → mũi tên chuyển về laptop "TRÌNH DUYỆT CỦA BẠN" có dấu tích xanh; badge "THẺ ẢO 0Đ" | Nguyên tắc bảo mật — vẽ tối giản |
-| 10 | 45s | **[DIAGRAM]** | "Ba: tài khoản thật...hàng hóa của chợ đó." | Excalidraw nền tối: cây referral (+1 tỷ mỗi nhánh) → farm 10+ acc → bảng giá "$" → vòng lặp: lạm dụng → cổng siết → mũi tên "CỬA SAU CŨNG CHẾT NẾU BỊ FARM" | Beat chợ đen + hệ quả — caption "MUA ACC = MẤT TRẮNG" |
+| 10 | 50s | **[DIAGRAM]** | "Ba: tài khoản thật...hàng hóa của chợ đó." | Excalidraw nền tối: cây referral (+1 tỷ mỗi nhánh) → farm 10+ acc → bảng giá "$" → vòng lặp: lạm dụng → cổng siết → mũi tên "CỬA SAU CŨNG CHẾT NẾU BỊ FARM" | Beat chợ đen + hệ quả — caption "MUA ACC = MẤT TRẮNG" |
 | 11 | 30s | **[B-ROLL]** | "Cửa nào rồi cũng bị vá...ngoài chat." | Night desk: 2 màn hình — một bên ChatGPT, một bên Muse, ánh neon xanh; fade text "MÃ REF: XEM MÔ TẢ" + card EP02 | CTA nhẹ + tease EP02 |
 
-**Tổng: 455s visuals + breathing pauses ≈ 7:35.**
+**Tổng: 505s visuals + breathing pauses ≈ 8:25.**
 
 ### Prompt trên màn hình (verbatim)
 
@@ -142,16 +144,18 @@ A cinematic over-the-shoulder photograph of a developer in a dark room watching 
 ```
 VPN Mỹ, VPN Canada — Muse vẫn waitlist? Cộng đồng vừa tìm ra cửa sau: mở trang đăng ký Muse AI qua trình duyệt điều khiển của ChatGPT Work mode, chạy trên hạ tầng đám mây Mỹ — không cần VPN.
 
+Lưu ý: cách này cần ChatGPT Plus trở lên (cloud browser là tính năng trả phí — bản free không đủ, giải thích trong video).
+
 Video này giải thích + walkthrough thật:
 ⏩ 0:00 — VPN đã chết?
 ⏩ 0:20 — Vì sao Muse siết cửa: farm acc qua VPN + chợ bán token
-⏩ 1:20 — Cửa sau: trình duyệt mây của ChatGPT
-⏩ 2:05 — Walkthrough: mở muse.ai qua ChatGPT Work
-⏩ 3:00 — Email sạch + mã PIN
-⏩ 3:50 — Trình duyệt từ xa timeout thì làm gì
-⏩ 4:15 — Vào rồi: đăng nhập không cần VPN + nhập mã 1 tỷ token
-⏩ 4:50 — Nói thẳng: không chính thức, không nhập thẻ qua browser ChatGPT
-⏩ 6:20 — Chợ acc: mua token = mất trắng, farm = tự đóng cửa
+⏩ 1:30 — Cửa sau: trình duyệt mây của ChatGPT (cần Plus)
+⏩ 2:15 — Walkthrough: mở muse.ai qua ChatGPT Work
+⏩ 3:25 — Email sạch + mã PIN
+⏩ 4:25 — Trình duyệt từ xa timeout thì làm gì
+⏩ 4:50 — Vào rồi: đăng nhập không cần VPN + nhập mã 1 tỷ token
+⏩ 5:35 — Nói thẳng: không chính thức, không nhập thẻ qua browser ChatGPT
+⏩ 7:05 — Chợ acc: mua token = mất trắng, farm = tự đóng cửa
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎁 NHẬN 1 TỶ TOKEN MUSE MIỄN PHÍ
@@ -206,4 +210,10 @@ Bạn thử cách này kết quả thế nào? Vào thẳng / waitlist / lỗi g
   hướng dẫn VN tự cảnh báo "mã có thể hết lượt/điều kiện thay đổi" — dấu hiệu farm mã hàng loạt.
   Listing "acc 8000 tỷ token" KHÔNG tìm thấy trên web công khai (chỉ lưu hành Telegram/FB group,
   không index) → narration dùng "hàng nghìn tỷ token", KHÔNG trích con số 8000 như fact.
+- **Plan yêu cầu (verify 09/10/2026):** cloud browser của ChatGPT Work (server Mỹ — chìa khóa bỏ
+  geo-block) chỉ có trên plan TRẢ PHÍ (Plus $20 trở lên), loại trừ Free/Go (help.openai.com
+  20001280 + pricing page; tổng hợp aiwiki/izzedo 9-11/10/2026). Free/Go có Work hạn chế trên
+  app desktop với built-in browser chạy LOCAL trên máy user → IP vẫn VN → không qua được
+  region gate. Cloud browser không nhập được credential/thanh toán (docs) — nhưng form signup
+  công khai + PIN email hoạt động theo báo cáo Tinhte/KR; giữ rule "thẻ chỉ nhập ở máy mình".
 - **Trạng thái cửa:** mẹo hoạt động theo báo cáo cộng đồng đầu 10/2026 — KHÔNG phải tính năng chính thức, Meta có thể vá bất cứ lúc nào; quay sớm.
