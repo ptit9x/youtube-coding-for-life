@@ -1,9 +1,9 @@
 # BONUS 1.5 — Đăng Ký Muse AI Khi Mọi Cửa Đều Đóng: Cloud Browser Miễn Phí
 
 - **Series:** AI Miễn Phí — bonus giữa EP01 (đã phát hành 08/10/2026) và EP02. Đăng trước EP02 vì cửa nào cũng có thể bị Meta vá bất cứ lúc nào.
-- **Target runtime:** ~7:55 (475s visuals, ~706 từ @ 100 wpm, fill ~89%).
+- **Target runtime:** ~7:50 (470s visuals, ~692 từ @ 100 wpm, fill ~88%).
 - **Outcome:** Người xem hiểu vì sao đăng ký Muse ngày càng khó (farm acc + region gate + blacklist), tự đăng ký được qua cloud browser miễn phí Lexmount (không VPN, không ChatGPT Plus, không thẻ), và biết nói thẳng 4 điều (không chính thức / ranh giới tin tưởng với cloud browser / free có giới hạn / đừng farm).
-- **Tình trạng các cửa (test của host, 09/10/2026):** VPN — chết. ChatGPT Work cloud browser — cần Plus $20, cộng đồng vào được 07–08/10 nhưng đã bắt đầu có báo cáo chặn. Gemini Spark remote browser (host có Ultra) — bị chặn khi test 09/10. Lexmount — đang mở (verify VOZ + test lại trước khi quay).
+- **Tình trạng các cửa (test của host, 09/10/2026):** VPN — chết. ChatGPT Work cloud browser — cần Plus $20, đã bắt đầu có báo cáo chặn. Gemini Spark — cũng không được. Lexmount — đang mở (verify VOZ + test lại trước khi quay).
 
 ---
 
@@ -15,7 +15,7 @@ Video trước mình dạy đăng ký bằng VPN. Ba ngày qua: điền ngày si
 
 Vì sao Muse siết? Vì cửa bị lạm dụng. Referral cho mỗi bên một tỷ token — người ta farm hàng chục tài khoản ảo, gom thành những acc hàng nghìn tỷ đem bán. Muse trả chi phí thật cho mỗi agent chạy, nên nó chống lại: blacklist dải IP VPN, chấm điểm cả môi trường trình duyệt, bắt xác minh thẻ. Người farm làm cửa hẹp lại — người thiệt là người dùng thật.
 
-Cộng đồng tìm cửa thứ hai: trình duyệt mây của ChatGPT Work — chạy trên server Mỹ. Vào được thật. Nhưng cần tài khoản Plus hai mươi đô. Mình có Gemini Ultra, test trình duyệt mây của Gemini Spark hôm qua — cũng bị chặn. Meta đang đóng từng cửa một, nhanh.
+Cộng đồng tìm cửa thứ hai: trình duyệt mây của ChatGPT Work — chạy trên server Mỹ. Vào được thật, nhưng cần Plus hai mươi đô. Gemini Spark cũng không được. Meta đang đóng từng cửa một, nhanh.
 
 Nên hôm nay mình dùng cửa thứ ba: Lexmount — cloud browser vốn dành cho dev chạy AI agent: một Chromium thật trên máy chủ của họ, mình điều khiển từ máy mình. Có gói miễn phí. Điểm mấu chốt: nó là một phiên trình duyệt sạch từ trung tâm dữ liệu — chưa nằm trong danh sách đen của Muse. Chưa — đó là từ khóa.
 
@@ -45,7 +45,7 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~7:55 (475s visuals, ~706 từ @ ~100 wpm, fill ~89%).**
+**Tổng thời lượng mục tiêu: ~7:50 (470s visuals, ~692 từ @ ~100 wpm, fill ~88%).**
 
 **Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar. Chuẩn bị: tài khoản Google demo, Gmail demo sạch (chưa từng đụng Muse/Facebook), ngày sinh của Gmail demo ghi sẵn. Không bật VPN ở bất kỳ cảnh nào.
 
@@ -53,7 +53,7 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 |---|-----------|------|---------------------|---------|---------|
 | 1 | 20s | **[BROWSER]** | "VPN Mỹ chết... làm luôn." | Màn waitlist thật "You're on the waitlist" + 3 icon lần lượt gạch X: VPN, ChatGPT, Spark → logo Lexmount sáng lên | Hook 3 nhịp — KHÔNG intro |
 | 2 | 60s | **[DIAGRAM]** | "Nếu anh em xem... người dùng thật." | Excalidraw: hàng loạt acc ảo ùa qua cổng → cổng "region gate" phản ứng: bảng đen IP VPN + chấm browser environment → user thật rơi waitlist | Beat cơ chế + nhân-quả farm |
-| 3 | 45s | **[DIAGRAM]** | "Cộng đồng tìm cửa... nhanh." | Sơ đồ 3 cửa: VPN ❌ (blacklist) → ChatGPT ⚠️ (Plus $20 + đang chặn) → Spark ❌ (test host bị chặn) → Lexmount ✅ "CHƯA blacklist" | Highlight chữ "CHƯA" — định tông thành thật |
+| 3 | 40s | **[DIAGRAM]** | "Cộng đồng tìm cửa... nhanh." | Sơ đồ 4 cửa: VPN ❌ (blacklist) → ChatGPT ⚠️ (Plus $20 + đang chặn) → Spark ❌ → Lexmount ✅ "CHƯA blacklist" | Highlight chữ "CHƯA" — định tông thành thật |
 | 4 | 40s | **[BROWSER]** | "Nên hôm nay... mở ra trên màn hình bạn." | browser.lexmount.com → Sign up bằng Google (zoom đúng nút, 2–3s) → console → Cloud Browser → Run → Chromium từ xa mở | Cảnh "tiền" #1 — quay UI thật theo thời điểm quay |
 | 5 | 65s | **[BROWSER]** | "Bước hai... lục thư rác." | Trong remote browser: gõ muse.ai/join → form load sạch → điền Gmail demo → submit → cut sang Gmail: PIN tới → quay lại nhập | Zoom form không-waitlist — khoảnh khắc "vào được rồi" |
 | 6 | 40s | **[BROWSER]** | "Bước ba... tin bạn là người thật." | Điền ngày sinh — overlay 2 thẻ ghi chú ghép nhau: "Gmail DOB ✓" + "Form DOB ✓" → dấu tích → badge "KHÔNG HỎI THẺ" | Trick cộng đồng — quay thật; nếu vẫn hỏi thẻ thì quay cảnh đó + bẻ narration nói thẳng |
@@ -63,7 +63,7 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 | 10 | 30s | **[BROWSER]** | "Ngoài lề một câu... chưa chết hẳn." | ChatGPT Work: cuộc trò chuyện mới → Work → prompt hiện 2s → khung browser mờ dần + text "ĐANG ĐÓNG DẦN" | Plan-B gọn — không walkthrough |
 | 11 | 40s | **[B-ROLL]** | "Cửa nào rồi cũng bị vá... dựng video." | Night desk: 3 màn hình mờ dần (VPN/ChatGPT/Lexmount) → một màn sáng còn lại; fade text "MÃ REF: XEM MÔ TẢ" + card EP02 | CTA + tease EP02 |
 
-**Tổng: 475s visuals + breathing pauses ≈ 7:55.**
+**Tổng: 470s visuals + breathing pauses ≈ 7:50.**
 
 ### Các bước & prompt trên màn hình (verbatim)
 
@@ -155,15 +155,15 @@ VPN Mỹ vẫn waitlist, ChatGPT bắt đầu chặn — đăng ký Muse AI từ
 Video này giải thích + walkthrough thật:
 ⏩ 0:00 — Ba cửa chết
 ⏩ 0:20 — Vì sao Muse siết: farm acc + chợ bán token
-⏩ 1:20 — Ba cánh cửa: VPN, ChatGPT, Lexmount
-⏩ 2:05 — Lexmount: cloud browser miễn phí
-⏩ 2:45 — Walkthrough: signup, Run, mở muse.ai
-⏩ 3:50 — Gmail sạch + mã PIN
-⏩ 4:30 — Trick ngày sinh: tránh xác minh thẻ
-⏩ 5:05 — Vào rồi: login không VPN + mã 1 tỷ token
-⏩ 5:50 — Nói thẳng: cloud browser là máy người khác
-⏩ 6:45 — Chợ acc: mua token = mất trắng, farm = tự đóng cửa
-⏩ 7:15 — Plan-B: ChatGPT Plus (đang đóng dần)
+⏩ 1:20 — Bốn cánh cửa: VPN, ChatGPT, Spark, Lexmount
+⏩ 2:00 — Lexmount: cloud browser miễn phí
+⏩ 2:40 — Walkthrough: signup, Run, mở muse.ai
+⏩ 3:45 — Gmail sạch + mã PIN
+⏩ 4:25 — Trick ngày sinh: tránh xác minh thẻ
+⏩ 5:00 — Vào rồi: login không VPN + mã 1 tỷ token
+⏩ 5:45 — Nói thẳng: cloud browser là máy người khác
+⏩ 6:40 — Chợ acc: mua token = mất trắng, farm = tự đóng cửa
+⏩ 7:10 — Plan-B: ChatGPT Plus (đang đóng dần)
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎁 NHẬN 1 TỶ TOKEN MUSE MIỄN PHÍ
@@ -212,9 +212,7 @@ Bạn thử cách nào vào được? VPN / ChatGPT / Lexmount — hay tất c�
   - ChatGPT Work cloud browser → vào được 07–08/10 (Tinhte 4182001, KR YT rHCJ6uAiYM4);
     cần Plus trở lên — Free/Go chỉ có browser LOCAL trên desktop (IP VN) → không qua cửa
     (help.openai.com 20001280 + pricing; aiwiki/izzedo 9-11/10). Đã bắt đầu có báo cáo chặn.
-  - Gemini Spark remote browser (host có Ultra, test 09/10) → BỊ CHẶN. VN đủ điều kiện Spark
-    (chỉ EEA/UK/CH/Nigeria bị loại, support.google.com/gemini/17094507) nhưng IP cloud Google
-    có vẻ đã vào radar Meta — ghi nhận là test của host, chờ xác nhận cộng đồng.
+  - Gemini Spark (remote browser, host có Ultra) → test 09/10: cũng không vào được.
 - **Lexmount (browser.lexmount.com):** Cloud Browser API cho AI agent — Chromium/Moli từ xa,
   Playwright CDP/SDK/MCP, console có nút Run không cần code; có gói Free (giới hạn giờ browser
   + concurrency). Vận hành bởi Beijing Zhuyue Technology Co., Ltd (Trung Quốc) — nói rõ trong
