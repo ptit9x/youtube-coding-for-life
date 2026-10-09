@@ -58,13 +58,14 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
 
 ### BONUS 1.5 — Đăng ký Muse khi mọi cửa đều đóng: cloud browser miễn phí — QUAY SỚM (mẹo có thể bị vá)
 - **Thời lượng mục tiêu:** ~6 phút (~540 từ)
-- **Nội dung chính (rewrite 10/10 theo test host):** VPN chết → ChatGPT Work cần Plus $20 + bắt đầu
-  chặn → Gemini Spark (host có Ultra) bị chặn → cửa đang mở: Lexmount cloud browser (free, Chromium
+- **Nội dung chính (rewrite 10/10 theo test host):** VPN chết → ChatGPT Work cần Plus $20, nay bị chặn
+  (host có footage lỗi thật — dùng làm bằng chứng trong video) → Gemini Spark cũng không được → cửa đang
+  mở: Lexmount cloud browser (free, Chromium
   từ xa cho AI agent). Walkthrough: Sign up Google ≠ Sign in → Cloud Browser → Run → muse.ai/join →
   Gmail sạch + PIN → trick ngày sinh trùng Gmail (tránh hỏi thẻ — kinh nghiệm VOZ, verify khi quay)
   → login thường không VPN + ref 48h. Nói thẳng 4 điều: không chính thức / cloud browser = máy người
   khác (Lexmount là công ty TQ — không gõ gì nhạy cảm) / free có hạn giờ, đủ 1 lần không đủ farm /
-  đừng góp phần đóng cửa. ChatGPT Plus còn là plan-B (prompt ở description). Beat "chợ acc": acc Muse chứa hàng nghìn tỷ
+  đừng góp phần đóng cửa. Beat "chợ acc": acc Muse chứa hàng nghìn tỷ
   token (farm referral) được rao bán — mua acc = mất trắng khi chủ acc rút mật khẩu/Meta quét.
   Tease EP02 cuối video.
 - **Nguồn đã verify 09/10/2026:** Tinhte thread 4182001 (gốc), VOZ 1282837, khuyendung.net
