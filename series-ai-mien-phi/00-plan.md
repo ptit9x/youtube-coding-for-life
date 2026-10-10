@@ -23,7 +23,7 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
 - Mọi con số (giá, quota, token) phải verify lại trên màn hình ngay trước khi
   quay — số liệu AI thay đổi từng tháng.
 
-**Số tập:** 3 tập đầu đã có script (EP01 đã phát hành, EP02, EP03). Roadmap mở rộng lên 9+.
+**Số tập:** 3 tập đầu đã có script (EP01 + BONUS 1.5 đã phát hành, EP02, EP03). Roadmap mở rộng lên 9+.
 
 **EP01 đã phát hành:** "Cách sử dụng VPN Free để lấy 1 TỶ Token Muse AI" — https://youtu.be/hQzSDxDhX6s (3:27, đăng 08/10/2026). Bản final rút gọn từ script 8–9 phút: bỏ phần Muse Code/bảng giá, tập trung walkthrough VPN + referral. Script repo là bản mở rộng — mô tả video thật dùng ref code 16NESL.
 
@@ -56,7 +56,9 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   - Ý nghĩa: miễn phí là chiến lược — "bạn là một phần của sản phẩm"
 - **Variant:** Học bằng LLM
 
-### BONUS 1.5 — Đăng ký Muse khi mọi cửa đều đóng: cloud browser miễn phí — QUAY SỚM (mẹo có thể bị vá)
+### BONUS 1.5 — Đăng ký Muse khi mọi cửa đều đóng: cloud browser miễn phí — ✅ ĐÃ PHÁT HÀNH 09/10/2026
+- **YouTube:** https://youtu.be/5B7GUlVM32g — "Đăng ký Muse AI khi VPN đã chết — cloud browser miễn phí" (4:43, ref code 16NESL)
+- **So với script:** bản final rút gọn 7:40 → 4:43 — bỏ 2 scene diagram (farm/chợ acc + cây referral), thêm intro chào + beat "kiên nhẫn vì form chậm" + outro lấy mã referral qua app mobile; 3 bước walkthrough và 4 điều nói thẳng giữ nguyên. Script repo là bản mở rộng.
 - **Thời lượng mục tiêu:** ~6 phút (~540 từ)
 - **Nội dung chính (rewrite 10/10 theo test host):** VPN chết → ChatGPT Work cần Plus $20, nay bị chặn
   (host có footage lỗi thật — dùng làm bằng chứng trong video) → Gemini Spark cũng không được → cửa đang

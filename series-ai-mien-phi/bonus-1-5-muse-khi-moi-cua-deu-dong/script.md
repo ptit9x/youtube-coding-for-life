@@ -1,7 +1,8 @@
 # BONUS 1.5 — Đăng Ký Muse AI Khi Mọi Cửa Đều Đóng: Cloud Browser Miễn Phí
 
 - **Series:** AI Miễn Phí — bonus giữa EP01 (đã phát hành 08/10/2026) và EP02. Đăng trước EP02 vì cửa nào cũng có thể bị Meta vá bất cứ lúc nào.
-- **Target runtime:** ~7:40 (460s visuals, ~676 từ @ 100 wpm, fill ~88%).
+- **🎬 ĐÃ PHÁT HÀNH 09/10/2026:** https://youtu.be/5B7GUlVM32g — "Đăng ký Muse AI khi VPN đã chết — cloud browser miễn phí" (4:43, ref code 16NESL). Bản final cắt từ script này: runtime rút 7:40 → 4:43 (bỏ hẳn scene 2 diagram farm/chợ acc + scene 9 cây referral — giữ 1 câu "Meta đang siết vì bị lạm dụng" trong narration), thêm intro chào ("Xin chào, ở video trước..."), thêm beat "làm đúng phải chậm" (đợi form load, điền năm sinh kiểu số) và outro hướng dẫn lấy mã referral riêng qua app mobile. Phiên bản repo này là **bản mở rộng** — narration 3 bước + 4 điều nói thẳng khớp 1:1 với video đã đăng.
+- **Target runtime (script gốc):** ~7:40 (460s visuals, ~676 từ @ 100 wpm, fill ~88%).
 - **Outcome:** Người xem hiểu vì sao đăng ký Muse ngày càng khó (farm acc + region gate + blacklist), tự đăng ký được qua cloud browser miễn phí Lexmount (không VPN, không ChatGPT Plus, không thẻ), và biết nói thẳng 4 điều (không chính thức / ranh giới tin tưởng với cloud browser / free có giới hạn / đừng farm).
 - **Tình trạng các cửa (test của host, 10/10/2026):** VPN — chết. ChatGPT Work cloud browser — cần Plus $20, nay đã bị chặn (host có footage lỗi thật — dùng trong video). Gemini Spark — cũng không được. Lexmount — đang mở (verify VOZ + test lại trước khi quay).
 
