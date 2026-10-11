@@ -5,7 +5,7 @@
 - **Nguyên tắc tách tập:** mỗi tập một outcome chính và một pain nối sang tập sau. Hai outcome độc lập mà cần quá 18 phút → tách đôi.
 - **Technical baseline:** Zalo Mini App CLI (docs 26/1/2026: `npx create-zalo-mini-app <tên>` hoặc `npm i -g zmp-cli` + `zmp init`), template e-commerce kiểu zaui-shop (React + TypeScript + Tailwind + ZaUI), Supabase free tier (Postgres + RLS + Realtime + Edge Functions). **Pin exact version mọi tool trên màn hình khi quay; re-verify trước khi viết từng script** — chính sách Zalo (KYB, duyệt) và template đổi liên tục.
 - **AI tool:** **Opus trong IDE Antigravity 1.0** (agent panel bên phải). Pattern: hỏi – đọc – chất vấn – verify.
-- **Spine:** build **một app duy nhất cho một quán ăn** (working name "Bếp Ơi" — chốt tên trước EP01): khách xem menu, đặt bàn, gọi món trước, lưu voucher, đọc blog; chủ quán quản lý qua tab admin ẩn. Không thanh toán trong app (v1), trả tiền tại quầy. Series này **đồng thời là app thật** cho quán — mọi tập quay trên repo thật `/home/vmo/vibe-coding/bep-oi/` (tạo ở EP02).
+- **Spine:** build **một app duy nhất cho một quán ăn** (tên đã chốt: **"Gắp Thêm"** — động từ văn hoá mâm cơm Việt, lời mời "gắp thêm đi", icon đôi đũa): khách xem menu, đặt bàn, gọi món trước, lưu voucher, đọc blog; chủ quán quản lý qua tab admin ẩn. Không thanh toán trong app (v1), trả tiền tại quầy. Series này **đồng thời là app thật** cho quán — mọi tập quay trên repo thật `/home/vmo/vibe-coding/gap-them/` (tạo ở EP02).
 - **Chain rule:** tập sau mở bằng NỖI ĐAU tập trước tạo ra. Mỗi EP dưới đây ghi "← pain" kế thừa và "→ pain mới" chuyển tiếp.
 - **Differentiator:** mỗi tập đúng MỘT AI sequence liền mạch theo **AI-Driven Development Workflow 6 bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng**. Không bao giờ copy-blind. Host tự gõ lại ít nhất một đoạn code AI sinh mỗi tập.
 
@@ -216,6 +216,6 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 
 ## Câu hỏi mở cần chốt trước khi viết EP01
 
+- ~~Q1 — Tên quán/app~~ **ĐÃ CHỐT: "Gắp Thêm"** (repo `gap-them`). Lưu ý: trước khi tạo app thật ở EP01, host tự Google/Facebook search "Gắp Thêm" quán ăn 30 giây + để Zalo dashboard chặn trùng tên nếu có.
 - ~~Q2 — Xác thực chủ sở hữu~~ **ĐÃ CHỐT: Cá nhân** (Zalo eKYC). Chuyện hộ kinh doanh giải thích bằng narration trong EP01 (khi nào cần HKD), không làm thật trên camera.
-- **Q1 — Tên quán/app demo:** đề xuất "Bếp Ơi" (ngắn, có tiếng gọi, không phèn); phương án: giữ tên quán thật của gia đình. Ảnh hưởng EP01 (tạo app thật trên dashboard) và toàn bộ nội dung trên màn hình.
 - **Q3 — Nhịp đăng:** xen kẽ với series NestJS đang chạy (1 NestJS : 1 Mini App/tuần) hay chạy riêng mùa mới? Ảnh hưởng đến việc EP14 có khớp lịch chờ duyệt 3–5 ngày thật hay không (nên quay trước, chèn cảnh chờ duyệt thật).
