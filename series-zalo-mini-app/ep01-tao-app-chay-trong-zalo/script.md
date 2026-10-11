@@ -2,7 +2,7 @@
 
 - **Trạng thái:** 📝 script draft — chờ host duyệt (chưa quay)
 - **Runtime mục tiêu:** ~8–9 phút (premiere, đã được chấp nhận dài hơn tập thường)
-- **Word count PART 1:** [điền sau khi check]
+- **Word count PART 1:** 740 từ ≈ 7,4–7,8 phút thoại → runtime thực tế (cộng khoảng thở visual) **8–9 phút**
 - **Repo app:** `/home/vmo/vibe-coding/gap-them` (tạo trong tập này)
 - **CLI probe thật (10/2026):** Node v26.7.0, `create-zalo-mini-app` 1.0.4 → cài `zmp-cli` 4.0.3; prompt đầu tiên của CLI là `Mini App ID:`
 
