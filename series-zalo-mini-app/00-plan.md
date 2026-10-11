@@ -72,9 +72,9 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 - **Mở màn theo đúng format premiere:** chào kênh → gap (tutorial VN không có, docs tiếng Anh, KYB vừa đổi) → tinh thần series (AI là mentor, host review từng dòng).
 - Học: Mini App là gì — web app < 10MB chạy trong webview Zalo; vì sao super app (tiền lệ WeChat, 75 triệu user Zalo, không cần cài đặt, Zalo host CDN); cái giá của nền tảng: kiểm duyệt + permission + **KYB** (xác thực chủ sở hữu, bắt buộc từ 15/10/2025).
 - Trace: điều gì xảy ra khi người dùng bấm mở một Mini App (tải bundle từ CDN → webview → ZJSBridge).
-- Thao tác thật: tạo app trên mini.zalo.me (tên, danh mục Ẩm thực, icon), lấy **Mini App ID**, xác thực chủ sở hữu theo loại hình — Cá nhân: Zalo đã eKYC là tự xong; DN/HKD: nộp GCN + CCCD (blur giấy tờ nếu quay thật).
+- Thao tác thật (đã chốt đường đi): tạo app trên mini.zalo.me loại **Cá nhân** — Zalo đã eKYC là xác thực xong ngay, không có cảnh nộp giấy tờ. Đường DN/Hộ kinh doanh (nộp GCN + CCCD, chờ 3–5 ngày; khi nào nên gắn HKD: danh mục F&B đúng hơn, bắt buộc nếu làm thanh toán) giải thích bằng narration + bảng so sánh 1 màn hình, không làm thật trên camera.
 - AI sequence: host đưa spec quán (đặt bàn/gọi món/voucher/blog) → AI lên plan toàn bộ product → host review, **cắt scope v1** (bỏ thanh toán, giao hàng, tích điểm) → approve plan. Kể hành động (plan → review → approve) nhưng KHÔNG liệt kê tên 6 bước — chưa giới thiệu.
-- Thành quả: app tồn tại trên dashboard, xác thực chủ sở hữu theo đúng loại hình (Cá nhân tự xong / DN-HKD chờ duyệt), có Mini App ID. → **pain mới: đã có "giấy khai sinh" nhưng chưa có dòng code nào — máy còn trống.**
+- Thành quả: app tồn tại trên dashboard, xác thực chủ sở hữu xong ngay (Cá nhân/eKYC), có Mini App ID. → **pain mới: đã có "giấy khai sinh" nhưng chưa có dòng code nào — máy còn trống.**
 - File: `ep01-app-trong-zalo/script.md`
 
 ### EP 02 — Scaffold: zmp-cli sinh project thế nào và mỗi file để làm gì
@@ -216,6 +216,6 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 
 ## Câu hỏi mở cần chốt trước khi viết EP01
 
+- ~~Q2 — Xác thực chủ sở hữu~~ **ĐÃ CHỐT: Cá nhân** (Zalo eKYC). Chuyện hộ kinh doanh giải thích bằng narration trong EP01 (khi nào cần HKD), không làm thật trên camera.
 - **Q1 — Tên quán/app demo:** đề xuất "Bếp Ơi" (ngắn, có tiếng gọi, không phèn); phương án: giữ tên quán thật của gia đình. Ảnh hưởng EP01 (tạo app thật trên dashboard) và toàn bộ nội dung trên màn hình.
-- **Q2 — Xác thực chủ sở hữu trên camera:** đăng ký app loại Cá nhân (Zalo eKYC, không có giấy tờ gì để blur — gọn cho quay) hay gắn hộ kinh doanh của quán (đúng danh mục F&B hơn, có cảnh nộp GCN + CCCD trên dashboard)? Lưu ý: Mini App tạo trên dashboard là thật — tên app public gắn với kênh.
 - **Q3 — Nhịp đăng:** xen kẽ với series NestJS đang chạy (1 NestJS : 1 Mini App/tuần) hay chạy riêng mùa mới? Ảnh hưởng đến việc EP14 có khớp lịch chờ duyệt 3–5 ngày thật hay không (nên quay trước, chèn cảnh chờ duyệt thật).
