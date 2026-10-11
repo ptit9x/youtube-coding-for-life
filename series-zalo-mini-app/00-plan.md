@@ -5,7 +5,7 @@
 - **Nguyên tắc tách tập:** mỗi tập một outcome chính và một pain nối sang tập sau. Hai outcome độc lập mà cần quá 18 phút → tách đôi. Không viết tập "setup thuần" — mọi tập mở màn bằng kết quả chạy được của tập trước.
 - **Technical baseline:** Zalo Mini App CLI (docs 26/1/2026: `npx create-zalo-mini-app <tên>` hoặc `npm i -g zmp-cli` + `zmp init`), template e-commerce kiểu zaui-shop (React + TypeScript + Tailwind + ZaUI), Supabase free tier (Postgres + RLS + Realtime + Edge Functions). **Pin exact version mọi tool trên màn hình khi quay; re-verify trước khi viết từng script** — chính sách Zalo (KYB, duyệt) và template đổi liên tục.
 - **AI tool:** **Opus trong IDE Antigravity 1.0** (agent panel bên phải). Pattern: hỏi – đọc – chất vấn – verify.
-- **Spine:** build **một app duy nhất cho một quán ăn** (tên đã chốt: **"Gắp Thêm"** — động từ văn hoá mâm cơm Việt, lời mời "gắp thêm đi", icon đôi đũa): khách xem menu, đặt bàn, gọi món trước, lưu voucher, đọc blog; chủ quán quản lý qua tab admin ẩn. Không thanh toán trong app (v1), trả tiền tại quầy. Series này **đồng thời là app thật** cho quán — mọi tập quay trên repo thật `/home/vmo/vibe-coding/gap-them/` (tạo ở EP02).
+- **Spine:** build **một app duy nhất cho một quán ăn** (tên đã chốt: **"Chan Thêm"** — quán **phở** của nhà mình; động từ của phở ("chan thêm nước nhé cô"), icon muỗng chan bên tô phở bốc khói; CTA series: "Chan thêm một tô cho bạn"): khách xem menu, đặt bàn, gọi món trước, lưu voucher, đọc blog; chủ quán quản lý qua tab admin ẩn. Không thanh toán trong app (v1), trả tiền tại quầy. Series này **đồng thời là app thật** cho quán — mọi tập quay trên repo thật `/home/vmo/vibe-coding/chan-them/` (tạo ở EP02).
 - **Chain rule:** tập sau mở bằng NỖI ĐAU tập trước tạo ra. Mỗi EP dưới đây ghi "← pain" kế thừa và "→ pain mới" chuyển tiếp.
 - **Differentiator:** mỗi tập đúng MỘT AI sequence liền mạch theo **AI-Driven Development Workflow 6 bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng**. Không bao giờ copy-blind. Host tự gõ lại ít nhất một đoạn code AI sinh mỗi tập.
 
@@ -70,12 +70,12 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 ## SEASON 1 — TỪ SỐ 0 ĐẾN QUÁN NHẬN ĐƠN (EP 01–04)
 
 ### EP 01 — premiere: Một chiều ra app chạy trong Zalo | Zalo Mini App #1
-- **Mở màn bằng KẾT QUẢ:** 30 giây đầu chiếu app "Gắp Thêm" mở trong Zalo thật, đặt một bàn — rồi mới chào kênh → gap (tutorial VN không có, docs tiếng Anh, chính sách vừa đổi) → tinh thần series (AI là mentor, host review từng dòng).
+- **Mở màn bằng KẾT QUẢ:** 30 giây đầu chiếu app "Chan Thêm" mở trong Zalo thật, đặt một bàn — rồi mới chào kênh → gap (tutorial VN không có, docs tiếng Anh, chính sách vừa đổi) → tinh thần series (AI là mentor, host review từng dòng).
 - Học (gọn cho premiere): Mini App là gì — web app < 10MB chạy trong webview Zalo; vì sao super app (không cần cài, Zalo host CDN); cái giá: kiểm duyệt + permission + xác thực chủ sở hữu (Cá nhân = Zalo eKYC xong ngay; khi nào cần HKD — narration + bảng so sánh 1 màn hình, không làm thật trên camera).
-- Thao tác thật (nhanh, cắt ghép): tạo app trên mini.zalo.me loại **Cá nhân** (tên, danh mục Ẩm thực, icon) → có **Mini App ID**; cài CLI, tạo project `gap-them` (template e-commerce), `zmp start`, **quét QR mở trong Zalo điện thoại thật**. Không đi từng prompt CLI trên màn hình — tóm tắt + chèn kết quả.
+- Thao tác thật (nhanh, cắt ghép): tạo app trên mini.zalo.me loại **Cá nhân** (tên, danh mục Ẩm thực, icon) → có **Mini App ID**; cài CLI, tạo project `chan-them` (template e-commerce), `zmp start`, **quét QR mở trong Zalo điện thoại thật**. Không đi từng prompt CLI trên màn hình — tóm tắt + chèn kết quả.
 - AI sequence: host đưa spec quán (đặt bàn/gọi món/voucher/blog) → AI lên plan toàn bộ product → host review, **cắt scope v1** (bỏ thanh toán, giao hàng, tích điểm) → approve. AI giải thích nhanh scaffold sinh gì (`app-config.json`, ZMPRouter, ZaUI) — chỉ file chạm tới hôm nay.
 - **Cuối tập: giới thiệu 6-bước AI-Driven Development Workflow LẦN ĐẦU** (app đã cài và chạy xong — đúng vị trí theo quy tắc kênh).
-- Thành quả: app "Gắp Thêm" (đang là quán demo) mở được trong Zalo + plan v1 đã duyệt. → **pain mới: menu là json hardcode của template — không phải món của quán mình.**
+- Thành quả: app "Chan Thêm" (đang là quán demo) mở được trong Zalo + plan v1 đã duyệt. → **pain mới: menu là json hardcode của template — không phải món của quán mình.**
 - File: `ep01-tao-app-chay-trong-zalo/script.md`
 
 ### EP 02 — Supabase: menu thật, đổi giá không cần deploy
@@ -182,7 +182,7 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 
 ## Câu hỏi mở cần chốt trước khi viết EP01
 
-- ~~Q1 — Tên quán/app~~ **ĐÃ CHỐT: "Gắp Thêm"** (repo `gap-them`). Lưu ý: trước khi tạo app thật ở EP01, host tự Google/Facebook search "Gắp Thêm" quán ăn 30 giây + để Zalo dashboard chặn trùng tên nếu có.
+- ~~Q1 — Tên quán/app~~ **ĐÃ CHỐT: "Chan Thêm"** (repo `chan-them`). Lưu ý: trước khi tạo app thật ở EP01, host tự Google/Facebook search "Chan Thêm" quán ăn 30 giây + để Zalo dashboard chặn trùng tên nếu có.
 - ~~Q2 — Xác thực chủ sở hữu~~ **ĐÃ CHỐT: Cá nhân** (Zalo eKYC). Chuyện hộ kinh doanh giải thích bằng narration trong EP01 (khi nào cần HKD), không làm thật trên camera.
 - ~~Q3 — Nhịp đăng~~ **ĐÃ CHỐT: mùa riêng**, không xen kẽ NestJS. Hệ quả: quay theo batch (block 3–4 tập/lượt); EP10 bấm gửi duyệt thật rồi quay tiếp các tập khác, chèn cảnh "Đã duyệt" thật vào EP11 khi quay bổ sung.
 - **CLI probe đã chạy thật (10/2026):** Node v26.7.0 + `create-zalo-mini-app` 1.0.4 (tự cài `zmp-cli` 4.0.3 global). Prompt đầu tiên của CLI là `Mini App ID:` → host phải có ID từ dashboard TRƯỚC khi chạy lệnh — đưa факт này vào EP01.

@@ -3,7 +3,7 @@
 - **Trạng thái:** 📝 script draft — chờ host duyệt (chưa quay)
 - **Runtime mục tiêu:** ~8–9 phút (premiere, đã được chấp nhận dài hơn tập thường)
 - **Word count PART 1:** 740 từ ≈ 7,4–7,8 phút thoại → runtime thực tế (cộng khoảng thở visual) **8–9 phút**
-- **Repo app:** `/home/vmo/vibe-coding/gap-them` (tạo trong tập này)
+- **Repo app:** `/home/vmo/vibe-coding/chan-them` (tạo trong tập này)
 - **CLI probe thật (10/2026):** Node v26.7.0, `create-zalo-mini-app` 1.0.4 → cài `zmp-cli` 4.0.3; prompt đầu tiên của CLI là `Mini App ID:`
 
 ## Gap table (research 10/2026)
@@ -21,7 +21,7 @@ Khác biệt của tập này: mở màn bằng app chạy trong Zalo THẬT tr�
 
 ## PART 1 — SCRIPT
 
-Quán cơm nhà mình vừa có app riêng. Khách mở Zalo, quét mã, đặt bàn trong ba mươi giây. Không cần App Store. Không cần Google Play. Chi phí nền tảng: không đồng.
+Quán phở nhà mình vừa có app riêng. Khách mở Zalo, quét mã, đặt bàn trong ba mươi giây. Không cần App Store. Không cần Google Play. Chi phí nền tảng: không đồng.
 
 Chào bạn, đây là Lập trình là cuộc sống, và đây là tập đầu của một mùa mới. Mùa này mình làm một thứ rất Việt Nam: Mini App chạy ngay trong Zalo, cho quán ăn nhà mình. Làm thật, sai thật, và quay lại toàn bộ.
 
@@ -31,9 +31,9 @@ Một điều nói trước. Mình không code một mình, mình đi cùng AI. 
 
 Ba mươi giây lý thuyết trước khi bấm. Mini App Zalo bản chất là trang web, gói dưới mười megabyte, chạy trong Zalo. Nó giống gian hàng trong trung tâm thương mại. Bạn không xây tòa nhà, không lo bảo vệ, không lo tiền điện. Trung tâm lo hết, và khách ai cũng đi ngang. Cái giá là nội luật. Zalo duyệt mọi app trước khi lên kệ. Và chủ shop phải khai danh tính. Cá nhân thì Zalo đã định danh eKYC là xong ngay, như mình. Doanh nghiệp hoặc hộ kinh doanh thì nộp giấy phép, chờ ba đến năm ngày làm việc. Quán nhà mình chưa có hộ kinh doanh, nên mùa này đi đường cá nhân. Khi làm thanh toán trong app thì buộc phải lên hộ kinh doanh. Bảng so sánh mình để trên màn hình, bạn pause chụp lại.
 
-Giờ là tay chân. Việc đầu tiên không phải code, mà là giấy tờ. mini.zalo.me, đăng nhập bằng Zalo đã định danh, bấm tạo Mini App. Tên: Gắp Thêm. Danh mục: Ẩm thực. Icon: đôi đũa. Dashboard trả lại một dãy số, Mini App ID. Đây là giấy khai sinh của app, giữ kỹ.
+Giờ là tay chân. Việc đầu tiên không phải code, mà là giấy tờ. mini.zalo.me, đăng nhập bằng Zalo đã định danh, bấm tạo Mini App. Tên: Chan Thêm. Danh mục: Ẩm thực. Icon: muỗng chan bên tô phở. Dashboard trả lại một dãy số, Mini App ID. Đây là giấy khai sinh của app, giữ kỹ.
 
-Vì sao giữ kỹ? Mở terminal ra là biết. Node hai mươi sáu, một lệnh duy nhất: npx create-zalo-mini-app. CLI tự cài. Và prompt đầu tiên không hỏi tên project. Nó hỏi Mini App ID. Không có ID từ dashboard, bạn đứng chết ngay ở dòng này. Dán ID vào, chọn template có sẵn giỏ hàng, TypeScript, Tailwind. Đoạn cài dependencies mình cắt nhé, không ai cần xem thanh tải ba phút. Xong: npm start. Trình duyệt mở localhost ba nghìn. Nhưng đó mới là web. Hôm nay cần mở trong Zalo. CLI đưa mã QR, điện thoại quét một cái. Và đây: quán Gắp Thêm, chạy trong Zalo thật, trên điện thoại thật. Buổi chiều đầu tiên, đếm bằng phút.
+Vì sao giữ kỹ? Mở terminal ra là biết. Node hai mươi sáu, một lệnh duy nhất: npx create-zalo-mini-app. CLI tự cài. Và prompt đầu tiên không hỏi tên project. Nó hỏi Mini App ID. Không có ID từ dashboard, bạn đứng chết ngay ở dòng này. Dán ID vào, chọn template có sẵn giỏ hàng, TypeScript, Tailwind. Đoạn cài dependencies mình cắt nhé, không ai cần xem thanh tải ba phút. Xong: npm start. Trình duyệt mở localhost ba nghìn. Nhưng đó mới là web. Hôm nay cần mở trong Zalo. CLI đưa mã QR, điện thoại quét một cái. Và đây: quán Chan Thêm, chạy trong Zalo thật, trên điện thoại thật. Buổi chiều đầu tiên, đếm bằng phút.
 
 Giờ đến mentor. Mình mở Antigravity, một IDE miễn phí, agent Opus nằm bên phải. Mình prompt tiếng Việt cho bạn dễ theo dõi. Làm thật thì prompt tiếng Anh rẻ hơn. Mình gửi spec quán: menu, đặt bàn, gọi món trước, voucher, blog. Kèm luật: trình plan trước, chờ mình duyệt, chưa đụng file. Opus trả lại bản plan rất hoành tráng. Thanh toán, giao hàng, tích điểm, đầy đủ hết. Đọc kỹ thì hợp lý, cho một nhà hàng. Nhưng quán mẹ mình có ba cái bàn. Thanh toán mùa sau. Giao hàng mùa sau. Tích điểm, nữa nữa. Mình cắt, và duyệt phần còn lại.
 
@@ -49,15 +49,15 @@ Tiêu chí cắt ghép của series: KHÔNG quay trực tiếp thời gian chờ
 
 | # | Tag | Nội dung quay | Dialogue map | Giây |
 |---|-----|---------------|--------------|------|
-| 1 | [PHONE] | Màn hình điện thoại thật: mở Zalo → vào "Gắp Thêm" → đặt bàn 30 giây, kết ở màn hình xác nhận | Beat 0 (4 câu đầu) | 45 |
+| 1 | [PHONE] | Màn hình điện thoại thật: mở Zalo → vào "Chan Thêm" → đặt bàn 30 giây, kết ở màn hình xác nhận | Beat 0 (4 câu đầu) | 45 |
 | 2 | [B-ROLL] | Bàn làm việc đêm, cà phê, gõ phím; overlay logo kênh + "MÙA MỚI" | Chào kênh + giới thiệu mùa | 25 |
 | 3 | [BROWSER] | Tab search Google "hướng dẫn làm zalo mini app": kết quả agency + docs Zalo; scroll nhanh | Gap (tutorial cũ/không có) | 30 |
 | 4 | [DIAGRAM] | Sơ đồ Excalidraw: web 10MB → webview trong Zalo → CDN; metaphor gian hàng trong TTTM; 3 nút: kiểm duyệt / permission / xác thực chủ sở hữu | 30 giây lý thuyết (phần 1) | 35 |
 | 5 | [DIAGRAM] | Bảng so sánh Cá nhân vs DN/HKD (xác thực, thời gian chờ, khi nào bắt buộc HKD) — hiện 6–7 giây, không đọc hết | "Bảng so sánh mình để trên màn hình..." | 20 |
-| 6 | [BROWSER] | mini.zalo.me: đăng nhập → tạo app → điền tên "Gắp Thêm" + danh mục Ẩm thực + upload icon → xong; ZOOM vào Mini App ID | "Giờ là tay chân... giữ kỹ" | 50 |
-| 7 | [TERM] | Terminal: gõ `npx create-zalo-mini-app gap-them`; prompt đầu hiện `? Mini App ID:` — hover/zoom dòng này; dán ID; chọn template e-commerce, TS, Tailwind | "Vì sao giữ kỹ?..." | 40 |
+| 6 | [BROWSER] | mini.zalo.me: đăng nhập → tạo app → điền tên "Chan Thêm" + danh mục Ẩm thực + upload icon → xong; ZOOM vào Mini App ID | "Giờ là tay chân... giữ kỹ" | 50 |
+| 7 | [TERM] | Terminal: gõ `npx create-zalo-mini-app chan-them`; prompt đầu hiện `? Mini App ID:` — hover/zoom dòng này; dán ID; chọn template e-commerce, TS, Tailwind | "Vì sao giữ kỹ?..." | 40 |
 | 8 | [TERM] | TIME-LAPSE 3–5s install + `npm start`; trình duyệt tự mở localhost:3000 hiện quán demo | "Đoạn cài dependencies mình cắt..." | 15 |
-| 9 | [PHONE] | Quét QR preview bằng Zalo → app "Gắp Thêm" mở trong Zalo thật; lướt menu demo | "Và đây: quán Gắp Thêm..." | 25 |
+| 9 | [PHONE] | Quét QR preview bằng Zalo → app "Chan Thêm" mở trong Zalo thật; lướt menu demo | "Và đây: quán Chan Thêm..." | 25 |
 | 10 | [IDE] | Antigravity mở repo: agent panel Opus bên phải; host DÁN prompt spec (Prompt 1, xem code/prompt-spec-quan.md); bấm gửi | "Giờ đến mentor... chưa đụng file" | 40 |
 | 11 | [IDE] | Plan của Opus hiện ra; host scroll, highlight mục thanh toán/giao hàng/tích điểm; gõ thêm yêu cầu cắt scope; status đổi "approved" | "Opus trả lại bản plan hoành tráng..." | 55 |
 | 12 | [DIAGRAM] | Graphic 6 bước workflow (số 1→6, vòng lặp) — làm 1 lần dùng lại cả series | "Nhìn lại màn hình..." | 45 |
@@ -76,7 +76,7 @@ Tiêu chí cắt ghép của series: KHÔNG quay trực tiếp thời gian chờ
 Lưu tại `code/prompt-spec-quan.md`:
 
 ```
-Bối cảnh: mình đang làm Zalo Mini App cho quán cơm gia đình nhỏ (tên Gắp Thêm),
+Bối cảnh: mình đang làm Zalo Mini App cho quán phở gia đình nhỏ (tên Chan Thêm),
 quay series YouTube. Project vừa scaffold từ template e-commerce của zmp-cli
 (React + TypeScript + Tailwind + ZaUI), chưa sửa gì. Backend dự kiến Supabase.
 
@@ -106,14 +106,14 @@ Cuối cùng gợi ý phần nào nên cắt khỏi v1 cho một quán 3 bàn.
 
 1. `Zalo Mini App #1: Một buổi chiều ra app cho quán nhà mình | Lập trình là cuộc sống`
 2. `Zalo Mini App #1: App chạy trong Zalo, 0 đồng nền tảng | Lập trình là cuộc sống`
-3. `Zalo Mini App #1: Không cần App Store, quán cơm có app riêng | Lập trình là cuộc sống`
+3. `Zalo Mini App #1: Không cần App Store, quán phở có app riêng | Lập trình là cuộc sống`
 4. `Zalo Mini App #1: Từ số 0 đến app mở trong Zalo thật | Lập trình là cuộc sống`
 5. `Zalo Mini App #1: Vibe coding app thật cho quán ăn | Lập trình là cuộc sống`
 
 ### 4b. SEO Description
 
 ```
-Quán cơm nhà mình vừa có app riêng — chạy ngay trong Zalo, không cần App Store, 0 đồng chi phí nền tảng. Tập 1 của series "Vibe Zalo Mini App": mình làm app thật cho quán ăn nhà mình và quay lại toàn bộ.
+Quán phở nhà mình vừa có app riêng — chạy ngay trong Zalo, không cần App Store, 0 đồng chi phí nền tảng. Tập 1 của series "Vibe Zalo Mini App": mình làm app thật cho quán ăn nhà mình và quay lại toàn bộ.
 
 ✅ Mini App Zalo là gì: web app < 10MB chạy trong webview Zalo
 ✅ Tạo app trên mini.zalo.me đúng quy trình mới 2026 (xác thực chủ sở hữu: cá nhân = eKYC xong ngay)

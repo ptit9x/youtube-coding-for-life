@@ -1,9 +1,9 @@
-# Prompt 1 — Spec quán "Gắp Thêm" cho Opus (EP01, scene 10–11)
+# Prompt 1 — Spec quán "Chan Thêm" cho Opus (EP01, scene 10–11)
 
 Gõ verbatim vào agent panel của Antigravity (Opus), theo đúng shot list:
 
 ```
-Bối cảnh: mình đang làm Zalo Mini App cho quán cơm gia đình nhỏ (tên Gắp Thêm),
+Bối cảnh: mình đang làm Zalo Mini App cho quán phở gia đình nhỏ (tên Chan Thêm),
 quay series YouTube. Project vừa scaffold từ template e-commerce của zmp-cli
 (React + TypeScript + Tailwind + ZaUI), chưa sửa gì. Backend dự kiến Supabase.
 
