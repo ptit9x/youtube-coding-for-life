@@ -26,7 +26,7 @@ Chạy thật. Khách đặt bàn, thêm tô đặc biệt và hai ly nước, g
 
 Rồi test vàng của tập này: mình vào Supabase, sửa giá tô đặc biệt lên gấp đôi, lưu. Mở lại đơn vừa rồi. Tổng tiền không nhúc nhích. Giá đã bị đóng băng từ lúc khách bấm gửi. Còn menu thì đã hiện giá mới. Cùng một món, hai con số, hai sự thật, mỗi sự thật đúng chỗ của nó.
 
-Nhưng меню ngày mai lại có vấn đề khác. Sáu giờ sáng hết bánh phở, mẹ gắn tạm nhãn "hết". Khách vẫn đặt tô, đơn vẫn về, quán vẫn phải chạy ra chào lỗi. App phải biết món nào hết trước khi khách bấm. Tập sau: một công tắc ở quầy, menu trên tay khách đổi trong vài giây. Làm theo cùng mình thì lưu kênh, hẹn gặp lại.
+Nhưng menu ngày mai lại có vấn đề khác. Sáu giờ sáng hết bánh phở, mẹ gắn tạm nhãn "hết". Khách vẫn đặt tô, đơn vẫn về, quán vẫn phải chạy ra chào lỗi. App phải biết món nào hết trước khi khách bấm. Tập sau: một công tắc ở quầy, menu trên tay khách đổi trong vài giây. Làm theo cùng mình thì lưu kênh, hẹn gặp lại.
 
 ---
 

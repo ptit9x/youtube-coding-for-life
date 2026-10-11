@@ -185,4 +185,4 @@ Khoảng trống khai thác: **tiếng Việt + mới 2026** (KYB bắt buộc t
 - ~~Q1 — Tên quán/app~~ **ĐÃ CHỐT: "Chan Thêm"** (repo `chan-them`). Lưu ý: trước khi tạo app thật ở EP01, host tự Google/Facebook search "Chan Thêm" quán ăn 30 giây + để Zalo dashboard chặn trùng tên nếu có.
 - ~~Q2 — Xác thực chủ sở hữu~~ **ĐÃ CHỐT: Cá nhân** (Zalo eKYC). Chuyện hộ kinh doanh giải thích bằng narration trong EP01 (khi nào cần HKD), không làm thật trên camera.
 - ~~Q3 — Nhịp đăng~~ **ĐÃ CHỐT: mùa riêng**, không xen kẽ NestJS. Hệ quả: quay theo batch (block 3–4 tập/lượt); EP10 bấm gửi duyệt thật rồi quay tiếp các tập khác, chèn cảnh "Đã duyệt" thật vào EP11 khi quay bổ sung.
-- **CLI probe đã chạy thật (10/2026):** Node v26.7.0 + `create-zalo-mini-app` 1.0.4 (tự cài `zmp-cli` 4.0.3 global). Prompt đầu tiên của CLI là `Mini App ID:` → host phải có ID từ dashboard TRƯỚC khi chạy lệnh — đưa факт này vào EP01.
+- **CLI probe đã chạy thật (10/2026):** Node v26.7.0 + `create-zalo-mini-app` 1.0.4 (tự cài `zmp-cli` 4.0.3 global). Prompt đầu tiên của CLI là `Mini App ID:` → host phải có ID từ dashboard TRƯỚC khi chạy lệnh — đưa fact này vào EP01.

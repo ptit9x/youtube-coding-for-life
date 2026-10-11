@@ -10,7 +10,7 @@
 
 Mọi tính năng đã xong. Giờ thì app đạt chuẩn chưa gửi duyệt được? Chưa. Vì người duyệt không phải mình, cũng không phải khách. Là một nhân viên Zalo, mở app của mình trong vòng năm phút, tìm một lý do để từ chối.
 
-Tập hôm nay đổi vai. Mình mời Opus đóng chính vai đó: người kiểm duyệt. Nhiệm vụ của nó: duyệt app Chan Thêm như duyệt app của người lạ, thật строго, liệt kê mọi lý do có thể từ chối. Cách dùng AI ít ai nói: không nhờ nó code, mà nhờ nó trở thành người khó tính thay mình.
+Tập hôm nay đổi vai. Mình mời Opus đóng chính vai đó: người kiểm duyệt. Nhiệm vụ của nó: duyệt app Chan Thêm như duyệt app của người lạ, thật nghiêm túc, liệt kê mọi lý do có thể từ chối. Cách dùng AI ít ai nói: không nhờ nó code, mà nhờ nó trở thành người khó tính thay mình.
 
 Kết quả của một lượt duyệt giả: danh sách dài hơn mình tưởng. Nút menu dẫn tới trang template demo còn sót. Ảnh món chụp dọc, hiển thị méo. Hai permission khai báo mà một cái chưa từng gọi. Giấy tờ tùy thân của quán: thiếu trang chính sách quyền riêng tư. Và chữ lorem ipsum vẫn nằm trong một trang blog demo. Bốn tập polish không bằng một lượt bị bắt lỗi.
 
