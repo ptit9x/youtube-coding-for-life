@@ -141,9 +141,11 @@ Visuals carry ~60–70%. Narration is thoughtful and atmospheric, leaving room f
 screen recordings to breathe.
 - Density: **~90–110 words per minute** (Vietnamese is slightly denser than
   English narration but still NOT a talking-head lecture).
-- **Preferred runtime: 5–7 minutes.** Only go to 8–10 if the topic genuinely
-  demands it. Shorter is almost always better for dev content.
+- **Preferred runtime: 8–12 minutes.** Series "Học bằng LLM" cần 8–12 min vì
+  gộp nhiều outcome vào một video. Standalone videos (triết lý, dev stories)
+  vẫn nên 5–7 min. Shorter is almost always better for dev content.
 - 5 min ≈ 450–550 words. 7 min ≈ 630–770 words. 10 min ≈ 900–1100 words.
+  12 min ≈ 1100–1300 words.
 - Fewer words + more beautiful visuals beats dense narration. Each 2–3 sentences
   spans 15–25s of footage.
 - Short-to-medium sentences with clear breaks so the AI voice reads with gravity
@@ -175,6 +177,10 @@ that wanders.
    the full "rule of three" (code/career/life) unless it genuinely adds value.
    A single powerful closing line often hits harder than three parallel
    statements.
+   **Sign-off (cho series "Học bằng LLM"):** Sau beat ý nghĩa, đóng bằng công
+   thức chuẩn: (a) nhắc để link Git nhánh trong description, (b) mời comment,
+   (c) hẹn video sau, (d) "Mình là Richard. Lập trình là cuộc sống." — 2–3 câu
+   gọn, KHÔNG kéo dài. KHÔNG nói "subscribe", "like" hay "bell" trong script.
 
 **Career Story variant:** Dream (why I started coding) → First wall (imposter
 syndrome, first fail) → Grinding (learning phase) → Breakthrough (first real
@@ -198,6 +204,24 @@ QUY TẮC VÀNG — AI-DRIVEN DEVELOPMENT WORKFLOW (6 bước, mọi video serie
 bằng mắt → (4) host Approve → (5) AI Thực hiện code → (6) Kiểm chứng
 (git diff / test / chạy lại app). AI không bao giờ tự ý sửa. Thể hiện rõ
 workflow này trên màn hình trong mọi video series.
+KỸ THUẬT SẢN XUẤT — NARRATE OVER THE FAST-FORWARD (bắt buộc cho series LLM):
+- KHÔNG giải thích concept TRƯỚC rồi mới prompt AI. Giải thích TRONG LÚC
+  AI đang xử lý (voice-over trên fast-forward).
+- Flow: Submit prompt → tua nhanh AI processing + voice-over giải thích
+  concept → AI trả code → dừng tua, review diff → kiểm chứng.
+- Viewer thấy AI đang làm + nghe giải thích = hai kênh thông tin song song.
+  Không có dead time trên màn hình.
+- Mọi script phải sắp xếp giải thích concept song song với AI sequences.
+POSTMAN STANDARDIZATION (bắt buộc cho series hướng dẫn):
+- Mỗi tập phải có Postman collection export (JSON) trong `code/`.
+- Dùng biến môi trường `{{endpoint}}` (giá trị `http://localhost:3000`) cho
+  TẤT CẢ URL trong collection — KHÔNG gõ cứng `http://localhost:3000`.
+- Gom tất cả API đã xây từ đầu series đến tập hiện tại, nhóm theo folder
+  (Health Check, Auth, Users…).
+- Collection phải import được ngay — viewer clone repo, import JSON, tạo
+  environment variable `endpoint`, và test luôn.
+- Khi tập mới thêm endpoint, cập nhật collection cũ chứ KHÔNG tạo file mới.
+  File tên chuẩn: `<tên-project>.postman_collection.json`.
 
 ### 3. Voice and technique (mandatory)
 
@@ -335,7 +359,7 @@ for text.
 - [ ] **CONCISENESS: Could any section be shorter without losing meaning?** If
       yes, cut it. Developer viewers will click away from padding.
 - [ ] Word count matches ~90–110 wpm (not too long)?
-- [ ] **Runtime ≤ 7 minutes unless topic genuinely demands more?**
+- [ ] **Runtime ≤ 12 minutes for series LLM, ≤ 7 minutes for standalone?**
 - [ ] First sentence has tension/frustration, no intro?
 - [ ] All 6 beats in order (or career/concept variant)?
 - [ ] **No beat is longer than it needs to be? Beats merged where possible?**
@@ -349,6 +373,8 @@ for text.
 - [ ] Shot list includes pacing estimates that add up to target runtime?
 - [ ] Shot list specifies concrete code/commands/UI to record for each scene?
 - [ ] Dark-mode IDE aesthetic reminded (theme, font size ≥18px)?
+- [ ] **Narrate-over-fast-forward applied?** (giải thích concept TRONG LÚC AI
+      đang xử lý, không có dead time)
 - [ ] **Thumbnail prompts (Part 3) use cinematic code template with NO negative list?**
 - [ ] **Thumbnail package complete (Part 5): 3 options, each with a dedicated
       dramatized image prompt (neon lighting + code elements + empty text space)
@@ -383,17 +409,26 @@ Pick and deepen these lanes across multiple videos:
 - **NEVER** save content scripts or plans to the `scripts/` directory. The `scripts/` directory is exclusively for utility and automation scripts (e.g., Python, Bash).
 - Save output to a dedicated root directory for the series: `series-[tên-series]/` (e.g., `series-nestjs-ai`).
   - The main series plan must be saved exactly as `00-plan.md` at the root of the series folder.
-  - Each episode gets a sub-directory following the format `ep[số_tập]-[tên_tập]/` (e.g., `ep01-boilerplate/`).
+  - Each episode gets a sub-directory. Naming convention:
+    - EP01–07 (đã đăng/giữ nguyên): `NN-tên-tập/` (e.g., `01-hoc-nestjs-voi-ai/`)
+    - EP08+ (restructured): `epNN-tên-tập/` (e.g., `ep08-role-permission-relations/`)
+    - Tập gộp có subfolder `merged-from-*` chứa script/assets gốc từ tập cũ
     - Inside the episode directory, always name the main script file exactly `script.md`.
-    - Generate an `assets/` sub-directory for all media assets (thumbnails, screenshots, diagrams). Save thumbnails as `thumbnail-01-<desc>.jpg` in `assets/`.
+    - Generate an `assets/` sub-directory for all media assets (thumbnails, screenshots, diagrams).
     - Generate a `code/` sub-directory for all code snippets, examples, and prompt templates.
+    - **Postman collection:** Mỗi tập series hướng dẫn phải có file
+      `<tên-project>.postman_collection.json` trong `code/`. File này tích lũy
+      — tập sau kế thừa và mở rộng collection của tập trước, KHÔNG tạo file
+      riêng cho mỗi tập.
   - Create folder and files automatically — do not ask.
+  - **Series NestJS AI hiện tại: 29 tập (restructured từ 49).** Xem `series-nestjs-ai/00-plan.md` cho mapping chi tiết.
 
 ## General notes
 
 - A pasted competitor script means: analyze the structure and WRITE A COMPLETELY
   NEW one. Never translate, never copy phrasing.
-- No runtime specified → default 8–10 minutes.
+- No runtime specified → default 8–12 minutes (series LLM) or 5–7 minutes
+  (standalone).
 - Technical facts must be accurate; when unsure of a detail, describe it safely
   and generally rather than inventing specifics.
 - Channel strategy: each topic lane should have 15–20 videos exploring different

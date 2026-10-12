@@ -10,23 +10,41 @@
 
 ## PART 1 — SCRIPT
 
-VPN Mỹ chết. ChatGPT bắt đầu chặn. Còn một cửa đang mở — và nó miễn phí. Làm luôn.
+Xin chào. Ở video trước, mình đã hướng dẫn bạn đăng ký Muse bằng VPN Mỹ hoặc Canada.
 
-Video trước mình dạy đăng ký bằng VPN. Ba ngày qua: điền ngày sinh xong là waitlist. Đổi server, đổi nước — vẫn vậy.
+Cách đó từng hoạt động. Nhưng hiện tại, Muse đang siết VPN ngày càng chặt.
 
-Vì sao Muse siết? Vì cửa bị lạm dụng. Referral cho mỗi bên một tỷ token — người ta farm hàng chục tài khoản ảo, gom thành những acc hàng nghìn tỷ đem bán. Muse trả chi phí thật cho mỗi agent chạy, nên nó chống lại: blacklist dải IP VPN, chấm điểm cả môi trường trình duyệt, bắt xác minh thẻ. Người farm làm cửa hẹp lại — người thiệt là người dùng thật.
+Mình thử tiếp bằng ChatGPT Plus. Mình mở một khung chat mới, rồi yêu cầu nó truy cập trang đăng ký Muse.
 
-Cộng đồng tìm cửa thứ hai: trình duyệt mây của ChatGPT Work — chạy trên server Mỹ. Vào được thật hôm đầu tuần, nhưng cần Plus hai mươi đô. Và khi mình quay lại để làm video — chặn. Các bạn đang xem footage thật. Gemini Spark cũng không được. Meta đang đóng từng cửa một, nhanh.
+ChatGPT mở Muse trên server Mỹ ngay trong cửa sổ chat. Mình nhập email, mã OTP và ngày sinh như bình thường.
 
-Nên hôm nay mình dùng cửa thứ ba: Lexmount — cloud browser vốn dành cho dev chạy AI agent: một Chromium thật trên máy chủ của họ, mình điều khiển từ máy mình. Có gói miễn phí. Điểm mấu chốt: nó là một phiên trình duyệt sạch từ trung tâm dữ liệu — chưa nằm trong danh sách đen của Muse. Chưa — đó là từ khóa.
+Nhưng sau bước cuối, tài khoản vẫn bị đưa vào waitlist. Đây là footage mình vừa quay, không phải ảnh cộng đồng.
 
-Bước một: vào browser dot lexmount dot com. Đăng ký bằng Google — bấm đúng nút Sign up, không phải Sign in. Vào console, tìm mục Cloud Browser, bấm Run. Một trình duyệt Chromium từ xa mở ra trên màn hình bạn.
+Nguyên nhân nằm ở việc các cửa này đang bị lạm dụng. Referral cho mỗi bên một tỷ token.
 
-Bước hai: trong trình duyệt từ xa đó, gõ muse.ai slash join. Form đăng ký load sạch sẽ — không waitlist. Điền một Gmail chưa từng dùng đăng Muse. Muse gửi mã PIN về email — mở hộp thư, nhập mã. Không thấy mã thì lục thư rác.
+Nhiều người farm hàng chục tài khoản ảo. Họ gom token thành những tài khoản hàng nghìn tỷ rồi đem bán.
 
-Bước ba — chi tiết quan trọng nhất: điền ngày sinh trùng với ngày sinh của tài khoản Gmail. Cộng đồng phát hiện: khi hai thông tin khớp nhau, Muse không hỏi xác minh thẻ. Tín hiệu nhất quán — hệ thống chống bot tin bạn là người thật.
+Muse phải trả chi phí thật mỗi khi agent chạy. Vì vậy, họ bắt đầu blacklist IP VPN và kiểm tra môi trường trình duyệt.
 
-Vào được rồi thì thoát khỏi cloud browser. Đăng nhập lại bằng Chrome thường — không cần VPN, không cần gì cả. Vào Cài đặt, Quy đổi mã lời mời, nhập mã trong vòng bốn mươi tám giờ — mã của mình nằm dưới mô tả, cả hai bên cùng một tỷ.
+Kết quả là VPN không còn ổn định. ChatGPT cũng dính waitlist. Gemini Spark cũng không qua được.
+
+Người farm tìm cách lách cửa. Người dùng thật lại là người mắc kẹt bên ngoài.
+
+Nhưng mình thử thêm một cửa: Lexmount. Đây là cloud browser dành cho dev chạy AI agent.
+
+Nó mở một Chromium thật trên máy chủ từ xa. Quan trọng nhất, mình đã đăng ký Muse thành công bằng cách này.
+
+Cách làm như sau.
+
+Bước một: vào browser dot lexmount dot com. Bấm Sign up, tạo tài khoản rồi xác minh email. Vào console, mở Cloud Browser và khởi chạy một phiên mới. Một trình duyệt Chromium từ xa xuất hiện ngay trong tab.
+
+Bước hai: trong trình duyệt từ xa đó, gõ muse.ai slash join. Điền một Gmail chưa từng dùng đăng Muse. Muse gửi mã PIN về email. Mở hộp thư, lấy mã rồi quay lại nhập. Không thấy mã thì lục thư rác.
+
+Bước ba — chi tiết quan trọng nhất: điền ngày sinh trùng với ngày sinh của tài khoản Gmail. Cộng đồng phát hiện cách này thường không bị hỏi thẻ. Tín hiệu nhất quán giúp hệ thống tin đây là người dùng thật.
+
+Sau màn lưu ý, Muse mở thẳng vào giao diện chat. Đây là điểm khác biệt: cùng quy trình, nhưng lần này không còn waitlist.
+
+Giờ thoát cloud browser. Mở Chrome thường trên máy, không VPN, rồi đăng nhập lại bằng email vừa tạo. Nhập mã PIN, mở mục Redeem, rồi điền mã trong vòng bốn mươi tám giờ. Mã của mình nằm dưới mô tả. Thành công, cả hai bên cùng nhận một tỷ token.
 
 Giờ nói thẳng bốn điều.
 
@@ -44,22 +62,26 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~7:40 (460s visuals, ~676 từ @ ~100 wpm, fill ~88%).**
+**Tổng thời lượng mục tiêu: ~7:40 (460s visuals, ~684 từ @ ~90 wpm).**
 
 **Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar. Chuẩn bị: tài khoản Google demo, Gmail demo sạch (chưa từng đụng Muse/Facebook), ngày sinh của Gmail demo ghi sẵn. Không bật VPN ở bất kỳ cảnh nào.
 
 | # | Thời lượng | Loại | Narration tương ứng | Footage | Ghi chú |
 |---|-----------|------|---------------------|---------|---------|
-| 1 | 20s | **[BROWSER]** | "VPN Mỹ chết... làm luôn." | Màn waitlist thật "You're on the waitlist" + 3 icon lần lượt gạch X: VPN, ChatGPT, Spark → logo Lexmount sáng lên | Hook 3 nhịp — KHÔNG intro |
-| 2 | 60s | **[DIAGRAM]** | "Nếu anh em xem... người dùng thật." | Excalidraw: hàng loạt acc ảo ùa qua cổng → cổng "region gate" phản ứng: bảng đen IP VPN + chấm browser environment → user thật rơi waitlist | Beat cơ chế + nhân-quả farm |
-| 3 | 60s | **[BROWSER + DIAGRAM]** | "Cộng đồng tìm cửa... nhanh." | FOOTAGE THẬT đã quay: ChatGPT Work mở muse.ai → báo lỗi/chặn → cut sơ đồ 4 cửa: VPN ❌ (blacklist) → ChatGPT ❌ (vừa chết) → Spark ❌ → Lexmount ✅ "CHƯA blacklist" | Cảnh lỗi thật là bằng chứng — highlight chữ "CHƯA" |
-| 4 | 40s | **[BROWSER]** | "Nên hôm nay... mở ra trên màn hình bạn." | browser.lexmount.com → Sign up bằng Google (zoom đúng nút, 2–3s) → console → Cloud Browser → Run → Chromium từ xa mở | Cảnh "tiền" #1 — quay UI thật theo thời điểm quay |
-| 5 | 65s | **[BROWSER]** | "Bước hai... lục thư rác." | Trong remote browser: gõ muse.ai/join → form load sạch → điền Gmail demo → submit → cut sang Gmail: PIN tới → quay lại nhập | Zoom form không-waitlist — khoảnh khắc "vào được rồi" |
-| 6 | 40s | **[BROWSER]** | "Bước ba... tin bạn là người thật." | Điền ngày sinh — overlay 2 thẻ ghi chú ghép nhau: "Gmail DOB ✓" + "Form DOB ✓" → dấu tích → badge "KHÔNG HỎI THẺ" | Trick cộng đồng — quay thật; nếu vẫn hỏi thẻ thì quay cảnh đó + bẻ narration nói thẳng |
-| 7 | 35s | **[BROWSER]** | "Vào được rồi... cùng một tỷ." | Đóng remote browser → Chrome thường (biểu tượng VPN OFF rõ) → muse.ai login OK → Settings → Redeem → hạn mức 1 tỷ nhảy | Zoom con số 1 tỷ lúc nhảy |
-| 8 | 45s | **[DIAGRAM]** | "Hai: cloud browser... máy của chính mình." | Sơ đồ ranh giới tin tưởng: cloud browser = "MÁY NGƯỜI KHÁC" (hộp công khai ✅ / hộp khóa ngân hàng-email-thẻ ❌ gạch X) → laptop "MÁY BẠN" dấu tích | Beat bảo mật — vẽ tối giản, tông lạnh |
-| 9 | 55s | **[DIAGRAM]** | "Bốn: đừng góp phần... cũng vậy." | Cây referral (+1 tỷ/nhánh) → farm 10+ acc → bảng giá "$" → vòng lặp lạm dụng → cổng siết → "CỬA NÀO BỊ FARM CŨNG CHẾT" | Beat chợ đen + hệ quả |
-| 10 | 40s | **[B-ROLL]** | "Cửa nào rồi cũng bị vá... dựng video." | Night desk: 3 màn hình mờ dần (VPN/ChatGPT/Lexmount) → một màn sáng còn lại; fade text "MÃ REF: XEM MÔ TẢ" + card EP02 | CTA + tease EP02 |
+| 1 | 10s | **[BROWSER]** | "Xin chào... ngày càng chặt." | Chèn 2–3 giây thumbnail hoặc footage EP01 dùng VPN Mỹ/Canada → overlay VPN ❌ | Recap rất nhanh video trước |
+| 2 | 30s | **[BROWSER]** | "Mình thử tiếp... ảnh cộng đồng." | `01_start_with_chatgpt.mov` nối `02_start_with_chatgpt.mov`: mở chat mới → yêu cầu truy cập Muse → email → OTP → ngày sinh → waitlist | Speed ramp phần nhập; giữ màn waitlist 4 giây. Blur email, OTP và ngày sinh |
+| 3 | 40s | **[DIAGRAM]** | "Nguyên nhân nằm... trình duyệt." | Referral `+1 TỶ` → nhiều tài khoản ảo → gom thành acc hàng nghìn tỷ → agent chạy làm đồng hồ chi phí tăng → VPN IP bị blacklist | Motion diagram, không cần AI footage |
+| 4 | 30s | **[BROWSER + DIAGRAM]** | "Kết quả là... bên ngoài." | Freeze waitlist từ clip 02 → ba icon VPN ❌, ChatGPT ❌, Gemini Spark ❌ → người dùng thật bị đẩy ra ngoài cổng Muse | Kết luận ngắn, không lặp lại toàn bộ thao tác |
+| 5 | 20s | **[BROWSER]** | "Nhưng mình thử thêm... cách làm như sau." | Đầu `03_lexmount.mov`: trang chủ Lexmount → Sign up → flash nhanh giao diện Muse đã vào thành công rồi quay lại bước đầu | Cho người xem thấy kết quả trước khi walkthrough |
+| 6 | 40s | **[BROWSER]** | "Bước một... ngay trong tab." | `03_lexmount.mov`: tạo tài khoản → xác minh email → console → Cloud Browser → khởi chạy phiên → mở tab remote | Cắt đoạn nhập lại hoặc thông báo gửi email lỗi; chỉ giữ một lần thao tác thành công |
+| 7 | 45s | **[BROWSER]** | "Bước hai... lục thư rác." | `04_lexmount.mov`: trong remote Chromium mở Muse → nhập Gmail → lấy PIN → nhập mã | Crop vào khung Chromium bên trong; blur Gmail và PIN |
+| 8 | 35s | **[BROWSER]** | "Bước ba... người dùng thật." | Cuối `04_lexmount.mov` nối đầu `05_lexmount.mov`: chọn ngày sinh khớp Gmail → Continue | Không khẳng định tuyệt đối rằng cách này luôn tránh thẻ; dùng chữ "thường" |
+| 9 | 30s | **[BROWSER]** | "Sau màn lưu ý... không còn waitlist." | `05_lexmount.mov`: màn "A few things to know" → Get started → giao diện Muse chat | Giữ trạng thái Muse Connected; đây là payoff thứ hai |
+| 10 | 35s | **[BROWSER]** | "Giờ thoát cloud browser... một tỷ token." | Cuối `05_lexmount.mov` + `06_lexmount.mov`: Chrome thường → đăng nhập → PIN → Redeem a code → popup Congratulations, một tỷ token | Zoom popup thành công; che referral khi chưa muốn lộ sớm |
+| 11 | 30s | **[DIAGRAM]** | "Giờ nói thẳng... làm hôm nay." | Dùng chương `01 — MẸO CỘNG ĐỒNG` trong `assets/bon-dieu-can-biet-28s.mp4`; giữ frame cuối nếu lời thoại dài hơn | Nhịp nghỉ trước phần cảnh báo |
+| 12 | 35s | **[DIAGRAM]** | "Hai: cloud browser... máy của chính mình." | Dùng chương `02 — MÁY CỦA NGƯỜI KHÁC` trong `assets/bon-dieu-can-biet-28s.mp4`; freeze card cảnh báo khi cần | Nhắc người xem không nhập dữ liệu nhạy cảm |
+| 13 | 45s | **[DIAGRAM]** | "Ba: miễn phí... cũng vậy." | Dùng chương `03 — FREE CÓ GIỚI HẠN` và `04 — ĐỪNG FARM TÀI KHOẢN` trong `assets/bon-dieu-can-biet-28s.mp4`; kéo dài frame cuối mỗi chương theo voice | Gộp cảnh báo giới hạn và farm để giữ nhịp |
+| 14 | 35s | **[B-ROLL]** | "Cửa nào rồi cũng bị vá... dựng video." | Màn Congratulations → fade sang desk tối → text "MÃ REF: XEM MÔ TẢ" + card EP02 | CTA ngắn, không lặp lại quy trình |
 
 **Tổng: 460s visuals + breathing pauses ≈ 7:40.**
 
@@ -67,8 +89,8 @@ Cửa nào rồi cũng bị vá. Nhưng bài học giữ nguyên: khi một cán
 
 ```text
 Bước Lexmount (chính):
-1. https://browser.lexmount.com → Sign up (không phải Sign in) bằng Google
-2. Console → Cloud Browser → Run
+1. https://browser.lexmount.com → Sign up → tạo tài khoản → xác minh email
+2. Console → Cloud Browser → khởi chạy phiên mới
 3. Trong remote browser: mở https://muse.ai/join
 4. Điền Gmail chưa từng dùng đăng Muse → lấy mã PIN trong email (check thư rác) → nhập
 5. Ngày sinh: điền TRÙNG ngày sinh của tài khoản Gmail → tránh bị hỏi xác minh thẻ
@@ -76,10 +98,11 @@ Bước Lexmount (chính):
 ```
 
 **Lưu ý quay:**
-- Verify trước 30 phút: (1) Lexmount free còn cho Run session không, console UI có đổi không; (2) trick ngày sinh trùng Gmail còn tránh được bước thẻ không (nếu không còn: quay cảnh thật + bẻ narration nói thẳng); (3) login từ VN không VPN còn OK không. Nếu Lexmount đã bị Muse chặn IP vào đúng ngày quay → quay cảnh "đã bị vá" + bóc cơ chế, vẫn là video tốt.
+- Footage chính đã đủ theo thứ tự `01` → `06`. Khi dựng, không dùng toàn bộ thời lượng gốc; speed ramp phần nhập liệu và cắt mọi đoạn chờ.
+- Verify trước khi đăng: Lexmount còn mở phiên free không; login từ Việt Nam không VPN còn hoạt động không. Nếu trạng thái đổi, thêm card ngày kiểm tra thay vì quay lại toàn bộ.
 - KHÔNG quay hoặc blur: API key/console project của Lexmount, email thật.
 - Dùng đúng một tài khoản demo thật; không farm, giữ nguyên tắc series.
-- Cảnh waitlist hook (S1): nếu không tái hiện được bằng acc demo, dùng screenshot có nguồn từ cộng đồng — ghi credit trên màn.
+- Cảnh waitlist hook (S1): dùng footage ChatGPT đã quay làm nguồn chính. Giữ chuỗi thao tác đủ dài để người xem hiểu waitlist xuất hiện sau khi submit, không phải lỗi tải trang.
 
 ---
 
@@ -115,12 +138,13 @@ A cinematic photograph of a developer silhouette facing a massive wall of glowin
 
 ## PART 5 — THUMBNAIL PACKAGE (3 options)
 
-### Option 1 — "VPN Chết?" (khuyên dùng — image Prompt 1)
+### Option 1 — "VPN Chết?" (khuyên dùng — image Prompt 1) — ✅ ĐÃ RENDER: `assets/thumbnail-01-with-text.jpg`
 
 **5b. Text spec:**
 - Line 1: **VPN CHẾT?** — `#FF4444` neon red
-- Line 2: **CỬA CUỐI MỞ** — `#00FF41` neon green
-- Line 3 (small badge): **MIỄN PHÍ — 10/2026** — `#00D4FF` cyan, nền badge `#1a1a2e` viền neon
+- Line 2: **CỬA CUỐI** — `#00FF41` neon green
+- Line 3: **VẪN MỞ** — `#00FF41` neon green
+- Line 4 (small badge): **MIỄN PHÍ — 10/2026** — `#00D4FF` cyan, nền badge `#1a1a2e` viền neon
 
 ### Option 2 — "Cloud Browser" (image Prompt 2)
 
@@ -148,16 +172,17 @@ A cinematic photograph of a developer silhouette facing a massive wall of glowin
 VPN Mỹ vẫn waitlist, ChatGPT bắt đầu chặn — đăng ký Muse AI từ Việt Nam giờ đi bằng cloud browser miễn phí. Không VPN, không Plus, không thẻ.
 
 Video này giải thích + walkthrough thật:
-⏩ 0:00 — Ba cửa chết
-⏩ 0:20 — Vì sao Muse siết: farm acc + chợ bán token
-⏩ 1:20 — Bốn cánh cửa: VPN, ChatGPT (footage lỗi thật), Spark, Lexmount
-⏩ 2:20 — Lexmount: cloud browser miễn phí
-⏩ 3:00 — Walkthrough: signup, Run, mở muse.ai
-⏩ 4:05 — Gmail sạch + mã PIN
-⏩ 4:45 — Trick ngày sinh: tránh xác minh thẻ
-⏩ 5:20 — Vào rồi: login không VPN + mã 1 tỷ token
-⏩ 6:05 — Nói thẳng: cloud browser là máy người khác
-⏩ 7:00 — Chợ acc: mua token = mất trắng, farm = tự đóng cửa
+⏩ 0:00 — Thử thật bằng ChatGPT: vẫn rơi vào waitlist
+⏩ 0:40 — Vì sao Muse siết: farm acc + blacklist
+⏩ 1:20 — ChatGPT và Gemini đều không qua được
+⏩ 1:50 — Lexmount: cửa còn đang mở
+⏩ 2:10 — Tạo tài khoản và chạy cloud browser
+⏩ 2:50 — Đăng ký Muse, nhận mã PIN
+⏩ 3:35 — Điền ngày sinh và hoàn tất
+⏩ 4:10 — Vào Muse thành công, không waitlist
+⏩ 4:40 — Đăng nhập không VPN + nhận một tỷ token
+⏩ 5:15 — Bốn điều phải biết trước khi làm
+⏩ 6:20 — Free có giới hạn, đừng farm tài khoản
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎁 NHẬN 1 TỶ TOKEN MUSE MIỄN PHÍ

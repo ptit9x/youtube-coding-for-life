@@ -1,9 +1,9 @@
-# EP02 — Muse AI Một Tuần Sau: Code Review, Schedule, Tiếng Việt, Ảnh & Video
+# EP02 — Muse AI Một Tuần Sau: Code Review, Schedule, Tiếng Việt, Ảnh, Video & API
 
 - **Series:** AI Miễn Phí — EP02, tiếp nối EP01 đã phát hành ("Cách sử dụng VPN Free để lấy 1 TỶ Token Muse AI", https://youtu.be/hQzSDxDhX6s).
-- **Target runtime:** ~7:50 (468s visuals, ~690 từ @ 100 wpm, fill ~88%).
-- **Outcome:** Người xem biết Muse làm được gì ngoài chat: review code thật, đặt lịch agent tự chạy, TTS tiếng Việt (giới hạn giọng), gen ảnh, gen ảnh thành video — và tiêu token thế nào.
-- **Nguyên tắc:** Thẳng thắn, không tô hồng — giới hạn thật được nói rõ (không diff view, TTS thiếu giọng Nam, media gen đốt token nhanh).
+- **Target runtime:** ~10:00 (583s visuals, ~910 từ @ 100 wpm, fill ~91%).
+- **Outcome:** Người xem biết Muse làm được gì ngoài chat: review code thật, đặt lịch agent tự chạy, TTS tiếng Việt (giới hạn giọng), gen ảnh, gen ảnh thành video — tiêu token thế nào — và biến token free thành API bằng muse2api (1 tài khoản thật, không farm).
+- **Nguyên tắc:** Thẳng thắn, không tô hồng — giới hạn thật được nói rõ (không diff view, TTS thiếu giọng Nam, media gen đốt token nhanh, muse2api không chính thức).
 
 ---
 
@@ -37,13 +37,25 @@ Và chiêu cuối: biến chính ảnh vừa vẽ thành video. Upload lại ả
 
 Nói nhanh ba cái tên cho ai mới vào: Muse là app mình đang dùng. Muse Spark là model — bộ não bên dưới. Muse Code là công cụ dòng lệnh cho dev.
 
-Một tuần với Muse: code review được việc, schedule đáng tiền nhất, ảnh và video là bonus. Nếu bạn thấy hữu ích, dùng mã Ref của mình để có thêm một tỷ token — link ở phần mô tả.
+Nhưng cả năm việc trên đều có chung một giới hạn: bạn phải mở app, gõ prompt, chờ. Không có cách nào gọi Muse từ code. Meta có API chính thức — Meta Model API — nhưng phải trả tiền. Một tỷ token free trên app thì không có endpoint nào để dùng.
+
+Và đây là lúc cộng đồng open-source bước vào. muse-two-API — một dự án trên GitHub — biến chính tài khoản Muse của bạn thành một server API tương thích OpenAI. Một lệnh Docker, import cookie từ trình duyệt, xong.
+
+Mình thử. Docker compose up. Mở trang quản trị, import cookie — một tài khoản duy nhất, tài khoản thật của mình.
+
+Gọi thử chat completions — curl POST, model muse-spark, stream true. Response chạy, streaming từng token, y hệt gọi API của OpenAI. Tiếp, gen ảnh qua API — cùng prompt bàn dev ban đêm lúc nãy. Ảnh trả về qua URL. Tất cả từ terminal, không mở app.
+
+Nói thẳng ba điều. Một: đây là tool không chính thức — nó tự động hóa giao diện web Muse, Meta có thể chặn bất kỳ lúc nào. Hai: chỉ nên dùng một tài khoản thật của chính bạn — đừng farm nhiều tài khoản. Ba: khi Meta mở API miễn phí cho bản consumer — dùng cái đó thay, ngay lập tức.
+
+Nhưng hôm nay, nếu bạn cần Muse trong CI pipeline, trong chatbot, hay trong script tự động — đây là cách duy nhất không tốn tiền.
+
+Một tuần với Muse: code review được việc, schedule đáng tiền nhất, ảnh và video là bonus, và API không chính thức mở thêm một cánh cửa cho dev. Nếu bạn thấy hữu ích, dùng mã Ref của mình để có thêm một tỷ token — link ở phần mô tả.
 
 ---
 
 ## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
 
-**Tổng thời lượng mục tiêu: ~7:50 (468s visuals, ~690 từ @ 100 wpm ≈ 88% fill).**
+**Tổng thời lượng mục tiêu: ~10:00 (583s visuals, ~910 từ @ 100 wpm ≈ 91% fill).**
 
 **Cài đặt chung:** Dark mode toàn bộ; font ≥18px; ẩn bookmark bar; blur email/avatar cá nhân. App Muse for Mac cài sẵn. IDE theme Monokai/Dracula. Antigravity mở sẵn.
 
@@ -65,9 +77,15 @@ Một tuần với Muse: code review được việc, schedule đáng tiền nh�
 | 14 | 45s | **[BROWSER]** | "Giờ tới phần vẽ...giá của nó." | Prompt 5 → chờ gen (timer góc, giữ thật ~15s rồi speed-up) → ảnh trả về → Settings token usage nhảy | Zoom ảnh kết quả; caption "MEDIA ĂN TOKEN NHANH HƠN TEXT" |
 | 15 | 50s | **[BROWSER]** | "Và chiêu cuối...ba công cụ trả phí." | Upload lại ảnh vừa gen → Prompt 6 → chờ (speed-up phần dài) → video ngắn play loop 2 nhịp | Cảnh kết demo — video chạy loop 2 nhịp |
 | 16 | 20s | **[DIAGRAM]** | "Nói nhanh ba cái tên...cho dev." | 3 hộp: MUSE (app) → MUSE SPARK (model) → MUSE CODE (CLI) | Fix định nghĩa — khớp EP01 + fact-sheet |
-| 17 | 20s | **[B-ROLL]** | "Một tuần với Muse...phần mô tả." | Night desk: monitor glow, tách cà phê, bàn phím → fade to black + text Ref code | CTA nhẹ — không giục |
+| 17 | 15s | **[BROWSER]** | "Nhưng cả năm việc...để dùng." | Split screen: Muse app chat (trái) vs terminal trống (phải) → overlay "KHÔNG CÓ API FREE" | Beat chuyển tiếp |
+| 18 | 10s | **[BROWSER]** | "muse-two-API...xong." | GitHub repo page muse2api → scroll README → Docker badge highlight | Giới thiệu tool |
+| 19 | 25s | **[TERM]** | "Docker compose up...tài khoản thật của mình." | `docker compose up -d` → container logs → mở admin page (port một-tám-sáu-một-không) → import cookie → 1 account hiện xanh | Walkthrough deploy — quay thật |
+| 20 | 30s | **[TERM]** | "Gọi thử...không mở app." | curl POST /v1/chat/completions → streaming text → curl POST /v1/images/generations → URL trả về → mở ảnh | Split: curl trái, kết quả phải |
+| 21 | 20s | **[DIAGRAM]** | "Nói thẳng ba điều...ngay lập tức." | Overlay 3 bullet neon: ① Không chính thức — Meta có thể chặn ② 1 tài khoản thật duy nhất ③ Chuyển official API khi có | Giữ lâu cho viewer đọc kỹ |
+| 22 | 15s | **[TERM]** | "Nhưng hôm nay...không tốn tiền." | Terminal chạy script Python gọi Muse API → response hiện | Dev workflow thật |
+| 23 | 20s | **[B-ROLL]** | "Một tuần với Muse...phần mô tả." | Night desk: monitor glow, tách cà phê, bàn phím → fade to black + text Ref code + GitHub link muse2api | CTA nhẹ — không giục |
 
-**Tổng: 468s visuals + breathing pauses ≈ 7:50.**
+**Tổng: 583s visuals + breathing pauses ≈ 10:00.**
 
 ### Prompt trên màn hình (verbatim)
 
@@ -94,6 +112,18 @@ phong cách cinematic, tỷ lệ 16:9.
 
 Prompt 6 (ảnh thành video, kèm ảnh từ Prompt 5):
 Camera chậm rãi zoom vào màn hình bên trái.
+
+Prompt 7 (curl chat completions qua muse2api):
+curl -X POST "http://localhost:18610/v1/chat/completions" \
+  -H "Authorization: Bearer m2a_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"muse-spark","messages":[{"role":"user","content":"Giải thích dependency injection trong 3 câu"}],"stream":true}'
+
+Prompt 8 (curl gen ảnh qua muse2api):
+curl -X POST "http://localhost:18610/v1/images/generations" \
+  -H "Authorization: Bearer m2a_your_key" \
+  -H "Content-Type: application/json" \
+  -d '{"model":"muse-image","prompt":"Một bàn dev ban đêm, hai màn hình sáng, ánh neon xanh cyan","size":"16:9","response_format":"url"}'
 ```
 
 **Lưu ý quay:**
@@ -102,6 +132,7 @@ Camera chậm rãi zoom vào màn hình bên trái.
 - Schedule demo: nếu không quay qua đêm, đặt job chạy sau 2 phút để có tin nhắn tới trong cùng session; khoe thêm screenshot digest 8:00 thật của buổi sáng hôm trước.
 - TTS: verify danh sách giọng trước 30 phút quay — nếu Muse đã có giọng miền Nam, cập nhật narration và fact này.
 - Giữ nguyên độ trễ response khi edit — đó là sự thật, cắt sẽ mất tính chân thực.
+- **muse2api (cảnh 17–22):** Cài Docker trước khi quay. Clone `https://github.com/czg86389-hub/muse2api`, `docker compose up -d`, verify container chạy ổn. Import cookie từ browser đã login Muse — CHỈ 1 ACCOUNT. Test curl commands (Prompt 7, 8) trước để biết response time. Quay terminal font ≥18px, dark theme. Admin page: blur MUSE2API_KEY khi quay. Nếu muse2api bị takedown trước ngày quay, bỏ toàn bộ cảnh 17–22 và dùng closing cũ.
 - Ref code để ở description + pinned comment; nhắc viewer mã hết hạn 48h.
 
 ---
@@ -121,18 +152,18 @@ A cinematic photograph of a smartphone on a nightstand lighting up at dawn with 
 
 ## PART 4 — TITLES (10)
 
-1. Muse AI làm được gì ngoài chat? Review code, đặt lịch, đọc tiếng Việt, vẽ ảnh, dựng video | Lập trình là cuộc sống
+1. Muse AI làm được gì ngoài chat? Review code, đặt lịch, đọc tiếng Việt, vẽ ảnh, dựng video, và API | Lập trình là cuộc sống
 2. AI tự dậy 8 giờ sáng gửi tin cho bạn — Muse Schedule | Lập trình là cuộc sống
 3. 1 tỷ token Muse: một tuần sau, điều đáng tiền nhất không phải là code review | Lập trình là cuộc sống
 4. Muse AI đọc tiếng Việt: nghe thử rồi quyết định — và giọng miền Nam thì chưa có | Lập trình là cuộc sống
-5. Biến ảnh thành video ngay trong Muse AI — miễn phí | Lập trình là cuộc sống
+5. 1 tỷ token Muse nhưng KHÔNG CÓ API — cộng đồng open-source giải quyết | Lập trình là cuộc sống
 6. Từ text sang ảnh sang video, tất cả trong 1 app miễn phí của Meta | Lập trình là cuộc sống
 7. Muse AI review code React: lộ API key ngay lần đầu | Lập trình là cuộc sống
 8. Trợ lý AI của Meta: review code, đọc Gmail, đặt lịch, vẽ ảnh — một app | Lập trình là cuộc sống
-9. 5 việc bạn nên thử ngay khi có 1 tỷ token Muse | Lập trình là cuộc sống
+9. 6 việc bạn nên thử khi có 1 tỷ token Muse — kể cả biến nó thành API | Lập trình là cuộc sống
 10. Muse AI một tuần sau: điểm đáng tiền nhất và điểm trừ lớn nhất | Lập trình là cuộc sống
 
-**Khuyên dùng:** Title 2 (schedule là hook khác biệt nhất so với mọi video Muse review khác) hoặc Title 6 (text→ảnh→video dễ viral). A/B test Title 1 cho người cần overview.
+**Khuyên dùng:** Title 5 (API gap + cộng đồng giải quyết = hook khác biệt nhất, dev-oriented). Alt: Title 2 (schedule) hoặc Title 9 (overview + API teaser). A/B test Title 1 cho người cần overview.
 
 ---
 
@@ -168,7 +199,7 @@ A cinematic photograph of a smartphone on a nightstand lighting up at dawn with 
 ### Description
 
 ```
-1 tỷ token rồi làm gì? Mình dùng Muse AI của Meta một tuần: review code dự án thật, đặt lịch cho agent tự chạy mỗi sáng, đọc tiếng Việt, vẽ ảnh và biến ảnh thành video.
+1 tỷ token rồi làm gì? Mình dùng Muse AI của Meta một tuần: review code dự án thật, đặt lịch cho agent tự chạy mỗi sáng, đọc tiếng Việt, vẽ ảnh, biến ảnh thành video — và biến token free thành API bằng muse2api.
 
 Video này cho bạn thấy:
 ⏩ 0:00 — Muse làm được gì ngoài chat?
@@ -179,6 +210,8 @@ Video này cho bạn thấy:
 ⏩ 4:53 — TTS tiếng Việt: nghe thử (chưa có giọng miền Nam)
 ⏩ 5:33 — Gen ảnh từ text
 ⏩ 6:18 — Biến ảnh thành video
+⏩ 7:18 — muse2api: biến token free thành OpenAI-compatible API
+⏩ 8:23 — 3 điều phải biết trước khi dùng (không chính thức!)
 
 ━━━━━━━━━━━━━━━━━━━━━━
 🎁 NHẬN 1 TỶ TOKEN MUSE MIỄN PHÍ
@@ -192,14 +225,15 @@ Video này cho bạn thấy:
 ━━━━━━━━━━━━━━━━━━━━━━
 ▸ Video trước — đăng ký Muse AI từ VN: https://youtu.be/hQzSDxDhX6s
 ▸ Muse AI: https://muse.ai
+▸ muse2api (không chính thức — chỉ dùng 1 tài khoản thật): https://github.com/czg86389-hub/muse2api
 
-#MuseAI #Meta #AIAgent #Schedule #TTS #TextToImage #LapTrinhLaCuocSong #AIMienPhi
+#MuseAI #Meta #AIAgent #Schedule #TTS #TextToImage #muse2api #LapTrinhLaCuocSong #AIMienPhi
 ```
 
 ### Tags (paste vào YouTube Studio)
 
 ```
-Muse AI, Meta Muse, Muse AI review, Muse AI schedule, AI tự động chạy, AI agent đặt lịch, Muse TTS tiếng Việt, muse text to speech việt nam, giọng đọc AI miền nam, Muse gen ảnh, Muse image generation, muse ảnh thành video, image to video AI, 1 tỷ token Muse, Muse referral code, Muse code review, AI review code React, Muse connectors, Muse Gmail, AI miễn phí cho dev, trợ lý AI Meta, lập trình là cuộc sống
+Muse AI, Meta Muse, Muse AI review, Muse AI schedule, AI tự động chạy, AI agent đặt lịch, Muse TTS tiếng Việt, muse text to speech việt nam, giọng đọc AI miền nam, Muse gen ảnh, Muse image generation, muse ảnh thành video, image to video AI, 1 tỷ token Muse, Muse referral code, Muse code review, AI review code React, Muse connectors, Muse Gmail, AI miễn phí cho dev, trợ lý AI Meta, muse2api, muse api free, muse openai compatible, muse docker api, lập trình là cuộc sống
 ```
 
 ### Hashtags (3 hiển thị trên tiêu đề)

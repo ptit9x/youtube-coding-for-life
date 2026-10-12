@@ -1,7 +1,12 @@
-# Một email trùng làm NestJS crash 500 — sửa đúng lỗi 409 | TaskFlow #4
+# Đừng biến mọi lỗi NestJS thành 500 | Error Handling - EP04
 
 - **Series:** Học NestJS bằng AI — tập 4/45
-- **Target runtime:** 5:00–6:00 (khoảng 500 từ thoại)
+- **Trạng thái:** ✅ Đã đăng
+- **Title đã đăng:** Đừng biến mọi lỗi NestJS thành 500 | Error Handling - EP04
+- **YouTube:** https://www.youtube.com/watch?v=KwQ7Sr8727Y
+- **Ngày đăng:** 2026-10-06
+- **Thời lượng thực tế:** 7:58
+- **Target runtime:** 7:58 (thời lượng video đã đăng)
 - **Outcome:** Chuẩn hóa lỗi 400, 404, 409; che chi tiết nội bộ khỏi client; map trực tiếp sqlState 23505 trong repository.
 - **Pain mở EP05:** API đã báo lỗi đẹp nhưng chưa có Auth, ai cũng gọi được.
 

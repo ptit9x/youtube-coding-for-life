@@ -75,11 +75,15 @@ Mình sửa một ký tự trong token. Chữ ký không còn khớp và guard c
 
 JWT không phải mã hóa bí mật. Payload có thể được đọc; chữ ký chỉ giúp phát hiện nó bị sửa.
 
+Giờ mình chuẩn hoá lại Postman một chút. Đặt một biến môi trường là `endpoint`, giá trị `http://localhost:3000`. Tất cả request đổi URL thành `{{endpoint}}` thay vì gõ cứng.
+
+Mình gom lại các API đã làm từ đầu series. Users có CRUD đầy đủ: list, create, find by ID, update, delete, count. Auth có register và login. Thêm `/users/me` cần Bearer token, và health check. Export collection thành file JSON để trong repo, bạn clone về là dùng được luôn.
+
 Cánh cửa đã biết người gõ là ai. Nhưng chuẩn bị xây Role và Permission, mình lại phải mô tả cùng convention cho AI.
 
 Tập sau, ta biến convention đã kiểm chứng thành Agent Skill. AI sẽ nhớ cách scaffold, còn mình vẫn giữ quyền duyệt.
 
-Đừng tin token chỉ vì nó trông dài và khó đọc. Theo dõi series để cùng kiểm tra từng lớp bảo vệ. Mình là Richard. Lập trình là cuộc sống.
+Mình sẽ để lại link Git của nhánh này trong description. Nếu có câu hỏi gì bạn hãy để lại comment nhé. Hẹn gặp ở video sau. Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -101,9 +105,10 @@ Tập sau, ta biến convention đã kiểm chứng thành Agent Skill. AI sẽ 
 | 12 | [IDE] | Host tự gõ `toPublicUser` và `@CurrentUser` | 50s |
 | 13 | [BROWSER] | Register, login sai, login đúng | 60s |
 | 14 | [BROWSER] | `/users/me`: thiếu, đúng và token bị sửa | 65s |
-| 15 | [B-ROLL] | Code phản chiếu, teaser Agent Skill | 20s |
+| 15 | [BROWSER] | Postman: tạo env variable `endpoint`, gom requests, export JSON | 50s |
+| 16 | [B-ROLL] | Code phản chiếu, teaser Agent Skill, sign-off | 20s |
 
-**Tổng: 730 giây ≈ 12:10.** Che token và JWT secret khi quay; font IDE tối thiểu 18px.
+**Tổng: 800 giây ≈ 13:20.** Che token và JWT secret khi quay; font IDE tối thiểu 18px.
 
 **Lưu ý flow mới:** Prompt được gõ ngay scene 2. Scenes 3–6 là giải thích khái niệm trong lúc agent lên plan — host nói voiceover, màn hình xen kẽ diagram và IDE hiện agent đang chạy. Scene 7 quay lại IDE khi agent trả kết quả.
 

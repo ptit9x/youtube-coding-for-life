@@ -1,15 +1,16 @@
-# NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2
+# Kiểm tra email và payload trong NestJS - EP02
 
 - **Series:** Học NestJS bằng AI — tập 2/45
-- **Trạng thái:** ✅ Đã đăng
-- **Title đã đăng:** NestJS ValidationPipe: Chặn data bẩn trước Controller | NestJS + AI #2
-- **YouTube:** https://www.youtube.com/watch?v=GCWSSb6-qhk
-- **Ngày đăng:** 2026-09-16
+- **Trạng thái:** ✅ Đã đăng (lần 2)
+- **Title đã đăng:** Kiểm tra email và payload trong NestJS - EP02
+- **YouTube:** https://www.youtube.com/watch?v=k3vi2u-Xabw
+- **Link cũ (đã xóa):** ~~https://www.youtube.com/watch?v=GCWSSb6-qhk~~
+- **Ngày đăng:** 2026-09-25
 - **Thời lượng thực tế:** 6:45
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; giữ workflow Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng.
 - **Technical baseline:** Tiếp tục project `nestjs-base-with-ai` từ EP01; Users API đang lưu dữ liệu trong RAM.
-- **Target runtime:** 6:45 (thời lượng video đã đăng)
+- **Target runtime:** 6:45
 - **Audience:** Dev mới vào nghề / Fresher đã xem EP01 hoặc biết controller/service cơ bản.
 - **Outcome chính:** Mọi payload đi vào Users API được kiểm tra trước controller bằng global ValidationPipe.
 - **Cấu trúc mới:** `src/common/pipes/app-validation.pipe.ts` — boundary toàn ứng dụng, không phụ thuộc business domain.

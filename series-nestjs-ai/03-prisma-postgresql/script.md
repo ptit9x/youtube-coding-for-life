@@ -1,10 +1,10 @@
-# NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
+# NestJS + Prisma 8: Lưu User vào PostgreSQL - EP03
 
 - **Series:** Học NestJS bằng AI — tập 3/45
 - **Trạng thái:** ✅ Đã đăng
-- **Title đã đăng:** NestJS + Prisma 8: Lưu User vào PostgreSQL | #3
+- **Title đã đăng:** NestJS + Prisma 8: Lưu User vào PostgreSQL - EP03
 - **YouTube:** https://www.youtube.com/watch?v=kUXmQxjecNE
-- **Ngày đăng:** 2026-09-20
+- **Ngày đăng:** 2026-09-19
 - **Thời lượng thực tế:** 14:19
 - **Target runtime:** 14:19 (thời lượng video đã đăng)
 - **Outcome:** Dựng PostgreSQL local không hardcode Compose config; cấu hình ENV có validation; thay Users in-memory bằng PostgreSQL qua Prisma 8 và repository contract.

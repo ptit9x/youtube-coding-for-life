@@ -75,8 +75,8 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
 - **File:** `bonus-1-5-muse-khi-moi-cua-deu-dong/script.md`
 - **Variant:** Học bằng LLM
 
-### EP02 — Trải nghiệm Muse AI trên Mac: Code Review, Connectors & Sự Thật
-- **Thời lượng mục tiêu:** ~5–6 phút (~500–550 từ)
+### EP02 — Trải nghiệm Muse AI trên Mac: Code Review, Connectors, Media & muse2api
+- **Thời lượng mục tiêu:** ~10 phút (~910 từ)
 - **Nội dung chính:**
   - Tiếp nối EP01 — bạn đã có 1 tỷ token, giờ dùng thử
   - Code review dự án React + Supabase: prompt qua ChatGPT → paste vào Muse
@@ -87,14 +87,16 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   - Token tiêu hao: vài % trên 1 tỷ
   - Connectors: Gmail connect → thống kê email nhanh → xóa rác bị chặn (cần
     thêm quyền ghi — điều tốt)
-  - Thẳng thắn: chưa có cách kết nối qua 9Router/AI Router
+  - Schedule: agent 8:00 gửi digest (khác biệt chatbot vs agent)
+  - TTS tiếng Việt (nghe được nhưng chưa có giọng miền Nam — nói thẳng)
+  - Gen ảnh từ text (đốt token nhanh hơn text)
+  - Gen ảnh thành video (image-to-video)
+  - **MỚI — muse2api:** Muse chưa có API cho free tier → cộng đồng open-source
+    xây bridge. Docker deploy → import 1 cookie (tài khoản thật duy nhất) →
+    OpenAI-compatible API (chat completions + image generation). Nói thẳng 3
+    điều: không chính thức, chỉ 1 account, chuyển official API khi Meta mở.
+    GitHub: https://github.com/czg86389-hub/muse2api
   - CTA nhẹ: ref code ở description
-- **Nội dung mới (rewrite 09/10/2026):** schedule (agent 8:00 gửi digest, khác biệt
-  chatbot vs agent), TTS tiếng Việt (nghe được nhưng chưa có giọng miền Nam — nói thẳng),
-  gen ảnh từ text (đốt token nhanh hơn text), gen ảnh thành video (image-to-video).
-  Giữ code review React+Supabase + connectors Gmail từ footage đã quay.
-  Đã sửa: định nghĩa Muse Spark = model (bản cũ sai "phiên bản nhẹ"), pacing 88% fill,
-  timestamps tính lại từ shot-list, thêm PART 6 SEO.
 - **Variant:** Học bằng LLM
 
 ### EP03 — Đăng ký ChatGPT miễn phí: không cần thẻ, không cần VPN

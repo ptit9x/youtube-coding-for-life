@@ -1,15 +1,16 @@
-# Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1
+# NestJS từ con số 0: Thực chiến cùng AI Mentor - EP01
 
 - **Series:** Học NestJS bằng AI — tập 1/45
-- **Trạng thái:** ✅ Đã đăng
-- **Title đã đăng:** Tạo Users API đầu tiên với NestJS + AI | NestJS từ số 0 #1
-- **YouTube:** https://www.youtube.com/watch?v=7lRvCk_CHLs
-- **Ngày đăng:** 2026-09-15
-- **Thời lượng thực tế:** 10:41
+- **Trạng thái:** ✅ Đã đăng (lần 2)
+- **Title đã đăng:** NestJS từ con số 0: Thực chiến cùng AI Mentor - EP01
+- **YouTube:** https://www.youtube.com/watch?v=p3LYkjwdlqg
+- **Link cũ (đã xóa):** ~~https://www.youtube.com/watch?v=7lRvCk_CHLs~~
+- **Ngày đăng:** 2026-09-24
+- **Thời lượng thực tế:** 10:38
 - **Định dạng:** Host tự quay màn hình + tự thoại âm. Không AI voice, không AI footage.
 - **AI tool:** Opus trong Antigravity IDE; có thể thay bằng coding agent khác nhưng giữ nguyên workflow.
 - **Technical baseline:** NestJS, Node.js, npm, Vitest và ES module theo lựa chọn trong Nest CLI tại thời điểm quay.
-- **Target runtime:** 10:41 (thời lượng video đã đăng)
+- **Target runtime:** 10:38
 - **Audience:** Dev mới vào nghề / Fresher — lần đầu chạm backend framework.
 - **Outcome chính:** Hiểu đường đi của một request và chạy được Users API trong `src/modules/users` bằng mảng in-memory.
 - **Pain mở tập 2:** DTO khai báo `email` là string nhưng payload số vẫn lọt qua vì chưa có validation runtime.
