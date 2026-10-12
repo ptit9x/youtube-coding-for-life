@@ -91,6 +91,37 @@ def parse_age_days(txt: str):
     return n * factor
 
 
+def scrape_shorts() -> list:
+    """Scrape the /shorts tab (shortsLockupViewModel renderer).
+
+    The /videos tab only lists long-form uploads; Shorts live under /shorts
+    and use a different renderer, so they must be fetched separately.
+    Returns [] when the tab is missing/unparseable (never fatal).
+    """
+    try:
+        data = fetch_initial_data(f"https://www.youtube.com/@{HANDLE}/shorts")
+    except Exception:
+        return []
+    shorts = []
+    for slv in find_all(data, "shortsLockupViewModel"):
+        try:
+            ov = slv["overlayMetadata"]
+            title = ov["primaryText"]["content"]
+            secondary = ov["secondaryText"]["content"]  # "162 lượt xem"
+            views = parse_views(secondary)
+        except (KeyError, IndexError):
+            continue
+        if title:
+            shorts.append({
+                "title": title,
+                "views": views,
+                "views_txt": secondary,
+                "pub": "",  # shorts tab shows no upload age
+                "age_days": None,
+            })
+    return shorts
+
+
 def scrape_channel() -> dict:
     about = fetch_initial_data(f"https://www.youtube.com/@{HANDLE}/about")
     meta = {}
@@ -129,10 +160,12 @@ def scrape_channel() -> dict:
         })
     if not videos:
         raise RuntimeError("0 videos parsed from /videos tab — renderer changed?")
+    shorts = scrape_shorts()
     return {
         "ts": datetime.now(TZ).isoformat(timespec="seconds"),
         "meta": {**meta, **meta_num},
         "videos": videos,
+        "shorts": shorts,
     }
 
 
@@ -182,6 +215,12 @@ def build_report(cur: dict, prev: dict | None) -> str:
         if gap > 10:
             lines.append(f"  ⚠️ Đã {gap:.0f} ngày chưa đăng video — cadence 1 video/tuần đang đứt!")
 
+    shorts = cur.get("shorts", [])
+    if shorts:
+        sviews = [s["views"] for s in shorts if s["views"] is not None]
+        lines.append(f"- Shorts công khai: {len(shorts)}"
+                     + (f" (tổng {sum(sviews)} views)" if sviews else ""))
+
     if not prev:
         lines.append("")
         lines.append("ℹ️ Đây là lần chạy đầu (baseline) — từ tuần sau sẽ có so sánh tăng trưởng.")
@@ -197,11 +236,17 @@ def build_report(cur: dict, prev: dict | None) -> str:
     cur_titles = {v["title"] for v in vids}
 
     new_videos = [v for v in vids if v["title"] not in prev_by_title]
-    if new_videos:
+    new_shorts = []
+    if shorts:
+        prev_shorts_by_title = {s["title"]: s for s in prev.get("shorts", [])}
+        new_shorts = [s for s in shorts if s["title"] not in prev_shorts_by_title]
+    if new_videos or new_shorts:
         lines.append("")
-        lines.append(f"**🆕 Video mới trong tuần ({len(new_videos)})**")
+        lines.append(f"**🆕 Video mới trong tuần ({len(new_videos)} long-form + {len(new_shorts)} shorts)**")
         for v in new_videos:
-            lines.append(f"- {v['title'][:70]} — {v['views_txt']}")
+            lines.append(f"- 📹 {v['title'][:70]} — {v['views_txt']}")
+        for s in new_shorts:
+            lines.append(f"- ⚡ {s['title'][:70]} — {s['views_txt']}")
     else:
         lines.append("")
         lines.append("🆕 Không có video mới trong tuần.")
@@ -211,6 +256,12 @@ def build_report(cur: dict, prev: dict | None) -> str:
         p = prev_by_title.get(v["title"])
         if p and v["views"] is not None and p["views"] is not None and v["views"] > p["views"]:
             grew.append((v["views"] - p["views"], v))
+    if shorts:
+        prev_shorts_by_title = {s["title"]: s for s in prev.get("shorts", [])}
+        for s in shorts:
+            p = prev_shorts_by_title.get(s["title"])
+            if p and s["views"] is not None and p["views"] is not None and s["views"] > p["views"]:
+                grew.append((s["views"] - p["views"], s))
     grew.sort(reverse=True, key=lambda x: x[0])
     if grew:
         lines.append("")
@@ -221,13 +272,17 @@ def build_report(cur: dict, prev: dict | None) -> str:
     subs = m.get("subs")
     if subs and subs > 0:
         fresh = [v for v in vids if v["age_days"] is not None and v["age_days"] <= 30 and v["views"]]
-        if fresh:
-            ratios = [v["views"] / subs for v in fresh]
-            best = max(fresh, key=lambda v: v["views"])
+        # Shorts carry no age on the /shorts tab; fold them into the
+        # distribution signal via their view counts only.
+        ratios = [v["views"] / subs for v in fresh]
+        ratios += [s["views"] / subs for s in shorts if s["views"]]
+        if ratios:
+            best_pool = fresh + shorts
+            best = max(best_pool, key=lambda v: v["views"])
             lines.append("")
             lines.append("**Signal phân phối**")
             lines.append(
-                f"- Views/sub video <30 ngày: cao nhất {max(ratios):.1f}× "
+                f"- Views/sub (<30 ngày + shorts): cao nhất {max(ratios):.1f}× "
                 f"(>2× = thuật toán đang đẩy ra ngoài)"
             )
             lines.append(f"- Video hiệu quả nhất: {best['title'][:60]} ({best['views_txt']})")
