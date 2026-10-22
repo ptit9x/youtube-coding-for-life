@@ -1,6 +1,6 @@
-# Series Plan — "Học NestJS bằng AI" (29 tập, lane: Học lập trình bằng LLM)
+# Series Plan — "Học NestJS bằng AI" (29 tập + bonus, lane: Học lập trình bằng LLM)
 
-- **Format:** 23 tập xây modular monolith, 6 tập Microservices. Host tự quay màn hình + tự thoại âm.
+- **Format:** 23 tập xây modular monolith, 6 tập Microservices, cộng các bonus xen giữa season khi một quyết định kỹ thuật xứng đáng có riêng một tập. Host tự quay màn hình + tự thoại âm.
 - **Thời lượng:** EP01–EP04 giữ thời lượng thực tế đã quay. Các video chưa quay hướng tới 8–12 phút với khoảng 800–1100 từ thoại; chỉ dài hơn khi outcome không thể tách hợp lý.
 - **Nguyên tắc tách tập:** Mỗi tập có một outcome chính và một pain nối sang tập sau. Nếu cần quá 18 phút để hoàn thành hai outcome độc lập, tách thành hai tập.
 - **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript `5.9+`, npm, ESM (`"type": "module"`) và PostgreSQL. Data layer dùng **Prisma ORM 8** với PSL contract; Node 24 nạp `temporal-polyfill/full/global` vì timestamp Prisma 8 là `Temporal.Instant`. Khi setup, luôn hiện phiên bản thực tế trên màn hình.
@@ -46,6 +46,7 @@ Submit prompt → ĐỒNG THỜI giải thích concept (voice-over trên fast-fo
 | 09 | 10 + 11 | PermissionGuard + Ownership |
 | 10 | 12 | Testing RBAC bằng Vitest |
 | 11 | 13 + B13.5 + 14 | DRY, Abstraction và Common Library |
+| B11.5 | mới | Bonus: Zod vs class-validator |
 | 12 | 15 + 16 | Request Lifecycle + Docker Deploy |
 | 13 | 17 + B17.5 | Swagger + REST vs GraphQL |
 | 14 | 18 | Rate Limiting & Helmet |
@@ -314,7 +315,18 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 - Files gốc: `13-dry-abstraction-nestjs/`, `bonus-13-5-typeorm-nestjs/`, `14-common-library-nestjs/`
 
 > [!NOTE]
-> **Tổng Season 1:** 11 tập. Mỗi tập 8–12 min, đặc hơn.
+> **Tổng Season 1:** 11 tập + bonus. Mỗi tập 8–12 min, đặc hơn.
+
+### Bonus 11.5 — Zod vs class-validator: một nguồn sự thật cho validation
+- **Vị trí:** xen giữa EP11 và EP12. Không renumber; tiêu đề đánh `NestJS #11.5:`. Pain mở phải khớp pain-đóng của EP11 (library tách ra nhưng validation pipe kéo theo dependency cũ) và pain-đóng phải nối sang pain mở EP12 (debug request qua nhiều layer) — bonus không phá chain 29 tập.
+- ← pain: EP11 tách common library xong, phát hiện validation pipe kéo `class-validator` + `class-transformer` vào package dùng chung — mà `class-transformer` lần publish cuối là 22/11/2021 (verify trên npm registry 23/10/2026). Cùng lúc, env của app lại được validate bằng Zod từ EP03 (`env.validation.ts`) — TaskFlow đang có hai hệ validation song song.
+- Học: một nguồn sự thật (schema Zod → `z.infer` ra type TS luôn, không viết interface + decorator riêng); error chi tiết có path + expected/received (`age: Expected number, received string`) so với custom message thủ công từng field; maintenance status hai library (có số npm trên màn hình); viết `ZodValidationPipe` (~vài chục dòng: `schema.parse` + map `ZodError` → `BadRequestException`); demo swap đúng MỘT endpoint (POST /tasks) — phần còn lại giữ class-validator.
+- AI moment: nhờ AI plan swap Zod cho một endpoint → AI đề xuất rewrite toàn bộ DTO trong một sweep → host từ chối: dự án đang chạy ngon thì không migrate cho mệt, YAGNI, incremental. Đúng format "host bắt AI quá tay".
+- Giá phải trả (nói thẳng trong video): mất Swagger auto-gen từ decorator → cần `nestjs-zod` hoặc `zod-openapi` (và phải đợi tới EP13 mới thấy trên màn hình, tập đó vẫn dùng class-validator — không retrofit). Tài liệu NestJS chính thống viết theo class-validator → team toàn junior thì tra cứu nhanh hơn với class-validator.
+- Kiểm chứng 30s đầu: gửi payload sai, đặt error Zod và error class-validator cạnh nhau trên màn hình.
+- Thành quả: endpoint demo có schema + type từ một khai báo; quyết định "mới thì Zod, cũ đang ngon thì giữ" có rationale. → pain-đóng không tạo pain mới cho EP12 (bonus off-chain).
+- Ước lượng: ~1500 từ → 6–8 min
+- File: `bonus-11-5-zod-validation/script.md`
 
 ---
 
