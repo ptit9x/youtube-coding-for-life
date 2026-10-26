@@ -1,11 +1,17 @@
 {
 	"info": {
-		"_postman_id": "ep05-nestjs-base-with-ai",
-		"name": "NestJS Base with AI",
+		"_postman_id": "taskflow-ep05-authentication",
+		"name": "TaskFlow API",
 		"description": "Postman collection cho series Học NestJS bằng AI — EP01 đến EP05.\n\nSetup:\n1. Tạo Environment mới trong Postman.\n2. Thêm variable `endpoint` = `http://localhost:3000`.\n3. Import file này vào Postman.\n4. Chọn environment vừa tạo rồi test.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
-	"variable": [],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		}
+	],
 	"item": [
 		{
 			"name": "Health Check",
@@ -54,6 +60,20 @@
 				},
 				{
 					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test('Login thành công', function () { pm.response.to.have.status(200); });",
+									"const body = pm.response.json();",
+									"pm.expect(body.accessToken).to.be.a('string').and.not.empty;",
+									"pm.collectionVariables.set('accessToken', body.accessToken);"
+								]
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -71,7 +91,7 @@
 							"host": ["{{endpoint}}"],
 							"path": ["auth", "login"]
 						},
-						"description": "Đăng nhập, trả accessToken. Sai email hoặc password đều nhận 401 chung."
+						"description": "Đăng nhập, trả accessToken. Test script tự lưu token vào collection variable để các request sau dùng ngay. Sai email hoặc password đều nhận 401 chung."
 					},
 					"response": []
 				}

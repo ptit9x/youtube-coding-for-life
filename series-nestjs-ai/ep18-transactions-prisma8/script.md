@@ -1,6 +1,6 @@
-# NestJS #24 — Transactions: trọn vẹn hoặc không làm
+# NestJS #18 — Transactions: trọn vẹn hoặc không làm
 
-- **Series:** Học NestJS bằng AI — tập 24/45
+- **Series:** Học NestJS bằng AI — tập 18/29
 - **Target runtime:** khoảng 6 phút 10 giây (563 từ thoại)
 - **Outcome:** Create Task và attach Label chạy trong Prisma 8 callback transaction, rollback đúng khi lỗi.
 - **Pain tập kế:** Dashboard join nhiều bảng đúng dữ liệu nhưng lặp lại và làm database nặng.
@@ -179,18 +179,18 @@ Reproduce and then fix partial Task creation with Prisma 8 transactions.
 
 ### 4a. Titles
 
-1. Transaction: Hoặc trọn vẹn, hoặc không làm — EP24
-2. Một request lỗi để lại nửa dữ liệu — EP24
-3. Prisma 8 Transaction không còn `$transaction` — EP24
-4. Vì sao `db.orm` phá rollback? — EP24
-5. Chặn Race Condition khi gắn Label — EP24
+1. Transaction: Hoặc trọn vẹn, hoặc không làm — EP18
+2. Một request lỗi để lại nửa dữ liệu — EP18
+3. Prisma 8 Transaction không còn `$transaction` — EP18
+4. Vì sao `db.orm` phá rollback? — EP18
+5. Chặn Race Condition khi gắn Label — EP18
 
 **Khuyên dùng:** Title 2. A/B test Title 1 cho chủ đề evergreen.
 
 ### 4b. SEO Description
 
 ```text
-Mỗi câu lệnh có thể đúng nhưng cả business operation vẫn sai. Tập 24 dùng Prisma 8 transaction để Task và Label cùng thành công hoặc cùng rollback.
+Mỗi câu lệnh có thể đúng nhưng cả business operation vẫn sai. Tập 18 dùng Prisma 8 transaction để Task và Label cùng thành công hoặc cùng rollback.
 
 ✅ Đặt transaction boundary ở application service
 ✅ Dùng db.transaction và tx.orm của Prisma 8
@@ -218,7 +218,7 @@ Mỗi câu lệnh có thể đúng nhưng cả business operation vẫn sai. T�
 ### 4c. Keywords / Tags
 
 ```text
-prisma 8 transaction, db transaction tx orm, nestjs database transaction, prisma 8 rollback, transaction boundary service, partial write database, race condition postgres, composite key conflict, createAll prisma 8, prisma 7 vs prisma 8 transaction, task label transaction, failure injection test, taskflow nestjs, học nestjs bằng ai, nestjs tập 24, lập trình là cuộc sống
+prisma 8 transaction, db transaction tx orm, nestjs database transaction, prisma 8 rollback, transaction boundary service, partial write database, race condition postgres, composite key conflict, createAll prisma 8, prisma 7 vs prisma 8 transaction, task label transaction, failure injection test, taskflow nestjs, học nestjs bằng ai, nestjs tập 18, lập trình là cuộc sống
 ```
 
 ---

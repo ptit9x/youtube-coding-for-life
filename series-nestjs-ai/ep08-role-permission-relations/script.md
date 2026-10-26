@@ -1,6 +1,7 @@
 # NestJS #08 — Role và Permission khác nhau thế nào?
 
-- **Series:** Học NestJS bằng AI — tập 8/45
+- **Series:** Học NestJS bằng AI — tập 8/29
+- **Recording status:** CHƯA READY — script hiện mới có Role/Permission; phải merge phần relations trong `merged-from-09/`.
 - **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Hoàn thiện model, repository, service nội bộ và seed cho Role/Permission; chưa expose API quản trị trước khi có PermissionGuard.
 - **Pain mở EP09:** User, Role và Permission vẫn là các bảng rời, chưa có quan hệ N–N.

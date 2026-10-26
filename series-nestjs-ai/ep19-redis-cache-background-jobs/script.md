@@ -1,6 +1,7 @@
-# NestJS #25 — Caching với Redis: học cách quên
+# NestJS #19 — Caching với Redis: học cách quên
 
-- **Series:** Học NestJS bằng AI — tập 25/45
+- **Series:** Học NestJS bằng AI — tập 19/29
+- **Recording status:** CHƯA READY — script hiện mới có Redis cache; phải merge BullMQ/background jobs trong `merged-from-26/`.
 - **Target runtime:** khoảng 6 phút 25 giây (619 từ thoại)
 - **Outcome:** Dashboard dùng cache-aside qua Redis, key theo scope và invalidation đúng khi dữ liệu hoặc quyền đổi.
 - **Pain tập kế:** Gửi email nhắc deadline trong HTTP request làm user phải chờ mail server.
@@ -179,18 +180,18 @@ Plan a narrow cache-aside optimization for the TaskFlow dashboard.
 
 ### 4a. Titles
 
-1. Cache nhanh nhưng vẫn có thể sai — EP25
-2. Caching với Redis: Học cách quên — EP25
-3. Bug Permission cũ còn sống trong Cache — EP25
-4. Cache-Aside cho NestJS đúng cách — EP25
-5. TTL không phải Security Policy — EP25
+1. Cache nhanh nhưng vẫn có thể sai — EP19
+2. Caching với Redis: Học cách quên — EP19
+3. Bug Permission cũ còn sống trong Cache — EP19
+4. Cache-Aside cho NestJS đúng cách — EP19
+5. TTL không phải Security Policy — EP19
 
 **Khuyên dùng:** Title 1. A/B test Title 2 cho search intent.
 
 ### 4b. SEO Description
 
 ```text
-Cache vừa làm hệ thống nhanh hơn, và sai nhanh hơn. Tập 25 dùng Redis theo cache-aside mà vẫn revoke permission có hiệu lực ngay.
+Cache vừa làm hệ thống nhanh hơn, và sai nhanh hơn. Tập 19 dùng Redis theo cache-aside mà vẫn revoke permission có hiệu lực ngay.
 
 ✅ Chọn đúng query đáng cache
 ✅ Dùng CacheModule với Keyv Redis
@@ -218,7 +219,7 @@ Cache vừa làm hệ thống nhanh hơn, và sai nhanh hơn. Tập 25 dùng Red
 ### 4c. Keywords / Tags
 
 ```text
-nestjs redis cache, cache aside nestjs, keyv redis nestjs, cache invalidation permissions, redis stale data bug, nestjs cache manager, versioned cache key, access version rbac, ttl milliseconds cache, redis outage fallback, dashboard cache nestjs, postgres source of truth, taskflow nestjs, học nestjs bằng ai, nestjs tập 25, lập trình là cuộc sống
+nestjs redis cache, cache aside nestjs, keyv redis nestjs, cache invalidation permissions, redis stale data bug, nestjs cache manager, versioned cache key, access version rbac, ttl milliseconds cache, redis outage fallback, dashboard cache nestjs, postgres source of truth, taskflow nestjs, học nestjs bằng ai, nestjs tập 19, lập trình là cuộc sống
 ```
 
 ---

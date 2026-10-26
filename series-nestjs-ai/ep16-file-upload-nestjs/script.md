@@ -1,6 +1,6 @@
-# NestJS #21 — File Upload: đừng tin chiếc đuôi `.jpg`
+# NestJS #16 — File Upload: đừng tin chiếc đuôi `.jpg`
 
-- **Series:** Học NestJS bằng AI — tập 21/45
+- **Series:** Học NestJS bằng AI — tập 16/29
 - **Target runtime:** khoảng 6 phút (573 từ thoại)
 - **Outcome:** Upload attachment có auth, giới hạn dung lượng, kiểm tra magic bytes và lưu object storage an toàn.
 - **Pain tập kế:** File và dữ liệu tăng khiến GET `/tasks` trả quá nhiều bản ghi.
@@ -176,18 +176,18 @@ Plan secure task attachments for the current NestJS API.
 
 ### 4a. Titles
 
-1. File Upload NestJS: Đừng tin đuôi .JPG — EP21
-2. Một file giả danh ảnh đi vào production — EP21
-3. Upload ảnh an toàn với Magic Bytes — EP21
-4. Vì sao không nên lưu Upload trong Container? — EP21
-5. Attachment, Object Storage và Signed URL — EP21
+1. File Upload NestJS: Đừng tin đuôi .JPG — EP16
+2. Một file giả danh ảnh đi vào production — EP16
+3. Upload ảnh an toàn với Magic Bytes — EP16
+4. Vì sao không nên lưu Upload trong Container? — EP16
+5. Attachment, Object Storage và Signed URL — EP16
 
 **Khuyên dùng:** Title 1. A/B test Title 2 cho curiosity.
 
 ### 4b. SEO Description
 
 ```text
-Extension và MIME type đều là lời khai của client. Tập 21 xây attachment cho TaskFlow mà không tin chiếc đuôi .jpg.
+Extension và MIME type đều là lời khai của client. Tập 16 xây attachment cho TaskFlow mà không tin chiếc đuôi .jpg.
 
 ✅ Nhận multipart bằng FileInterceptor
 ✅ Chặn file quá dung lượng
@@ -215,7 +215,7 @@ Extension và MIME type đều là lời khai của client. Tập 21 xây attach
 ### 4c. Keywords / Tags
 
 ```text
-nestjs file upload, multer nestjs, secure file upload nodejs, magic bytes file validation, fake jpg upload, nestjs object storage, s3 signed url nestjs, attachment api nestjs, parse file pipe nestjs, file size validator nestjs, path traversal upload, upload ownership authorization, taskflow nestjs, học nestjs bằng ai, nestjs tập 21, typescript backend, lập trình là cuộc sống
+nestjs file upload, multer nestjs, secure file upload nodejs, magic bytes file validation, fake jpg upload, nestjs object storage, s3 signed url nestjs, attachment api nestjs, parse file pipe nestjs, file size validator nestjs, path traversal upload, upload ownership authorization, taskflow nestjs, học nestjs bằng ai, nestjs tập 16, typescript backend, lập trình là cuộc sống
 ```
 
 ---

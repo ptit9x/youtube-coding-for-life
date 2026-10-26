@@ -23,7 +23,7 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
 - Mọi con số (giá, quota, token) phải verify lại trên màn hình ngay trước khi
   quay — số liệu AI thay đổi từng tháng.
 
-**Số tập:** 3 tập đầu đã có script (EP01 + BONUS 1.5 đã phát hành, EP02, EP03). Roadmap mở rộng lên 9+.
+**Số tập:** EP01 + BONUS 1.5 đã phát hành; EP02, EP03 Facebook Page và EP04 ChatGPT đã có script. Roadmap mở rộng lên 9+.
 
 **EP01 đã phát hành:** "Cách sử dụng VPN Free để lấy 1 TỶ Token Muse AI" — https://youtu.be/hQzSDxDhX6s (3:27, đăng 08/10/2026). Bản final rút gọn từ script 8–9 phút: bỏ phần Muse Code/bảng giá, tập trung walkthrough VPN + referral. Script repo là bản mở rộng — mô tả video thật dùng ref code 16NESL.
 
@@ -99,7 +99,20 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   - CTA nhẹ: ref code ở description
 - **Variant:** Học bằng LLM
 
-### EP03 — Đăng ký ChatGPT miễn phí: không cần thẻ, không cần VPN
+### EP03 — Quản lý Facebook Page bằng Muse: AI làm nội dung, người giữ quyền đăng
+- **Thời lượng mục tiêu:** ~8–9 phút (~810 từ)
+- **Nội dung chính:**
+  - Kết nối riêng Page “Lập trình là cuộc sống” qua Meta Business Manager
+  - Đọc số liệu 28 ngày, tìm bài hiệu quả và nhìn thẳng vào follower mới bằng không
+  - Workflow 6 bước: yêu cầu → AI chuẩn bị → host review → approve → publish → mở Facebook kiểm chứng
+  - Tìm tin công nghệ, soạn draft, tạo ảnh và gắn YouTube Shorts
+  - Tách quyền đọc dữ liệu khỏi quyền publish; chỉ cấp đúng Page cần quản lý
+  - Tạo job hằng ngày chỉ lưu draft, không auto-publish
+  - Nói thẳng về hallucination: luôn kiểm tra nguồn, ngày, phiên bản và số liệu
+- **Footage:** `ep03-quan-ly-facebook-page-vs-muse/videos/`
+- **Variant:** Học bằng LLM / practical agent workflow
+
+### EP04 — Đăng ký ChatGPT miễn phí: không cần thẻ, không cần VPN
 - **Thời lượng mục tiêu:** ~5–5.5 phút (~500 từ)
 - **Nội dung chính:**
   - Hook 2 câu: 3 tin đồn cũ vs sự thật → walkthrough NGAY (chatgpt.com →
@@ -109,13 +122,13 @@ hình → giới hạn thật → cách dùng miễn phí thông minh.
   - 3 thói quen tiết kiệm quota; khi nào ĐÁNG nâng Plus; cảnh báo multi-account
 - **Variant:** Học bằng LLM
 
-### Roadmap EP04+ (đề xuất, chưa có script)
-- **EP04** — Google AI Studio / Gemini: API key miễn phí cho dev, dùng được tại VN
-- **EP05** — GitHub Student Developer Pack: Copilot + credit miễn phí cho sinh viên
-- **EP06** — Claude free / Copilot free tier: kéo dài quota tối đa mỗi ngày
-- **EP07** — Đọc hiểu pricing AI: input/output/cached token — để không bị sốc bill
-- **EP08** — Ghép nhiều free tier hợp pháp bằng 9Router (cross-ref series-9router)
-- **EP09** — Bảng so sánh free tier AI cho dev Việt 2026 (tổng kết series)
+### Roadmap EP05+ (đề xuất, chưa có script)
+- **EP05** — Google AI Studio / Gemini: API key miễn phí cho dev, dùng được tại VN
+- **EP06** — GitHub Student Developer Pack: Copilot + credit miễn phí cho sinh viên
+- **EP07** — Claude free / Copilot free tier: kéo dài quota tối đa mỗi ngày
+- **EP08** — Đọc hiểu pricing AI: input/output/cached token — để không bị sốc bill
+- **EP09** — Ghép nhiều free tier hợp pháp bằng 9Router (cross-ref series-9router)
+- **EP10** — Bảng so sánh free tier AI cho dev Việt 2026 (tổng kết series)
 
 ---
 

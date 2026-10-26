@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <rect x="170" y="82" width="1580" height="105" rx="18" fill="#000" fill-opacity=".68"/>
+  <text x="960" y="153" text-anchor="middle" font-family="Andale Mono, monospace" font-size="58" font-weight="700" fill="#fff" stroke="#000" stroke-width="3" paint-order="stroke">KHÔNG LƯU PASSWORD PLAIN TEXT</text>
+</svg>

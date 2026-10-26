@@ -1,6 +1,7 @@
-# NestJS #15 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
+# NestJS #12 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
 
-- **Series:** Học NestJS bằng AI — tập 15/45
+- **Series:** Học NestJS bằng AI — tập 12/29
+- **Recording status:** CHƯA READY — script hiện mới có request lifecycle; phải merge Docker deploy trong `merged-from-16/`.
 - **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Đọc đúng thứ tự middleware, guard, interceptor, pipe, handler và filter.
 - **Pain mở EP16:** Ứng dụng rõ luồng nhưng vẫn chỉ chạy trên máy lập trình viên.
@@ -172,11 +173,11 @@ Produce a sequence diagram, then verify it against logs from three requests.
 
 ### 4a. Titles
 
-1. Request Lifecycle NestJS: Middleware, Guard và Pipe chạy thế nào? — EP15
-2. Thứ tự Middleware, Guard, Interceptor và Pipe — EP15
-3. Vì sao request chưa chạy vào Controller? — EP15
-4. Theo dõi request bằng Request ID trong NestJS — EP15
-5. Debug Request Lifecycle trong NestJS — EP15
+1. Request Lifecycle NestJS: Middleware, Guard và Pipe chạy thế nào? — EP12
+2. Thứ tự Middleware, Guard, Interceptor và Pipe — EP12
+3. Vì sao request chưa chạy vào Controller? — EP12
+4. Theo dõi request bằng Request ID trong NestJS — EP12
+5. Debug Request Lifecycle trong NestJS — EP12
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 3 cho tình huống debug.
 
@@ -208,7 +209,7 @@ Request trả lỗi trước khi vào controller? Hãy theo dõi đúng thứ t�
 ### 4c. Keywords / Tags
 
 ```text
-nestjs request lifecycle, middleware guard interceptor pipe order, nestjs interceptor, nestjs middleware, validation pipe nestjs, exception filter nestjs, request id nestjs, debug nestjs request, nestjs tiếng việt, nestjs tập 15, lập trình là cuộc sống
+nestjs request lifecycle, middleware guard interceptor pipe order, nestjs interceptor, nestjs middleware, validation pipe nestjs, exception filter nestjs, request id nestjs, debug nestjs request, nestjs tiếng việt, nestjs tập 12, lập trình là cuộc sống
 ```
 
 ---

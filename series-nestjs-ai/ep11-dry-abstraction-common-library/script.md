@@ -1,9 +1,10 @@
-# NestJS #13 — DRY: Khi nào không nên dùng BaseCrudService
+# NestJS #11 — DRY: Khi nào không nên dùng BaseCrudService
 
-- **Series:** Học NestJS bằng AI — tập 13/45
+- **Series:** Học NestJS bằng AI — tập 11/29
+- **Recording status:** CHƯA READY — phải merge phần common library/versioning theo `00-plan.md`.
 - **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Phân biệt duplicate code với duplicate knowledge, tránh generic business service.
-- **Pain mở EP14:** `common/` ổn định nhưng copy sang nhiều dự án sẽ tạo nhiều phiên bản lệch nhau.
+- **Pain mở EP12:** `common/` ổn định nhưng request đi qua quá nhiều layer, debug không còn trực quan.
 
 ---
 
@@ -51,7 +52,7 @@ Boilerplate biến mất ở service, nhưng complexity chuyển vào base class
 
 Người đọc phải nhảy qua nhiều file để hiểu một thao tác create.
 
-Bộ test EP12 cho phép mình thử refactor an toàn.
+Bộ test EP10 cho phép mình thử refactor an toàn.
 
 Mình thêm ba rule mới.
 
@@ -179,11 +180,11 @@ Do not create abstractions solely to reduce line count.
 
 ### 4a. Titles
 
-1. DRY trong NestJS: Khi nào không nên dùng BaseCrudService — EP13
-2. BaseCrudService có thật sự giúp code tốt hơn? — EP13
-3. Duplicate code và duplicate knowledge khác nhau thế nào? — EP13
-4. Refactor CRUD mà không che business logic — EP13
-5. Khi nào nên đưa code vào common? — EP13
+1. DRY trong NestJS: Khi nào không nên dùng BaseCrudService — EP11
+2. BaseCrudService có thật sự giúp code tốt hơn? — EP11
+3. Duplicate code và duplicate knowledge khác nhau thế nào? — EP11
+4. Refactor CRUD mà không che business logic — EP11
+5. Khi nào nên đưa code vào common? — EP11
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho curiosity và Title 3 cho khái niệm cốt lõi.
 
@@ -212,7 +213,7 @@ AI xóa gần sáu mươi dòng bằng BaseCrudService. Ba business rule sau, m�
 ### 4c. Keywords / Tags
 
 ```text
-nestjs generic crud, base crud service nestjs, abstraction trap, dry principle, duplicate knowledge, yagni nestjs, refactor nestjs, clean architecture nestjs, repository pattern, typescript generics, nestjs tiếng việt, nestjs tập 13, lập trình là cuộc sống
+nestjs generic crud, base crud service nestjs, abstraction trap, dry principle, duplicate knowledge, yagni nestjs, refactor nestjs, clean architecture nestjs, repository pattern, typescript generics, nestjs tiếng việt, nestjs tập 11, lập trình là cuộc sống
 ```
 
 ---

@@ -1,9 +1,9 @@
-# NestJS #12 — Testing phân quyền bằng Vitest và Supertest
+# NestJS #10 — Testing phân quyền bằng Vitest và Supertest
 
-- **Series:** Học NestJS bằng AI — tập 12/45
+- **Series:** Học NestJS bằng AI — tập 10/29
 - **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** Unit test, integration test và e2e bảo vệ auth, RBAC, ownership.
-- **Pain mở EP13:** Test làm duplication lộ rõ và tạo cám dỗ refactor quá tay.
+- **Pain mở EP11:** Test làm duplication lộ rõ và tạo cám dỗ refactor quá tay.
 
 ---
 
@@ -13,7 +13,7 @@ Terminal báo coverage 100%. Mình đảo PermissionGuard để người thiếu
 
 Con số đẹp vừa bỏ lọt một bug bảo mật.
 
-EP11 kết thúc với ba request màu xanh và đỏ đúng như mong đợi.
+EP09 kết thúc với nhiều nhánh permission và ownership đúng như mong đợi.
 
 Không ai nhớ thử lại mọi role, permission và owner sau mỗi lần sửa code.
 
@@ -195,11 +195,11 @@ Show how one deliberate mutation proves each security test is meaningful.
 
 ### 4a. Titles
 
-1. Testing phân quyền NestJS bằng Vitest và Supertest — EP12
-2. Viết E2E Test cho RBAC và Ownership — EP12
-3. Test PermissionGuard trong NestJS — EP12
-4. Unit Test, Integration Test và E2E khác nhau thế nào? — EP12
-5. Vì sao coverage cao vẫn chưa đủ? — EP12
+1. Testing phân quyền NestJS bằng Vitest và Supertest — EP10
+2. Viết E2E Test cho RBAC và Ownership — EP10
+3. Test PermissionGuard trong NestJS — EP10
+4. Unit Test, Integration Test và E2E khác nhau thế nào? — EP10
+5. Vì sao coverage cao vẫn chưa đủ? — EP10
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho outcome và Title 5 cho curiosity dễ hiểu.
 
@@ -230,7 +230,7 @@ Coverage 100% vẫn có thể bỏ lọt bug authorization. Tập này biến au
 ### 4c. Keywords / Tags
 
 ```text
-nestjs testing, vitest nestjs, supertest nestjs, rbac testing, authorization test matrix, permission guard test, ownership testing, prisma 8 integration test, e2e nestjs, test coverage, mutation testing, nestjs tiếng việt, nestjs tập 12, lập trình là cuộc sống
+nestjs testing, vitest nestjs, supertest nestjs, rbac testing, authorization test matrix, permission guard test, ownership testing, prisma 8 integration test, e2e nestjs, test coverage, mutation testing, nestjs tiếng việt, nestjs tập 10, lập trình là cuộc sống
 ```
 
 ---

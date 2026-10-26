@@ -1,6 +1,7 @@
-# NestJS #22 — Pagination, Filtering và Sorting với Prisma 8
+# NestJS #17 — Pagination, Filtering và Sorting với Prisma 8
 
-- **Series:** Học NestJS bằng AI — tập 22/45
+- **Series:** Học NestJS bằng AI — tập 17/29
+- **Recording status:** CHƯA READY — script hiện mới có pagination; phải merge Project + Label trong `merged-from-23/`.
 - **Target runtime:** khoảng 6 phút 20 giây (581 từ thoại)
 - **Outcome:** GET `/tasks` có filter, sort allowlist và cursor ổn định với `createdAt + id`.
 - **Pain tập kế:** Task vẫn là danh sách phẳng, chưa thuộc project hay có label.
@@ -170,18 +171,18 @@ Plan cursor pagination for the current Prisma 8 TasksRepository.
 
 ### 4a. Titles
 
-1. Pagination sai làm Task bị lặp — EP22
-2. Cursor Pagination với Prisma 8 — EP22
-3. Vì sao Offset chậm dần theo từng trang? — EP22
-4. Năm nghìn Task và một Cursor ổn định — EP22
-5. Filtering, Sorting, Pagination cho NestJS — EP22
+1. Pagination sai làm Task bị lặp — EP17
+2. Cursor Pagination với Prisma 8 — EP17
+3. Vì sao Offset chậm dần theo từng trang? — EP17
+4. Năm nghìn Task và một Cursor ổn định — EP17
+5. Filtering, Sorting, Pagination cho NestJS — EP17
 
 **Khuyên dùng:** Title 1. A/B test Title 2 cho intent kỹ thuật.
 
 ### 4b. SEO Description
 
 ```text
-Offset nói “bỏ qua hai mươi dòng”. Cursor nói “tiếp tục sau bản ghi này”. Tập 22 xây pagination ổn định cho dữ liệu thay đổi liên tục.
+Offset nói “bỏ qua hai mươi dòng”. Cursor nói “tiếp tục sau bản ghi này”. Tập 17 xây pagination ổn định cho dữ liệu thay đổi liên tục.
 
 ✅ So sánh offset và cursor pagination
 ✅ Filter theo status, owner và deadline
@@ -209,7 +210,7 @@ Offset nói “bỏ qua hai mươi dòng”. Cursor nói “tiếp tục sau b�
 ### 4c. Keywords / Tags
 
 ```text
-prisma 8 pagination, cursor pagination nestjs, nestjs filtering sorting, offset vs cursor pagination, composite cursor createdAt id, prisma 8 orderBy cursor take, stable pagination postgres, api pagination best practices, list tasks nestjs, pagination ownership rbac, taskflow nestjs, học nestjs bằng ai, nestjs tập 22, prisma tiếng việt, typescript backend, lập trình là cuộc sống
+prisma 8 pagination, cursor pagination nestjs, nestjs filtering sorting, offset vs cursor pagination, composite cursor createdAt id, prisma 8 orderBy cursor take, stable pagination postgres, api pagination best practices, list tasks nestjs, pagination ownership rbac, taskflow nestjs, học nestjs bằng ai, nestjs tập 17, prisma tiếng việt, typescript backend, lập trình là cuộc sống
 ```
 
 ---

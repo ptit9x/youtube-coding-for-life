@@ -1,6 +1,7 @@
-# NestJS #10 — PermissionGuard: Phân biệt lỗi 401 và 403
+# NestJS #09 — PermissionGuard: Phân biệt lỗi 401 và 403
 
-- **Series:** Học NestJS bằng AI — tập 10/45
+- **Series:** Học NestJS bằng AI — tập 9/29
+- **Recording status:** CHƯA READY — script hiện mới có PermissionGuard; phải merge Tasks + ownership trong `merged-from-11/`.
 - **Target runtime:** 8–10 phút (650–800 từ thoại)
 - **Outcome:** `@RequirePermissions`, PermissionGuard và response 401/403 đúng nghĩa.
 - **Pain mở EP11:** Cần một business feature thật để kiểm chứng permission và ownership.
@@ -128,11 +129,11 @@ Plan claims-based authorization for the current AccessControlModule.
 
 ### 4a. Titles
 
-1. PermissionGuard NestJS: Phân biệt lỗi 401 và 403 — EP10
-2. Tạo decorator RequirePermissions trong NestJS — EP10
-3. Kiểm tra quyền truy cập API bằng PermissionGuard — EP10
-4. Authentication và Authorization khác nhau thế nào? — EP10
-5. Vì sao không nên lưu permission trong JWT? — EP10
+1. PermissionGuard NestJS: Phân biệt lỗi 401 và 403 — EP09
+2. Tạo decorator RequirePermissions trong NestJS — EP09
+3. Kiểm tra quyền truy cập API bằng PermissionGuard — EP09
+4. Authentication và Authorization khác nhau thế nào? — EP09
+5. Vì sao không nên lưu permission trong JWT? — EP09
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 3 cho search và Title 4 cho người mới.
 
@@ -165,7 +166,7 @@ Plan claims-based authorization for the current AccessControlModule.
 ### 4c. Keywords / Tags
 
 ```text
-nestjs permission guard, require permissions nestjs, nestjs authorization, 401 vs 403, claims based authorization, rbac guard nestjs, reflector nestjs, permission metadata, jwt permissions, revoke permission, access control nestjs, nestjs tiếng việt, học nestjs, nestjs tập 10, typescript backend, lập trình là cuộc sống
+nestjs permission guard, require permissions nestjs, nestjs authorization, 401 vs 403, claims based authorization, rbac guard nestjs, reflector nestjs, permission metadata, jwt permissions, revoke permission, access control nestjs, nestjs tiếng việt, học nestjs, nestjs tập 9, typescript backend, lập trình là cuộc sống
 ```
 
 ---

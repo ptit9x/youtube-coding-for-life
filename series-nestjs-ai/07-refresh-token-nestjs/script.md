@@ -1,7 +1,7 @@
 # NestJS #07 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên
 
-- **Series:** Học NestJS bằng AI — tập 7/45
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
+- **Series:** Học NestJS bằng AI — tập 7/29
+- **Target runtime:** 9–10 phút (~825 từ thoại)
 - **Outcome:** Tạo session, refresh rotation, reuse detection và logout có thu hồi.
 - **Pain mở EP08:** Xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.
 
@@ -89,23 +89,23 @@ Theo dõi series nếu bạn muốn security được kiểm chứng bằng time
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | Access token hết hạn; request đang làm nhận 401 | 35s |
-| 2 | [DIAGRAM] | Access token ngắn và refresh token dài | 45s |
-| 3 | [DIAGRAM] | Vé cũ bị bấm lỗ; reuse báo động | 45s |
-| 4 | [IDE] | Thêm refresh TTL vào config đã validate; model AuthSession và các field lifecycle | 60s |
-| 5 | [BROWSER] | Mở RFC 9700 đúng đoạn refresh rotation | 35s |
-| 6 | [IDE] | Prompt AI threat model bốn tình huống | 60s |
-| 7 | [IDE] | Review lỗi update cùng row, chuyển thành token family | 60s |
-| 8 | [IDE] | Login tạo opaque token, lưu SHA-256 hash | 70s |
-| 9 | [IDE] | Set HttpOnly cookie, production flags | 55s |
-| 10 | [IDE] | Transaction revoke cũ và tạo session mới | 75s |
-| 11 | [IDE] | Reuse detection và revoke family | 65s |
-| 12 | [IDE] | Host tự gõ `hashToken` và logout revoke | 55s |
-| 13 | [BROWSER]+[TERM] | Timeline A → B → reuse A → B bị chặn | 80s |
-| 14 | [BROWSER] | Login mới, logout, kiểm tra cookie và DB | 50s |
-| 15 | [B-ROLL] | Hai chìa khóa trên bàn tối, teaser Role/Permission | 25s |
+| 1 | [BROWSER] | Access token hết hạn; request đang làm nhận 401 | 25s |
+| 2 | [DIAGRAM] | Access token ngắn và refresh token dài | 30s |
+| 3 | [DIAGRAM] | Vé cũ bị bấm lỗ; reuse báo động | 30s |
+| 4 | [IDE] | Thêm refresh TTL vào config đã validate; model AuthSession và các field lifecycle | 40s |
+| 5 | [BROWSER] | Mở RFC 9700 đúng đoạn refresh rotation | 25s |
+| 6 | [IDE] | Prompt AI threat model bốn tình huống | 40s |
+| 7 | [IDE] | Review lỗi update cùng row, chuyển thành token family | 40s |
+| 8 | [IDE] | Login tạo opaque token, lưu SHA-256 hash | 50s |
+| 9 | [IDE] | Set HttpOnly cookie, production flags | 40s |
+| 10 | [IDE] | Transaction revoke cũ và tạo session mới | 50s |
+| 11 | [IDE] | Reuse detection và revoke family | 45s |
+| 12 | [IDE] | Host tự gõ `hashToken` và logout revoke | 40s |
+| 13 | [BROWSER]+[TERM] | Timeline A → B → reuse A → B bị chặn | 55s |
+| 14 | [BROWSER] | Login mới, logout, kiểm tra cookie và DB | 35s |
+| 15 | [B-ROLL] | Hai chìa khóa trên bàn tối, teaser Role/Permission | 15s |
 
-**Tổng mục tiêu: 8–10 phút.** Khi quay, làm mờ token/cookie thật và chỉ dùng database development.
+**Tổng: 560 giây ≈ 9:20.** Khi quay, làm mờ token/cookie thật và chỉ dùng database development.
 
 ### Model cốt lõi
 

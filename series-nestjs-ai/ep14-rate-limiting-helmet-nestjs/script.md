@@ -1,6 +1,6 @@
-# NestJS #18 — Rate Limiting và Helmet: dạy API tự vệ
+# NestJS #14 — Rate Limiting và Helmet: dạy API tự vệ
 
-- **Series:** Học NestJS bằng AI — tập 18/45
+- **Series:** Học NestJS bằng AI — tập 14/29
 - **Target runtime:** khoảng 6 phút 30 giây (592 từ thoại)
 - **Outcome:** Login có rate limit riêng, API có security headers và hoạt động đúng sau reverse proxy.
 - **Pain tập kế:** Khi bị spam, log rời rạc khiến một request không thể truy vết.
@@ -167,18 +167,18 @@ Threat-model rate abuse for the current TaskFlow API before changing code.
 
 ### 4a. Titles
 
-1. Rate Limiting và Helmet: Dạy API tự vệ — EP18
-2. JWT không chặn được bot spam login — EP18
-3. Vì sao một Rate Limit cho mọi route là sai? — EP18
-4. Chặn Brute Force trong NestJS đúng cách — EP18
-5. API trả 429 trước khi production gục — EP18
+1. Rate Limiting và Helmet: Dạy API tự vệ — EP14
+2. JWT không chặn được bot spam login — EP14
+3. Vì sao một Rate Limit cho mọi route là sai? — EP14
+4. Chặn Brute Force trong NestJS đúng cách — EP14
+5. API trả 429 trước khi production gục — EP14
 
 **Khuyên dùng:** Title 2. A/B test Title 1 cho intent tìm kiếm.
 
 ### 4b. SEO Description
 
 ```text
-JWT kiểm tra ai đang gọi. Nó không kiểm tra người đó gọi nhanh tới đâu. Tập 18 thêm rate limiting, Helmet và một trust boundary đúng cho production.
+JWT kiểm tra ai đang gọi. Nó không kiểm tra người đó gọi nhanh tới đâu. Tập 14 thêm rate limiting, Helmet và một trust boundary đúng cho production.
 
 ✅ Phân loại rủi ro theo từng route
 ✅ Cấu hình @nestjs/throttler với nhiều cửa sổ
@@ -206,7 +206,7 @@ JWT kiểm tra ai đang gọi. Nó không kiểm tra người đó gọi nhanh t
 ### 4c. Keywords / Tags
 
 ```text
-nestjs rate limiting, nestjs throttler, helmet nestjs, chống spam login nestjs, brute force protection api, 429 too many requests, throttle login nestjs, reverse proxy ip nestjs, trust proxy express, api security headers, swagger csp helmet, rate limit redis nestjs, nestjs production security, học nestjs bằng ai, nestjs tập 18, typescript backend, lập trình là cuộc sống
+nestjs rate limiting, nestjs throttler, helmet nestjs, chống spam login nestjs, brute force protection api, 429 too many requests, throttle login nestjs, reverse proxy ip nestjs, trust proxy express, api security headers, swagger csp helmet, rate limit redis nestjs, nestjs production security, học nestjs bằng ai, nestjs tập 14, typescript backend, lập trình là cuộc sống
 ```
 
 ---

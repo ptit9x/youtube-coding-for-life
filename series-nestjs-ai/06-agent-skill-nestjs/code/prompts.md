@@ -93,9 +93,10 @@ progressive disclosure giúp tiết kiệm context.
 
 ## PROMPT 3 — Tạo AGENTS.md cho project TaskFlow
 
-> **Mục đích:** AGENTS.md là project-level instruction file mà mọi agent đọc
-> ngay khi mở repo. Nó khác SKILL (chỉ kích hoạt khi khớp) — AGENTS.md luôn
-> có hiệu lực.
+> **Mục đích:** AGENTS.md là project-level instruction file được nhiều coding
+> agent hỗ trợ. Cách tìm file và độ ưu tiên tùy client, nên phải kiểm chứng bằng
+> một prompt nhỏ sau khi mở repo. Nó khác SKILL: skill chỉ được đọc đầy đủ khi
+> task khớp description.
 
 ```text
 Đọc toàn bộ cấu trúc project hiện tại: `src/`, `package.json`,
@@ -149,7 +150,8 @@ Tóm tắt các luật kiến trúc quan trọng nhất:
 - Chạy verification đầy đủ sau mỗi thay đổi
 - Đối chiếu Prisma 8 docs, không dùng snippet từ search result
 
-Giữ AGENTS.md ngắn gọn (dưới 150 dòng). Đây là bản đồ tổng quan —
+Giữ AGENTS.md ngắn gọn (TaskFlow tự đặt mục tiêu dưới 150 dòng, không phải giới
+hạn của chuẩn). Đây là bản đồ tổng quan —
 chi tiết nằm trong skill và reference.
 ```
 

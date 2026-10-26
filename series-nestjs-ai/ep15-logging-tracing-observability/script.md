@@ -1,6 +1,7 @@
-# NestJS #19 — Structured Logging và Correlation ID
+# NestJS #15 — Structured Logging và Correlation ID
 
-- **Series:** Học NestJS bằng AI — tập 19/45
+- **Series:** Học NestJS bằng AI — tập 15/29
+- **Recording status:** CHƯA READY — script hiện mới có logging; phải merge tracing/observability từ các folder `merged-from-*`.
 - **Target runtime:** khoảng 6 phút (547 từ thoại)
 - **Outcome:** Log JSON bằng Pino, một correlation ID xuyên request và dữ liệu nhạy cảm được redact.
 - **Pain tập kế:** Log cho biết lỗi gì, nhưng chưa cho thấy Guard, Service hay database đang chậm.
@@ -179,18 +180,18 @@ Plan production structured logging for the current NestJS API.
 
 ### 4a. Titles
 
-1. Một ID cứu cả đêm debug production — EP19
-2. Structured Logging và Correlation ID trong NestJS — EP19
-3. Vì sao nghìn dòng log vẫn không đủ? — EP19
-4. Đừng bao giờ log password và token — EP19
-5. Truy một Request xuyên toàn bộ NestJS — EP19
+1. Một ID cứu cả đêm debug production — EP15
+2. Structured Logging và Correlation ID trong NestJS — EP15
+3. Vì sao nghìn dòng log vẫn không đủ? — EP15
+4. Đừng bao giờ log password và token — EP15
+5. Truy một Request xuyên toàn bộ NestJS — EP15
 
 **Khuyên dùng:** Title 1. A/B test Title 2 cho search intent.
 
 ### 4b. SEO Description
 
 ```text
-Hàng nghìn dòng log không có nghĩa là bạn truy được một request. Tập 19 thêm structured logging, correlation ID và redaction để debug production bằng bằng chứng.
+Hàng nghìn dòng log không có nghĩa là bạn truy được một request. Tập 15 thêm structured logging, correlation ID và redaction để debug production bằng bằng chứng.
 
 ✅ Dùng Pino cho log JSON
 ✅ Tạo và trả lại x-request-id
@@ -218,7 +219,7 @@ Hàng nghìn dòng log không có nghĩa là bạn truy được một request. 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs structured logging, nestjs pino, correlation id nestjs, request id nodejs, pino redact password, log json nestjs, x-request-id, production logging nodejs, debug production nestjs, redact authorization header, nestjs logger, logging best practices, taskflow nestjs, học nestjs bằng ai, nestjs tập 19, typescript backend, lập trình là cuộc sống
+nestjs structured logging, nestjs pino, correlation id nestjs, request id nodejs, pino redact password, log json nestjs, x-request-id, production logging nodejs, debug production nestjs, redact authorization header, nestjs logger, logging best practices, taskflow nestjs, học nestjs bằng ai, nestjs tập 15, typescript backend, lập trình là cuộc sống
 ```
 
 ---

@@ -1,6 +1,7 @@
-# NestJS #17 — Swagger: API tự viết hồ sơ
+# NestJS #13 — Swagger: API tự viết hồ sơ
 
-- **Series:** Học NestJS bằng AI — tập 17/45, mở Season 2
+- **Series:** Học NestJS bằng AI — tập 13/29, Season 2
+- **Recording status:** CHƯA READY — script hiện mới có Swagger; phải merge REST vs GraphQL trong `merged-from-bonus-17-5/`.
 - **Target runtime:** khoảng 6 phút (535 từ thoại)
 - **Outcome:** `/docs` và OpenAPI JSON mô tả đúng request, response, lỗi, bearer auth và permission.
 - **Pain tập kế:** Dashboard phải gọi nhiều REST endpoint để ghép một màn hình.
@@ -165,18 +166,18 @@ Audit the current NestJS REST API and propose an OpenAPI documentation plan.
 
 ### 4a. Titles
 
-1. Swagger cho NestJS: API tự viết hồ sơ — EP17
-2. Tài liệu API sai còn nguy hiểm hơn không có — EP17
-3. Biến Controller NestJS thành OpenAPI chuẩn — EP17
-4. Document Auth và RBAC trong Swagger — EP17
-5. Đừng để README nói khác code — EP17
+1. Swagger cho NestJS: API tự viết hồ sơ — EP13
+2. Tài liệu API sai còn nguy hiểm hơn không có — EP13
+3. Biến Controller NestJS thành OpenAPI chuẩn — EP13
+4. Document Auth và RBAC trong Swagger — EP13
+5. Đừng để README nói khác code — EP13
 
 **Khuyên dùng:** Title 1. A/B test Title 2 để tăng curiosity.
 
 ### 4b. SEO Description
 
 ```text
-API đã lên production, nhưng endpoint, payload và permission vẫn nằm rải rác trong code. Tập 17 biến metadata NestJS thành một hợp đồng OpenAPI có thể kiểm tra.
+API đã lên production, nhưng endpoint, payload và permission vẫn nằm rải rác trong code. Tập 13 biến metadata NestJS thành một hợp đồng OpenAPI có thể kiểm tra.
 
 ✅ Cấu hình Swagger UI và OpenAPI JSON
 ✅ Document DTO, response và error envelope
@@ -203,7 +204,7 @@ API đã lên production, nhưng endpoint, payload và permission vẫn nằm r�
 ### 4c. Keywords / Tags
 
 ```text
-nestjs swagger, nestjs openapi, swagger nestjs tiếng việt, document api nestjs, api bearer auth swagger, nestjs api response, api permissions openapi, x-permissions openapi, taskflow nestjs, nestjs production, rest api documentation, dto api property, openapi contract test, học nestjs bằng ai, nestjs tập 17, typescript backend, lập trình là cuộc sống
+nestjs swagger, nestjs openapi, swagger nestjs tiếng việt, document api nestjs, api bearer auth swagger, nestjs api response, api permissions openapi, x-permissions openapi, taskflow nestjs, nestjs production, rest api documentation, dto api property, openapi contract test, học nestjs bằng ai, nestjs tập 13, typescript backend, lập trình là cuộc sống
 ```
 
 ---

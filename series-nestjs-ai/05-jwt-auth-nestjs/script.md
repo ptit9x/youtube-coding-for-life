@@ -1,89 +1,113 @@
-# NestJS #05 — JWT Authentication: Register, Login và AuthGuard
+# API của bạn đang bị lộ hết thông tin người dùng!
 
-- **Series:** Học NestJS bằng AI — tập 5/45
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
-- **Outcome:** Register, login, hash password, phát JWT và bảo vệ `/users/me`.
+- **Series:** Học NestJS bằng AI — tập 5/29
+- **Trạng thái:** ✅ Đã đăng
+- **Ngày đăng:** 2026-10-26
+- **Title đã đăng:** API của bạn đang bị lộ hết thông tin người dùng!
+- **YouTube:** https://www.youtube.com/watch?v=HvVcAlgp7gU
+- **Thumbnail đã đăng:** `assets/thumbnail-05-jwt-auth-v4-final.png`
+- **Thời lượng thực tế:** 7:27
+- **Technical baseline kiểm tra ngày 26/10/2026:** `@nestjs/core` `12.2.0`; `@nestjs/authentication` `0.1.1`, phải pin exact version theo lockfile.
+- **Outcome:** Register, login, hash password bằng scrypt, phát JWT access token và bảo vệ `/users/me`.
 - **Pain mở EP06:** Chuẩn bị thêm Role và Permission, nhưng convention phải nhắc lại cho AI mỗi lần.
 
 ---
 
 ## PART 1 — SCRIPT
 
-API đã biết nói lỗi tử tế. Nhưng bất kỳ ai biết URL vẫn có thể đọc dữ liệu user.
+Ok, ở tập trước mình đã làm một API biết nói lỗi tử tế. Nhưng bất kỳ ai biết URL vẫn có thể đọc dữ liệu user.
 
-Không có danh tính, request chỉ là một người lạ gõ cửa. Controller không biết nên mở cho ai.
+Chính vì thế, giờ mình sẽ sửa lại phần này. Mình có một prompt ngắn như sau.
 
-Thêm một field `isLoggedIn` không giải quyết được gì. Client có thể tự gửi `true` nhanh hơn mình viết code.
+Audit và plan authentication cho NestJS. Yêu cầu là tạo API đăng ký, login và lấy thông tin user qua `/users/me`. Password phải được hash.
 
-Bước ngoặt là xác thực bằng bằng chứng server ký. Password chứng minh lúc đăng nhập, JWT chứng minh ở những request tiếp theo.
+Mình xem nó lên plan như thế nào.
 
-Mình gõ prompt cho agent luôn. Cài bcrypt, `@nestjs/jwt`, tạo AuthModule, register, login, hash password, AuthGuard toàn cục, mở rộng config boundary từ EP03. Lên threat model và plan trước, không code khi chưa duyệt.
+Ok, kế hoạch đã xong. Bạn có thể thấy đây là plan nó đưa ra.
 
-Trong lúc agent phân tích, mình giải thích cho bạn.
+Đầu tiên, nó sẽ tạo bcrypt. Sau đó chỉnh UsersService và controller. Tiếp theo là AuthenticationModule và guard.
 
-JWT giống vòng tay của một sự kiện. Bảo vệ kiểm tra chữ ký, nhưng không cần hỏi lại quầy vé mỗi lần.
+Nó đề xuất `@nestjs/jwt` và một AuthGuard tự viết.
+
+Plan này từng rất quen. Nhưng bây giờ, quen không có nghĩa là còn mới nữa.
+
+Mình mở docs NestJS cho bạn xem.
+
+Bạn có thể thấy ngay ở dòng đầu tiên. Bây giờ docs không còn dùng bcrypt như plan vừa rồi. Nó dùng package `@nestjs/authentication`.
+
+Tức là prompt của mình còn sơ sài.
+
+Mình tiếp tục yêu cầu nó plan lại. Lần này, mình bắt nó đọc official docs của NestJS trước.
+
+Mình phải xem xét plan trước khi duyệt. Bây giờ mình làm lại nhé.
+
+Nó sẽ bỏ bcrypt và không dùng `@nestjs/jwt` theo plan cũ nữa. Nó chuyển sang package `@nestjs/authentication`.
+
+Mình cho AI đọc `docs.nestjs.com`. Trong lúc agent phân tích, mình giải thích cho bạn.
+
+JWT giống như vòng tay của một sự kiện. Bảo vệ kiểm tra chữ ký, nhưng không cần hỏi lại quầy vé mỗi lần.
 
 Database tuyệt đối không lưu plaintext password. Nếu database bị lộ, plaintext biến một sự cố thành hàng nghìn tài khoản bị chiếm.
 
-Bcrypt tạo password hash — phép biến đổi một chiều. Salt làm hai password giống nhau có kết quả khác.
+Vì thế, mình cần `PasswordHasher` để băm password được nhập vào.
 
-Project đang có user test từ tập trước. Migration thêm `passwordHash` bắt buộc sẽ không đi qua dữ liệu cũ.
+Ok, plan mới đã có. Bạn có thể thấy package `@nestjs/authentication` phiên bản đầu tiên đã xuất hiện.
 
-Vì đây chỉ là database development, mình reset có chủ đích. Màn hình hiện cảnh báo dữ liệu sẽ bị xóa.
+Database User cũng được chỉnh đúng theo những gì mình muốn.
 
-Lệnh này không bao giờ được dùng tùy tiện trên production. Một command đúng môi trường vẫn có thể là command phá hoại ở môi trường khác.
+Bây giờ mình sẽ approve để nó chạy.
 
-Secret không nằm trong source code. Prompt yêu cầu mở rộng config boundary đã tạo ở EP03 với `auth.config.ts`. `JWT_ACCESS_SECRET` bắt buộc tối thiểu 32 ký tự, không có fallback. Nếu thiếu, application từ chối khởi động.
+Có một điểm khá thú vị. Plan ghi rõ phần out of scope là refresh token.
 
-Agent trả plan. Mình kiểm tra threat model: password leak, timing attack, token giả, user enumeration.
+Phần refresh token mình sẽ giải thích kỹ ở video tiếp theo. Tập này chúng ta chỉ làm access token.
 
-AuthModule phụ thuộc Users, còn Users không import ngược Auth. Dependency một chiều giúp hai module không kéo nhau thành vòng tròn.
+Trong kế hoạch có hai endpoint là register và login. Mình sẽ tạo chúng trong Postman.
 
-AI đề xuất trả nguyên user sau register. Trong object đó có `passwordHash`. Đây là kiểu bug nhìn response vẫn chạy ngon. Mình yêu cầu mapper loại field nhạy cảm trước khi trả khỏi service boundary.
+Sau đó mình verify lại khi agent làm xong.
 
-Mình approve plan. Agent implement, rồi mình mở diff theo đường request thay vì đọc ngẫu nhiên từng file.
+Không có token thì `/users/me` phải trả 401. Token chính xác thì endpoint trả 200.
 
-Register nhận name, email và password. Validation kiểm tra độ dài, còn AuthService gọi bcrypt hash trước khi lưu.
+Token sẽ dùng Bearer Authentication. Trong Postman, mình chọn Bearer Token và dán token vào đây.
 
-Login tìm user theo email. Bcrypt compare kiểm tra password mà không giải mã hash. Nếu email không tồn tại, service vẫn chạy một lần compare với dummy hash để giảm chênh lệch timing dễ quan sát giữa "không có user" và "sai password".
+Trong lúc chờ agent chạy, tài khoản Antigravity của mình bắt đầu bị giới hạn nhiều hơn.
 
-Nếu sai email hoặc password, cả hai cùng nhận một thông báo 401 chung. Client không cần biết tài khoản nào tồn tại.
+Việc dùng AI như thế này sẽ tốn tiền hơn trước khá nhiều. Mình cũng không thích thay đổi này.
 
-Khi đúng, JwtService ký payload chỉ có `sub`. Trong JWT, `sub` là subject, ở đây chính là user ID. Cấu hình ký và verify khóa cứng algorithm, issuer và audience; không chỉ kiểm tra mỗi secret và expiration.
+Mình sẽ cố gắng tìm cho bạn một tool mới, miễn phí hoặc rẻ nhất có thể. Trường phái của mình vẫn là trường phái tiết kiệm.
 
-Mình chưa nhét role hoặc permission vào token. Quyền thay đổi thường xuyên hơn danh tính, và token cũ không tự cập nhật.
+Ok, mọi thứ đã xong. Bây giờ mình quay lại kiểm thử.
 
-AuthGuard lấy Bearer token từ header, verify chữ ký, algorithm, issuer, audience và expiration. Payload hợp lệ được gắn vào request.
+Đầu tiên là register.
 
-Guard được đăng ký toàn cục bằng `APP_GUARD`: mặc định route phải xác thực. Chỉ register, login và health check được đánh dấu `@Public()`. Cách này tránh quên gắn guard khi thêm controller mới.
+Tiếp theo mình login. Bạn có thể thấy API đã trả về một access token.
 
-`@CurrentUser` chỉ giúp controller đọc user hiện tại gọn hơn. Decorator không tự xác thực và không thay guard.
+Access token này là gì, bạn có thể xem video ngắn mình đã làm về JWT.
 
-Đường register là route `@Public()`, AuthService, UsersRepository rồi PostgreSQL. Đường `/users/me` tự động đi qua global AuthGuard trước controller.
+JWT có ba phần. Phần đầu là header. Phần thứ hai là payload. Phần cuối cùng là signature.
 
-Đến phần tự gõ, mình viết mapper `toPublicUser`. Type trả về không có `passwordHash`.
+Mình đăng nhập lại để lấy access token.
 
-Đây là defense in depth. Kể cả controller return user, compiler cũng nhắc nếu mình làm rò field nhạy cảm.
+Tiếp theo là request User Profile. Mình đưa token vừa lấy vào phần Bearer Token.
 
-Giờ kiểm chứng. Register trả 201 và không có hash. Login sai trả 401 với message chung.
+Bạn có thể thấy endpoint trả 200 OK.
 
-Login đúng trả access token. Gọi `/users/me` không token nhận 401.
+Bỏ token ra thì request trả 401. Như vậy, code đã thực hiện đúng yêu cầu.
 
-Gắn header `Authorization: Bearer ...`, endpoint trả đúng user đang đăng nhập.
+Mình xem qua code một chút.
 
-Mình sửa một ký tự trong token. Chữ ký không còn khớp và guard chặn ngay.
+Users đã được bổ sung hai luồng là register và login. Register phục vụ đăng ký. Login phục vụ đăng nhập.
 
-JWT không phải mã hóa bí mật. Payload có thể được đọc; chữ ký chỉ giúp phát hiện nó bị sửa.
+Trong AuthService có `TokenService` để tạo access token.
 
-Giờ mình chuẩn hoá lại Postman một chút. Đặt một biến môi trường là `endpoint`, giá trị `http://localhost:3000`. Tất cả request đổi URL thành `{{endpoint}}` thay vì gõ cứng.
+Trong UsersController có endpoint `/users/me`. Endpoint này sử dụng `@CurrentUser()` từ `@nestjs/authentication`.
 
-Mình gom lại các API đã làm từ đầu series. Users có CRUD đầy đủ: list, create, find by ID, update, delete, count. Auth có register và login. Thêm `/users/me` cần Bearer token, và health check. Export collection thành file JSON để trong repo, bạn clone về là dùng được luôn.
+Vậy là cánh cửa đã biết người gõ là ai. Nhưng package chính thức không thay mình quyết định ai được phép làm gì.
 
-Cánh cửa đã biết người gõ là ai. Nhưng chuẩn bị xây Role và Permission, mình lại phải mô tả cùng convention cho AI.
+Tập sau, mình sẽ biến convention đã kiểm chứng thành Agent Skill. Đây là một tập rất đáng xem.
 
-Tập sau, ta biến convention đã kiểm chứng thành Agent Skill. AI sẽ nhớ cách scaffold, còn mình vẫn giữ quyền duyệt.
+AI sẽ nhớ cách scaffold, còn mình vẫn giữ quyền duyệt.
 
-Mình sẽ để lại link Git của nhánh này trong description. Nếu có câu hỏi gì bạn hãy để lại comment nhé. Hẹn gặp ở video sau. Mình là Richard. Lập trình là cuộc sống.
+Mình sẽ để lại link Git của nhánh này trong description. Nếu có câu hỏi gì, hãy để lại comment nhé. Hẹn gặp ở video sau.
 
 ---
 
@@ -91,35 +115,36 @@ Mình sẽ để lại link Git của nhánh này trong description. Nếu có c
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | GET user không auth vẫn thành công | 25s |
-| 2 | [IDE] | Gõ prompt đầy đủ: install, auth, config, threat model | 50s |
-| 3 | [DIAGRAM] | JWT = vòng tay sự kiện; password lúc login → JWT cho request sau | 45s |
-| 4 | [DIAGRAM] | Plaintext vs salted hash; không minh họa giải mã | 40s |
-| 5 | [IDE]+[TERM] | Migration passwordHash, reset dev DB có cảnh báo | 50s |
-| 6 | [IDE] | Config boundary: auth.config.ts, JWT_ACCESS_SECRET schema | 35s |
-| 7 | [IDE] | Agent trả plan + threat model, review dependency và response leak | 60s |
-| 8 | [IDE] | Approve, agent implement, mở diff theo đường request | 55s |
-| 9 | [IDE] | Diff: Register flow, bcrypt hash, public mapper | 60s |
-| 10 | [IDE] | Diff: Login flow, compare, dummy hash, payload `{ sub }` | 60s |
-| 11 | [IDE] | Diff: AuthGuard, APP_GUARD, @Public() | 55s |
-| 12 | [IDE] | Host tự gõ `toPublicUser` và `@CurrentUser` | 50s |
-| 13 | [BROWSER] | Register, login sai, login đúng | 60s |
-| 14 | [BROWSER] | `/users/me`: thiếu, đúng và token bị sửa | 65s |
-| 15 | [BROWSER] | Postman: tạo env variable `endpoint`, gom requests, export JSON | 50s |
-| 16 | [B-ROLL] | Code phản chiếu, teaser Agent Skill, sign-off | 20s |
+| 1 | [BROWSER] | GET user không auth vẫn thành công | 15s |
+| 2 | [IDE] | Agent đưa plan cũ: bcrypt + @nestjs/jwt + custom guard | 30s |
+| 3 | [BROWSER] | Mở docs NestJS 12 Authentication và Encryption/Hashing | 35s |
+| 4 | [IDE] | Gõ prompt mới, yêu cầu audit docs rồi lập lại plan | 35s |
+| 5 | [IDE]+[TERM] | Migration passwordHash, reset dev DB có cảnh báo | 35s |
+| 6 | [IDE] | Config boundary: auth.config.ts, JWT_ACCESS_SECRET schema | 25s |
+| 7 | [IDE] | Agent trả plan + threat model, review package 0.x, dependency và response leak | 40s |
+| 8 | [IDE] | Approve, agent implement, mở diff theo đường request | 40s |
+| 9 | [IDE] | Diff: Register, PasswordHasher scrypt, public mapper | 40s |
+| 10 | [IDE] | Diff: Login, verify(undefined), TokenService và refreshToken: false | 45s |
+| 11 | [IDE] | Diff: JwtBearerProvider, global guard, @Public() | 45s |
+| 12 | [IDE] | Host tự gõ `toPublicUser` và `@CurrentUser` | 35s |
+| 13 | [BROWSER] | Register, login sai, login đúng | 40s |
+| 14 | [BROWSER] | `/users/me`: thiếu, đúng và token bị sửa | 45s |
+| 15 | [BROWSER] | Postman: login tự lưu accessToken, chạy tiếp /users/me, export JSON | 35s |
+| 16 | [B-ROLL] | Code phản chiếu, teaser Agent Skill, sign-off | 15s |
 
-**Tổng: 800 giây ≈ 13:20.** Che token và JWT secret khi quay; font IDE tối thiểu 18px.
+**Tổng: 555 giây ≈ 9:15, cộng nhịp nghỉ ngắn thành khoảng 9–10 phút.** Che token và JWT secret khi quay; dùng One Dark Pro, JetBrains Mono tối thiểu 18px, ẩn sidebar và minimap.
 
 **Lưu ý flow mới:** Prompt được gõ ngay scene 2. Scenes 3–6 là giải thích khái niệm trong lúc agent lên plan — host nói voiceover, màn hình xen kẽ diagram và IDE hiện agent đang chạy. Scene 7 quay lại IDE khi agent trả kết quả.
 
 ### Command chuẩn bị
 
-Agent sẽ tự chạy install và scaffold từ prompt. Host chỉ cần biết để verify diff:
+Trước khi quay, chạy và giữ nguyên exact version trong lockfile:
 
 ```bash
-# Agent chạy từ prompt:
-npm install @nestjs/jwt bcrypt
-npm install --save-dev @types/bcrypt
+# Xem version thật, rồi pin đúng version đó; không quay với @latest
+npm view @nestjs/core version
+npm view @nestjs/authentication version
+npm install --save-exact @nestjs/authentication@0.1.1
 nest g module modules/auth
 nest g controller modules/auth --no-spec
 nest g service modules/auth --no-spec
@@ -128,12 +153,18 @@ nest g service modules/auth --no-spec
 Thêm `JWT_ACCESS_SECRET` vào `.env` local và chỉ thêm placeholder đủ dài vào `.env.example`. `auth.config.ts` là nơi duy nhất chuyển biến môi trường thô thành config của Auth.
 
 ```typescript
-export default registerAs('auth', () => ({
-  accessSecret: process.env.JWT_ACCESS_SECRET!,
-  accessTtl: process.env.JWT_ACCESS_TTL ?? '15m',
-  issuer: process.env.JWT_ISSUER!,
-  audience: process.env.JWT_AUDIENCE!,
-}));
+AuthenticationModule.forRootAsync({
+  inject: [ConfigService],
+  useFactory: (config: ConfigService) => ({
+    accessToken: {
+      key: config.getOrThrow<string>('auth.accessSecret'),
+      ttl: config.getOrThrow<string>('auth.accessTtl'),
+      issuer: config.getOrThrow<string>('auth.issuer'),
+      audience: config.getOrThrow<string>('auth.audience'),
+    },
+    refreshToken: false,
+  }),
+});
 ```
 
 Schema từ EP03 được mở rộng để app fail fast:
@@ -148,52 +179,70 @@ JWT_AUDIENCE: z.string().min(1),
 ### Code cốt lõi
 
 ```typescript
-const passwordHash = await bcrypt.hash(dto.password, 12);
+const passwordHash = await this.passwordHasher.hash(dto.password);
 const user = await this.usersService.createWithPassword(dto, passwordHash);
 return toPublicUser(user);
 ```
 
 ```typescript
-const valid = user && await bcrypt.compare(dto.password, user.passwordHash);
-if (!valid) {
+const credential = await this.usersRepository.findCredentials(dto.email);
+const valid = await this.passwordHasher.verify(
+  dto.password,
+  credential?.passwordHash,
+);
+if (!credential || !valid) {
   throw new UnauthorizedException('Email hoặc mật khẩu không đúng');
 }
 
-return {
-  accessToken: await this.jwtService.signAsync({ sub: user.id }),
-};
+return this.tokenService.issue(credential.user.id, {
+  method: 'password',
+  claims: { amr: ['pwd'] },
+});
 ```
 
 ```typescript
-@Get('me')
-findMe(@CurrentUser() actor: AuthenticatedUser) {
-  return this.usersService.findPublicById(actor.id);
+export class JwtAuth extends JwtBearerProvider<PublicUser> {
+  constructor(
+    private readonly users: UsersRepository,
+    registry: AuthenticationRegistry,
+  ) {
+    super({ realm: 'taskflow' });
+    registry.registerProvider(this);
+  }
+
+  validate({ sub }: JwtClaims) {
+    return sub ? this.users.findPublicById(sub) : null;
+  }
 }
 ```
 
 ### Prompt cho Opus
 
 ```text
-Plan JWT authentication for the existing NestJS Users API.
+Audit and plan authentication for the existing NestJS 12 Users API.
 
 Setup:
-- Install @nestjs/jwt and bcrypt (with @types/bcrypt as dev dependency).
+- Read the current official NestJS Authentication and Encryption/Hashing docs first.
+- Use @nestjs/authentication and pin its exact 0.x version in package-lock.json.
 - Generate AuthModule, AuthController and AuthService under modules/auth.
 
 Requirements:
 - Add register, login and GET /users/me.
-- Hash passwords with bcrypt and never return passwordHash.
-- Use @nestjs/jwt and a Bearer-token AuthGuard.
-- Register AuthGuard globally with APP_GUARD; only explicit @Public routes bypass authentication.
-- Pin the JWT algorithm and validate issuer, audience and expiration.
-- JWT payload contains sub only for now.
+- Hash passwords with PasswordHasher and never return passwordHash.
+- Use AuthenticationModule, TokenService and JwtBearerProvider.
+- Keep the package's global guard; only explicit @Public routes bypass authentication.
+- Configure and validate key, issuer, audience and access-token TTL once.
+- Set refreshToken: false in this episode; do not build refresh-token persistence yet.
+- JwtBearerProvider.validate() must load the current public user and reject a deleted user.
 - Use one generic 401 message for invalid email or password.
-- Perform a dummy password-hash comparison when the email is absent to reduce timing differences.
+- Pass undefined to PasswordHasher.verify() when credentials are absent, so its built-in dummy verification runs.
+- Rehash after successful login when PasswordHasher.needsRehash() is true.
 - AuthModule may depend on UsersModule; UsersModule must not import AuthModule.
 - Extend the ConfigModule boundary created in EP03 with a typed auth.config.ts.
 - Add JWT_ACCESS_SECRET to startup validation; require at least 32 characters and never provide a secret fallback.
 - Validate JWT_ISSUER and JWT_AUDIENCE at startup.
 - Update .env.example with placeholders only; never commit or print the real secret.
+- Do not add sessions, email verification, MFA or refresh tokens in this episode.
 - First produce a threat model, file plan and verification matrix.
 - Do not edit before approval.
 ```
@@ -208,13 +257,15 @@ Requirements:
 | Token hợp lệ | 200 |
 | Token bị sửa | 401 |
 
+Không tự tạo `DUMMY_PASSWORD_HASH`. `PasswordHasher.verify(password, undefined)` đã thực hiện dummy verification cùng cost. Sau login thành công, dùng `needsRehash()` để nâng hash cũ khi cấu hình cost thay đổi.
+
 ---
 
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
 
-1. `A cinematic photograph of a Vietnamese developer holding a glowing JWT token like a digital wristband before a locked API doorway, dark code screens, neon green and cyan lighting, dramatic shadows, subject on the right with empty left space, 16:9, photorealistic, no text, no logos, no watermark.`
-2. `A cinematic close-up of plaintext password dissolving into an irreversible bcrypt hash on a dark IDE monitor, code reflected in eyeglasses, neon green syntax and red warning light, empty space on the left, 16:9, photorealistic tech commercial, no text.`
-3. `A cinematic developer workspace where a forged red JWT is stopped by a glowing cyan guard while a valid green token passes, rain bokeh, deep navy background, subject positioned right, 16:9, photorealistic, no text, no watermark.`
+1. `A cinematic photograph of a dark IDE monitor showing an old custom AuthGuard diff being replaced by the official NestJS 12 authentication package, dramatic Nest red and white monitor glow, neon syntax highlighting on a black background, shallow depth of field, rain bokeh through a window, film grain, anamorphic lens flare, 8k, photorealistic, like a high-end tech commercial or developer documentary, 16:9, text-free composition. Not a screenshot, not a tutorial, not cartoon.`
+2. `A cinematic photograph of a password entering a glowing scrypt memory grid beside a dark IDE monitor, dramatic Nest red and white monitor glow, code visible with syntax highlighting on a black background, shallow depth of field, bokeh city lights through a window, film grain, 8k, photorealistic, like a high-end tech commercial or developer documentary, 16:9, text-free composition. Not a screenshot, not a tutorial, not cartoon.`
+3. `A cinematic photograph of a forged red JWT stopped at a luminous API gate while one valid token passes toward a dark NestJS code monitor, dramatic Nest red and white monitor glow, syntax highlighting on a black background, shallow depth of field, rain bokeh through a window, 8k, photorealistic, like a high-end tech commercial or developer documentary, 16:9, text-free composition. Not a screenshot, not a tutorial, not cartoon.`
 
 ---
 
@@ -222,29 +273,34 @@ Requirements:
 
 ### 4a. Titles
 
-1. JWT Authentication NestJS: Register, Login và AuthGuard — EP05
-2. Xây chức năng đăng nhập JWT trong NestJS — EP05
-3. Hash mật khẩu với bcrypt trong NestJS — EP05
-4. Bảo vệ API bằng AuthGuard và JWT — EP05
-5. Tạo API /users/me trong NestJS — EP05
+1. NestJS 12 đổi cách làm Authentication như thế nào? — EP05 | Lập trình là cuộc sống
+2. JWT Authentication NestJS 12: Register, Login và Bearer Token — EP05 | Lập trình là cuộc sống
+3. Đừng tự viết AuthGuard trước khi xem package mới này — EP05 | Lập trình là cuộc sống
+4. Một plan AI lỗi thời suýt làm Auth của tôi cũ ngay ngày đầu — EP05 | Lập trình là cuộc sống
+5. Hash mật khẩu bằng scrypt trong NestJS 12 — EP05 | Lập trình là cuộc sống
+6. NestJS đã có Authentication chính thức, bcrypt còn cần không? — EP05 | Lập trình là cuộc sống
+7. Bảo vệ mọi route mặc định trong NestJS 12 — EP05 | Lập trình là cuộc sống
+8. JWT không mã hóa dữ liệu: lỗi hiểu nhầm của nhiều Fresher — EP05 | Lập trình là cuộc sống
+9. Tạo Register, Login và /users/me đúng kiểu NestJS 12 — EP05 | Lập trình là cuộc sống
+10. Code Auth chạy được chưa chắc là Auth nên dùng — EP05 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 4 cho outcome bảo mật.
+**Khuyên dùng:** Đăng Title 1 để bắt thay đổi mới của NestJS 12. A/B test Title 2 cho search và Title 4 cho insight AI.
 
 ### 4b. SEO Description
 
 ```text
-API trả lỗi đẹp nhưng vẫn mở cửa cho mọi người. Tập này thêm register, login, bcrypt, JWT và AuthGuard đúng boundary.
+API trả lỗi đẹp nhưng vẫn mở cửa cho mọi người. Tập này dùng package authentication chính thức của NestJS 12 để thêm register, login, JWT bearer và global guard.
 
-✅ Hash password bằng bcrypt
+✅ Hash password bằng PasswordHasher dùng scrypt
 ✅ Không trả passwordHash cho client
 ✅ Phát JWT với payload tối thiểu
-✅ Verify Bearer token bằng AuthGuard
-✅ Tạo decorator CurrentUser
+✅ Verify Bearer token bằng JwtBearerProvider
+✅ Dùng global guard, Public và CurrentUser
 ✅ Phân biệt ký token với mã hóa payload
 ✅ Test token thiếu, sai và bị chỉnh sửa
 
 🔗 NestJS Authentication: https://docs.nestjs.com/security/authentication
-🔗 NestJS JWT: https://github.com/nestjs/jwt
+🔗 NestJS Encryption and Hashing: https://docs.nestjs.com/security/encryption-and-hashing
 
 ⏱ 0:00 API chưa có khóa
 ⏱ 0:25 Gõ prompt cho agent
@@ -264,26 +320,38 @@ API trả lỗi đẹp nhưng vẫn mở cửa cho mọi người. Tập này th
 ### 4c. Keywords / Tags
 
 ```text
-nestjs jwt auth, nestjs authentication, bcrypt nestjs, register login nestjs, auth guard nestjs, current user decorator, jwt bearer token, password hashing, jwt không mã hóa, nestjs tiếng việt, học nestjs, nestjs tập 5, backend security, typescript backend, users auth api, ai coding mentor, opus antigravity, lập trình là cuộc sống
+nestjs 12 authentication, nestjs authentication, passwordhasher nestjs, scrypt nestjs, register login nestjs, jwt bearer provider, current user decorator, jwt bearer token, password hashing, jwt không mã hóa, nestjs tiếng việt, học nestjs, nestjs tập 5, backend security, typescript backend, ai coding mentor, opus antigravity, lập trình là cuộc sống
 ```
 
 ---
 
 ## PART 5 — THUMBNAIL PACKAGE
 
+### Thumbnail đã đăng
+
+- **File:** `assets/thumbnail-05-jwt-auth-v4-final.png`
+- **Hook:** `JWT / KHÔNG / MÃ HÓA`
+- **Visual:** Không dùng nhân vật. Bên phải chỉ giữ mắt cảnh báo, payload JWT mở và khiên chữ ký; đã kiểm tra khả năng đọc ở kích thước 320×180.
+
 ### Option 1 — khuyên dùng
-- `JWT` — NEON GREEN `#00FF41`
-- `KHÔNG MÃ HÓA` — WHITE
-- Hình: payload JWT nhìn thấy được, chữ ký phát sáng.
+- **Image prompt:** `A cinematic photograph of a giant glowing NestJS shield replacing fragmented handwritten guard code on a dark IDE monitor, floating red authentication symbols, extreme Nest red and white contrast, dramatic rim lighting, deep shadows, subtle rain and code particles, visual elements positioned on the right leaving empty dark space on the left for text, 8k, 16:9, photorealistic, text-free, not cartoon or illustration.`
+- Dòng 1: `NESTJS 12` — WHITE `#FFFFFF`
+- Dòng 2: `AUTH ĐỔI RỒI` — `ĐỔI RỒI` NEST RED `#E0234E`, phần còn lại WHITE.
+- Badge nhỏ: `EP05` — WHITE trên hộp `#1a1a2e`, viền NEST RED.
+- Canvas 1280×720. Font Anton cho headline, JetBrains Mono cho badge. Mỗi dòng cao 110–140px, line spacing 0.85, block trái khoảng một phần ba khung. Stroke đen 8px, shadow/glow đỏ 8–12px ở 65%, không đè visual. Thêm noise/scan-line nhẹ.
 
 ### Option 2
-- `PASSWORD` — WHITE
-- `ĐỪNG LƯU THẲNG` — NEON GREEN `#00FF41`
-- Hình: plaintext rơi vào máy nghiền bcrypt.
+- **Image prompt:** `A cinematic photograph of a plaintext password entering an exaggerated glowing scrypt memory grid beside a dark NestJS IDE, floating hash fragments and memory blocks, extreme Nest red and white lighting, dramatic rim light, deep black shadows and subtle fog, visual elements positioned on the right leaving empty dark space on the left for text, 8k, 16:9, photorealistic, text-free, not cartoon or illustration.`
+- Dòng 1: `BCRYPT` — WHITE `#FFFFFF`
+- Dòng 2: `KHÔNG CÒN MẶC ĐỊNH` — `KHÔNG CÒN` NEST RED `#E0234E`, phần còn lại WHITE.
+- Badge nhỏ: `SCRYPT` — WHITE trên hộp `#1a1a2e`, viền NEST RED.
+- Canvas 1280×720. Font Anton cho headline, JetBrains Mono cho badge. Mỗi dòng cao 110–140px, line spacing 0.85, block trái khoảng một phần ba khung. Stroke đen 8px, shadow/glow đỏ 8–12px ở 65%, không đè visual. Thêm noise/scan-line nhẹ.
 
 ### Option 3
-- `AI VIẾT AUTH` — WHITE
-- `TÔI BẮT LỖI` — NEON GREEN `#00FF41`
-- Hình: agent panel cạnh response rò passwordHash.
+- **Image prompt:** `A cinematic photograph of an AI coding panel proposing an old custom JWT guard while an official NestJS 12 authentication document glows red beside it, floating diff lines and a sharp warning marker, extreme red and white contrast, deep shadows and dramatic monitor light, visual elements positioned on the right leaving empty dark space on the left for text, 8k, 16:9, photorealistic, text-free, not cartoon or illustration.`
+- Dòng 1: `AI ĐƯA CODE CŨ` — WHITE `#FFFFFF`
+- Dòng 2: `DOCS CỨU TÔI` — `CỨU TÔI` NEST RED `#E0234E`, phần còn lại WHITE.
+- Badge nhỏ: `NESTJS 12` — WHITE trên hộp `#1a1a2e`, viền NEST RED.
+- Canvas 1280×720. Font Anton cho headline, JetBrains Mono cho badge. Mỗi dòng cao 110–140px, line spacing 0.85, block trái khoảng một phần ba khung. Stroke đen 8px, shadow/glow đỏ 8–12px ở 65%, không đè visual. Thêm noise/scan-line nhẹ.
 
-**Typography chung:** Canvas 1280×720, Anton cho hook và JetBrains Mono cho `NESTJS #05`. Chữ trái, hình phải, stroke 8px, glow 10px. Typeset trong Canva; giữ bản nền không chữ.
+Luôn typeset trong Canva thay vì để AI render chữ. Giữ bản nền sạch không chữ để tái sử dụng và A/B test.
