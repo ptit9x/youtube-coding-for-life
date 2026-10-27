@@ -1,7 +1,7 @@
 # Prompt dùng trong EP06 — Agent Skill: Giúp AI làm đúng cấu trúc dự án
 
 > Các prompt dưới đây dùng tuần tự trong video.
-> Host paste từng prompt vào agent panel (Antigravity / Cursor / Codex),
+> Host paste từng prompt vào agent panel Antigravity,
 > review kết quả, chỉnh sửa, rồi mới chuyển sang prompt tiếp theo.
 
 ---
@@ -139,7 +139,7 @@ Tóm tắt các luật kiến trúc quan trọng nhất:
 - Docker Compose dùng required interpolation
 
 ### 6. Testing
-- Framework: Vitest 4 (Nest CLI 12 scaffold sẵn, globals: true)
+- Framework: Vitest 4 đã được TaskFlow chọn từ EP01 (`globals: true`)
 - Unit test: mock repository contract
 - E2E test: Supertest + database thật (test container hoặc test DB)
 - Chạy: `npm test`, `npm run test:e2e`
@@ -163,17 +163,19 @@ chi tiết nằm trong skill và reference.
 > skill và tuân thủ convention không.
 
 ```text
-Use $nest-feature to plan Roles and Permissions inside the TaskFlow
-access-control domain.
+Plan Roles and Permissions inside the TaskFlow access-control domain using
+the existing project conventions.
 
 Do not edit yet. Show:
-1. Folder structure for `src/modules/access-control/roles/` and
-   `src/modules/access-control/permissions/`
+1. Folder structure for Roles and Permissions
 2. Dependency direction for each layer
-3. Repository contract interface (no Prisma imports)
-4. Which Prisma 8 docs/release-status pages to check before migration
+3. Repository contract boundaries without Prisma imports
+4. Business rules that must remain explicit per feature
 5. Verification commands to run after implementation
 ```
+
+Không gọi tên Skill. Mục tiêu là kiểm chứng Antigravity tự route bằng
+`description`. Không approve và không cho agent sửa code; EP08 mới implement.
 
 ---
 
@@ -208,8 +210,10 @@ services. Create a BaseCrudService<T> that all three can extend.
 
 - **Prompt 1–3:** Chạy trong cùng conversation để AI có context liên tục.
   Host review output từng prompt, loại bỏ business rule trước khi approve.
-- **Prompt 4–6:** Mở conversation MỚI (context sạch) để kiểm chứng skill
+- **Prompt 4–6:** Mở conversation MỚI (context sạch) để kiểm chứng Skill
   hoạt động độc lập.
+- Mở **Customizations → Skills** trước prompt 4 để quay bằng chứng
+  `nest-feature` đã được Antigravity discover.
 - Quay cả lúc host đọc output, suy nghĩ và loại bỏ — đây là điểm khác biệt
   "AI viết, mình hiểu" của series.
 - IDE theme: One Dark Pro, font ≥18px, ẩn sidebar/minimap khi chiếu terminal.

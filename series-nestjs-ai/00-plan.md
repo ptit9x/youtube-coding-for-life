@@ -267,12 +267,12 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 ### EP 06 — AGENTS.md, Skills và MCP: Dạy AI nhớ project ✅ script mới
 - ← pain: mỗi tool AI có cơ chế rule riêng (`CLAUDE.md`, `.cursor/rules/*.mdc`, `.github/copilot-instructions.md`). Copy-paste qua lại, đổi convention chỗ A quên cập nhật B và C.
 - Học 3 tầng context cho AI coding agent:
-  - **Tầng 1 — AGENTS.md (Hot Memory):** định dạng mở được nhiều coding agent hỗ trợ, không phải lời hứa rằng mọi tool nạp giống nhau. Chuẩn do Agentic AI Foundation thuộc Linux Foundation quản lý. Claude Code (v2.1.277+) dùng AGENTS.md làm fallback nếu không có CLAUDE.md; từng client vẫn phải kiểm tra load order thực tế.
+  - **Tầng 1 — AGENTS.md (Hot Memory):** định dạng mở được nhiều coding agent hỗ trợ, không phải lời hứa rằng mọi tool nạp giống nhau. Chuẩn do Agentic AI Foundation thuộc Linux Foundation quản lý. Video kiểm chứng trực tiếp trong Antigravity qua Customizations thay vì suy đoán từ tên file.
   - **Tầng 2 — docs/ (Cold Memory):** architecture.md, database-schema.md — AGENTS.md ghi rõ điều kiện phải đọc từng file. Giữ instruction ngắn và bền vững; `<150 dòng` là convention riêng của TaskFlow, không phải giới hạn của chuẩn.
   - **Tầng 3 — Skills (On-demand workflow):** `.agents/skills/nest-feature/SKILL.md` đóng gói scaffold convention. Progressive disclosure — agent chỉ nạp instruction khi prompt khớp.
-  - **MCP (Tool connectivity):** giới thiệu Model Context Protocol — "USB-C cho ứng dụng AI" kết nối database/API. Chỉ giới thiệu concept, chưa tạo một file config giả portable; config và permission thuộc từng client.
-- Bảng so sánh Agent Config trên màn hình: Codex, Claude Code, Cursor, Copilot, Windsurf + file paths + điều kiện AGENTS.md thực tế.
-- AI sequence: tạo AGENTS.md + docs/ cho TaskFlow → tạo nest-feature skill → scaffold Roles/Permissions → verify skill chỉ kích hoạt đúng lúc.
+  - **MCP (Tool connectivity):** giới thiệu Model Context Protocol — "USB-C cho ứng dụng AI" kết nối database/API. Antigravity hỗ trợ workspace config tại `.agents/mcp_config.json`; config này không portable sang mọi client. Review quyền và chỉ bật tool cần dùng.
+- Bảng so sánh Agent Config trên màn hình: Antigravity, Codex, Cursor, Copilot, Claude Code + file paths + điều kiện AGENTS.md thực tế.
+- AI sequence: tạo AGENTS.md + docs/ + nest-feature skill theo đủ workflow plan/review/approve/code/verify → dùng prompt Roles/Permissions để kiểm chứng auto-route nhưng không implement trước EP08 → kiểm chứng skill không kích hoạt với README typo.
 - Kiểm chứng: prompt không liên quan (fix README typo) → skill không kích hoạt.
 - Thành quả: convention sống trong repo, đổi tool vẫn giữ. AI biết kiến trúc trước khi viết dòng đầu tiên. → **pain: access token ngắn hạn làm phiên đăng nhập liên tục bị ngắt.**
 - File: `06-agent-skill-nestjs/script.md`
@@ -305,7 +305,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 
 ### EP 10 — Testing phân quyền bằng Vitest và Supertest
 - ← pain: EP09 thay guard hoặc ownership rule là phải thử tay hàng loạt tài khoản và route.
-- Học: Vitest unit test service/guard với mock (Nest CLI 12 scaffold sẵn vitest 4, `globals: true` — API tương thích Jest), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì.
+- Học: Vitest unit test service/guard với mock (TaskFlow đã chọn Vitest từ EP01, `globals: true`), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì. Nest CLI 12 hiện scaffold Jest 30 mặc định, nên không gọi Vitest là mặc định mới của CLI.
 - Ma trận bắt buộc: user không role; nhiều role; permission trùng qua hai role; revoke role; revoke permission; thiếu permission; ownership sai; direct ALLOW/DENY nếu bật override.
 - AI moment: AI sinh test chỉ assert status chung chung → host mutation nhỏ vào guard để chứng minh test vẫn xanh, rồi viết lại assertion có giá trị.
 - Thành quả: `test` và `test:e2e` bảo vệ luồng auth/RBAC/ownership. → **pain: duplication giữa ba feature bắt đầu rõ, rất dễ refactor quá tay.**

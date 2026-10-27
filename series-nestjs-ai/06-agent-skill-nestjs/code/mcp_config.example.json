@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "project-docs-example": {
+      "serverUrl": "https://example.com/mcp/",
+      "enabledTools": [
+        "search_docs",
+        "read_doc"
+      ],
+      "disabled": true
+    }
+  }
+}

@@ -2,8 +2,8 @@
 
 Task management REST API built with NestJS 12, TypeScript 5.9+, Prisma 8 and
 PostgreSQL. Runs on Node 24 with ESM. Architecture: modular monolith organized
-by business domain. Authentication uses JWT access tokens with refresh token
-rotation.
+by business domain. Authentication currently uses JWT access tokens. Refresh
+token rotation is introduced in EP07.
 
 ## Directory layout
 

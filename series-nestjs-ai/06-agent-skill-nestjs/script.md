@@ -1,7 +1,7 @@
 # NestJS #06 — AGENTS.md, Skills và MCP: Dạy AI nhớ project
 
 - **Series:** Học NestJS bằng AI — tập 6
-- **Target runtime:** 10–12 phút (~900–1100 từ thoại)
+- **Target runtime:** 9–11 phút (~810 từ thoại + khoảng nghỉ review/diff)
 - **Outcome:** Viewer hiểu 3 tầng context cho AI coding agent: project rules (AGENTS.md), on-demand workflow (Skills), tool connectivity (MCP). Áp dụng cho TaskFlow NestJS project.
 - **Pain mở EP07:** Access token ngắn hạn an toàn nhưng buộc người dùng đăng nhập lại liên tục.
 
@@ -9,71 +9,87 @@
 
 ## PART 1 — SCRIPT
 
-Cài Cơ-xờ, tạo rule trong `.cursor/rules/`. Cài Claude Code, tạo `CLAUDE.md`. Cài thêm Copilot, tạo `.github/copilot-instructions.md`. Ba chỗ. Cùng nội dung. Copy-paste qua lại. Đổi convention ở chỗ A, quên cập nhật B và C.
+AI vừa tạo hai module trong cùng một project. Một module theo convention. Module kia như code của đội khác.
 
-Thiếu convention thì còn tệ hơn. AI từ mỗi tool sinh code kiểu khác nhau. Cùng một project, hai folder cấu trúc hai kiểu.
+Bạn nhắc lại rule trong prompt. Conversation mới, rule biến mất. Prompt dài hơn, nhưng code chưa chắc nhất quán hơn.
 
-Thử nhồi convention vào prompt. Mỗi lần paste lại một đoạn dài. Rồi prompt dài quá, AI chú ý đoạn đầu, quên rule ở giữa.
+Vấn đề không phải AI lười. Convention của project đang nằm sai chỗ.
 
-Vấn đề không phải AI lười. Mà convention chưa nằm đúng chỗ.
+Cách sửa có ba tầng. AGENTS.md giữ rule luôn cần. Skill giữ workflow theo nhu cầu. MCP nối agent với tool bên ngoài.
 
-Giải pháp có ba tầng. Tầng một: đặt quy tắc project trong một file mở được nhiều agent. Tầng hai: đóng gói workflow lặp lại thành Skill. Tầng ba: kết nối agent với database, docs, API bằng MCP.
+Bắt đầu với AGENTS.md. Đây là định dạng mở dành cho coding agent. Hơn sáu mươi nghìn repo mã nguồn mở đã dùng.
 
-Bắt đầu từ tầng một. Năm hai nghìn hai mươi sáu, mỗi AI tool vẫn có file riêng. Claude Code đọc `CLAUDE.md`. Cơ-xờ đọc file `.mdc` trong `.cursor/rules/`. Copilot đọc `.github/copilot-instructions.md`. Kiro dùng file steering trong `.kiro/steering/`.
+Agentic AI Foundation thuộc Linux Foundation đang quản lý định dạng này. Antigravity, Codex, Cơ-xờ và nhiều agent khác đều hỗ trợ.
 
-Nhưng có một định dạng mở đang được nhiều agent chấp nhận: `AGENTS.md`. Agentic AI Foundation thuộc Linux Foundation đang quản lý định dạng này. Hơn sáu mươi nghìn repo mã nguồn mở đã dùng.
+Nhưng hỗ trợ không có nghĩa mọi tool nạp giống nhau. Tập này mình kiểm chứng trên đúng công cụ đang dùng: Antigravity.
 
-Quan trọng nhất cho series này: Claude Code từ bản hai chấm một chấm hai trăm bảy mươi bảy đọc `AGENTS.md` khi project không có `CLAUDE.md`. Codex, Cơ-xờ và Copilot coding agent cũng hỗ trợ. Nhưng cách tìm file và độ ưu tiên không giống nhau.
+Mình tạo AGENTS.md ở root TaskFlow. Antigravity xem file này là rule luôn bật cho workspace.
 
-Vậy nên mình không tạo CLAUDE.md cho TaskFlow. Mình tạo `AGENTS.md`.
+Mình mở Customizations. AGENTS.md xuất hiện trong danh sách active rules. Đây mới là bằng chứng, không phải tên file.
 
-Giờ mình mở TaskFlow. Tạo `AGENTS.md` ở root. Mình gọi đây là "Hot Memory" vì agent hỗ trợ sẽ đọc nó như project instruction. Nó nên ngắn và chỉ chứa rule bền vững. Một trăm năm mươi dòng là giới hạn của TaskFlow, không phải giới hạn của chuẩn.
+File này chỉ giữ những điều bền vững. Stack, lệnh kiểm chứng và ranh giới kiến trúc.
 
-Viết gì trong đó? Stack, build commands, coding boundaries. Những thứ AI cần biết mọi lúc.
+Mình tự đặt giới hạn một trăm năm mươi dòng. Đây là convention của TaskFlow, không phải giới hạn của chuẩn.
 
-Nhưng schema database, kiến trúc chi tiết, quyết định thiết kế — những thứ đó dài. Nếu nhồi hết vào AGENTS.md, context window bị ngập. Rule quan trọng bị AI bỏ quên vì kẹt giữa đống text.
+Kiến trúc chi tiết thì dài. Nếu nhét hết vào rule, context bị tốn cho những thứ chưa cần.
 
-Nên mình tách ra. Tạo folder `docs/` ngay trong source code. `docs/architecture.md` cho module map. `docs/database-schema.md` cho Prisma tám contract. AGENTS.md chỉ giữ rules cứng và trỏ tới docs: "See `docs/architecture.md` for module dependency direction."
+Nên mình tạo docs architecture và database schema. AGENTS.md ghi rõ lúc nào agent phải đọc từng file.
 
-Mình gọi đây là "Cold Memory". Agent không cần nạp toàn bộ lúc khởi tạo. Rule trong `AGENTS.md` chỉ rõ lúc nào phải mở từng tài liệu.
+Khi đổi boundary module, đọc architecture. Khi đổi model, đọc database schema. Một đường dẫn không có điều kiện chỉ là biển chỉ đường mơ hồ.
 
-Đừng dùng đường dẫn như một câu thần chú rồi tin agent tự hiểu. Mình viết rõ: khi đổi boundary module, đọc `docs/architecture.md`; khi đổi model, đọc `docs/database-schema.md`.
+Mình gọi AGENTS.md là Hot Memory. Docs là Cold Memory. Đây là cách gọi trong TaskFlow, không phải thuật ngữ của chuẩn.
 
-Mình demo trên màn hình. Mở Claude Code bản phù hợp trong TaskFlow, kiểm tra Project instructions, rồi yêu cầu nó nhắc lại hai rule. Không cần tạo `CLAUDE.md` riêng cho demo này. Đổi agent vẫn phải kiểm tra file nào thực sự được nạp.
+Giờ đến Skill. AGENTS.md nói điều luôn đúng. Skill mô tả một workflow chỉ dùng khi task phù hợp.
 
-Giờ qua tầng hai: Skill.
+Mình yêu cầu agent đọc Users và Auth. Sau đó, nó đề xuất convention chung cho feature NestJS.
 
-AGENTS.md giữ rules. Nhưng mỗi lần scaffold feature mới, mình lại paste cùng một danh sách bước. Thiếu một dòng, cấu trúc lệch.
+Agent muốn đưa rule hash password vào Skill. Mình từ chối. Đó là business rule của Auth, không phải kiến trúc chung.
 
-Skill đóng gói bước đó thành workflow tái sử dụng. Tạo file `SKILL.md` trong `.agents/skills/nest-feature/`. Mình thích đặt trong `.agents/` vì theo chuẩn Agent Skills — chuẩn mở tại `agentskills.io`, Claude Code cũng hỗ trợ.
+Đây là bước review bằng mắt. AI đề xuất. Người hiểu project quyết định.
 
-Skill dùng progressive disclosure. Ban đầu agent chỉ thấy tên và description. Khi prompt khớp, agent mới đọc toàn bộ instruction. Context không bị ngập bởi workflow không liên quan.
+Sau khi duyệt plan, mình cho agent tạo AGENTS.md, docs và nest-feature Skill.
 
-Description không phải lời quảng cáo. Nó là bộ định tuyến. Viết rõ: "Use for modules, controllers, services, DTOs. Do not use for one-line fixes."
+Antigravity dùng progressive disclosure. Ban đầu, agent chỉ thấy tên và description của Skill.
 
-Mình yêu cầu AI đọc Users và Auth, đề xuất phần nào đủ ổn định để đưa vào skill.
+Khi task phù hợp, agent mới đọc toàn bộ instruction. Context không phải gánh mọi workflow trong mọi conversation.
 
-AI muốn ghi rule "register phải hash password". Rule đó chỉ thuộc Auth. Mình loại. Skill giữ file layout, dependency direction và workflow plan-first. Convention cụ thể từng domain giữ trong service.
+Description là bộ định tuyến. Mình ghi rõ Skill dùng cho business feature. Sửa typo hoặc config nhỏ thì không dùng.
 
-Bây giờ kiểm chứng. Conversation mới. Yêu cầu scaffold Roles và Permissions theo convention TaskFlow.
+AI làm xong, mình không tin ngay. Mình mở git diff và đọc từng file.
 
-Agent nhận đúng skill. Đọc cấu trúc repo. Chỉ đưa plan, không sửa file. Plan dùng contract Prisma tám, adapter riêng biệt. Không lặp snippet Prisma bảy từ mạng.
+Mình chạy git diff check, lint và test. Tất cả đều xanh. Chu trình sáu bước kết thúc ở đây.
 
-Thử prompt không liên quan: sửa typo README. Skill không kích hoạt. Đúng vậy — description scope rõ nên agent bỏ qua.
+Mình mở Customizations lần nữa. AGENTS.md và Skill đều xuất hiện. Bây giờ mới tới kiểm chứng routing.
 
-Tầng ba — MCP. Model Context Protocol.
+Trong conversation mới, mình yêu cầu plan Roles và Permissions. Mình không gọi tên Skill.
 
-MCP giống cổng USB-C cho ứng dụng AI. Một đầu là client. Đầu kia là server cung cấp data hoặc tool như database, docs và API.
+Agent tự chọn đúng Skill. Nó đọc feature lân cận, trình file plan và dừng lại chờ approve.
 
-MCP có hệ sinh thái client rộng, gồm Claude, ChatGPT, VS Code và Cơ-xờ. Nhưng hỗ trợ giao thức không có nghĩa mọi client dùng chung một file config.
+Mình kiểm tra dependency direction. Controller gọi service. Service phụ thuộc contract. Adapter mới biết Prisma.
 
-Config phụ thuộc client, nên mình không tạo một file giả vờ portable trong repo. Tập này chỉ dừng ở kiến trúc và quyền truy cập. Khi cài thật, phải đọc docs của đúng client và review quyền của từng server.
+Skill không làm AI thông minh hơn. Nó biến kinh nghiệm đã kiểm chứng thành quy trình có thể lặp lại.
 
-Quay lại nhìn toàn bộ. `AGENTS.md`, `docs/` và Skill nằm trong repo. MCP là cổng kết nối, còn config theo client. Đổi tool không còn phải copy toàn bộ convention, nhưng vẫn phải kiểm tra compatibility.
+Mình mở conversation sạch khác và yêu cầu sửa typo README. Skill không kích hoạt. Scope đang hoạt động đúng.
 
-Convention tốt không phải để kiểm soát AI. Nó để AI và người cùng đọc được dự án sau sáu tháng.
+Tầng cuối là MCP, viết tắt của Model Context Protocol. Đây là chuẩn mở để nối ứng dụng AI với hệ thống bên ngoài.
 
-Nhưng access token hiện hết hạn là phiên bị ngắt. Tập sau, ta thêm refresh token rotation và khả năng thu hồi session. Lập trình là cuộc sống.
+MCP giống cổng USB-C cho agent. Server có thể cung cấp database, docs, API hoặc tool chuyên biệt.
+
+Antigravity hiện hỗ trợ MCP Store và workspace config. File của project nằm tại .agents, mcp_config.json.
+
+Nhưng file này là cấu hình của Antigravity, không phải config chung cho mọi client. Đổi tool vẫn phải đọc docs của tool đó.
+
+Mình mở MCP Store, chọn một server chỉ đọc và xem danh sách tool. Mình chỉ bật tool cần dùng.
+
+Quyền truy cập cũng là code. Cấp thừa một tool hôm nay có thể thành sự cố ngày mai.
+
+Giờ TaskFlow có ba tầng rõ ràng. Rule luôn bật. Workflow nạp theo nhu cầu. Kết nối ngoài được cấp quyền có chủ đích.
+
+Convention tốt không khóa AI lại. Nó giúp người và AI cùng hiểu project sau sáu tháng.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment convention khó giữ nhất trong project của mình.
+
+Tập sau, ta thêm refresh token rotation và khả năng thu hồi session. Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -83,29 +99,30 @@ Nhưng access token hiện hết hạn là phiên bị ngắt. Tập sau, ta th�
 
 | # | Type | Narration match | Nội dung quay | Thời lượng |
 |---|---|---|---|---:|
-| 1 | [IDE] | "Cài Cơ-xờ… ba chỗ, cùng nội dung" | Mở 3 tab: `.cursor/rules/taskflow.mdc`, `CLAUDE.md`, `.github/copilot-instructions.md` — highlight cùng convention copy-paste | 25s |
-| 2 | [IDE] | "Thiếu convention… hai folder cấu trúc hai kiểu" | Split view 2 folder có structure khác nhau trong cùng project | 20s |
-| 3 | [IDE] | "Vấn đề không phải AI lười" | Xóa 3 file, để blank — setup cho giải pháp | 10s |
-| 4 | [DIAGRAM] | "Giải pháp có ba tầng" | Diagram: 3 layers — AGENTS.md (Hot) → docs/ (Cold) → Skills (On-demand) → MCP (Connectivity) | 20s |
-| 5 | [IDE] | "Mỗi AI tool vẫn có file riêng" | Bảng so sánh trên màn hình (overlay hoặc markdown table): Claude/Cursor/Copilot/Windsurf/Kiro + file paths | 25s |
-| 6 | [BROWSER] | "AGENTS.md. File do Agentic AI Foundation" | Mở trang `agents.md` — highlight "universal standard", 60K+ repos | 20s |
-| 7 | [BROWSER] | "Claude Code từ bản…tự đọc AGENTS.md" | Mở Claude Code docs `code.claude.com/docs/en/memory.md` — highlight fallback behavior table | 25s |
-| 8 | [IDE] | "Mình tạo AGENTS.md ở root" | Tạo file AGENTS.md, viết Stack + Commands + Boundaries (live typing hoặc fast-forward) | 40s |
-| 9 | [IDE] | "Tạo folder docs/… Cold Memory" | Tạo `docs/architecture.md` + `docs/database-schema.md`. Show tree structure | 30s |
-| 10 | [IDE] | "AGENTS.md chỉ giữ rules cứng… trỏ tới docs" | Viết "See docs/architecture.md" trong AGENTS.md | 15s |
-| 11 | [IDE] | "Khi đổi boundary module…" | Zoom rule có điều kiện đọc `docs/architecture.md` và `docs/database-schema.md` | 15s |
-| 12 | [TERM] | "Mở Claude Code trong TaskFlow" | Chạy `claude`, mở Project instructions rồi yêu cầu agent nhắc lại hai rule để chứng minh file đã được nạp | 25s |
-| 13 | [IDE] | "Skill đóng gói bước đó thành workflow" | Tạo `.agents/skills/nest-feature/SKILL.md`. Show progressive disclosure concept | 35s |
-| 14 | [IDE] | "Description không phải lời quảng cáo" | Zoom vào frontmatter: `name`, `description` với trigger + non-trigger | 20s |
-| 15 | [IDE] | "AI muốn ghi rule hash password… mình loại" | AI suggest → host reject → keep only structural rules. Fast-forward AI response, voice-over explain | 40s |
-| 16 | [IDE] | "Kiểm chứng. Conversation mới" | Prompt: scaffold Roles + Permissions. AI trả plan, không edit. Show plan output | 50s |
-| 17 | [IDE] | "Thử prompt không liên quan: sửa typo" | Prompt: fix README typo. Skill không kích hoạt | 15s |
-| 18 | [DIAGRAM] | "MCP giống ổ cắm USB" | Diagram: AI agent ↔ MCP protocol ↔ Database/API/Docs | 20s |
-| 19 | [BROWSER] | "Config phụ thuộc client" | Đặt hai trang config client cạnh nhau; highlight đường dẫn khác nhau và phần permissions | 15s |
-| 20 | [IDE] | "Quay lại nhìn toàn bộ" | Tree view: AGENTS.md, docs/, .agents/skills/; MCP nằm ngoài cây portable | 20s |
-| 21 | [B-ROLL] | "Convention tốt… teaser refresh token" | Desk typing shot, monitor glow, cut to black | 15s |
+| 1 | [IDE] | "AI vừa tạo hai module…" | Split view hai module cố ý khác convention; highlight dependency và folder lệch nhau | 20s |
+| 2 | [DIAGRAM] | "Cách sửa có ba tầng" | Ba khối: AGENTS.md → Skill → MCP; docs nằm dưới AGENTS.md như nguồn đọc theo điều kiện | 20s |
+| 3 | [BROWSER] | "Đây là định dạng mở…" | Mở `agents.md`; highlight 60K+ repo và Agentic AI Foundation | 20s |
+| 4 | [BROWSER] | "Kiểm chứng trên Antigravity" | Mở Antigravity Rules docs; highlight `AGENTS.md` và directory scope | 25s |
+| 5 | [IDE] | "Tạo AGENTS.md ở root" | Submit prompt tạo file; tua nhanh agent xử lý, voice-over giải thích Hot Memory | 40s |
+| 6 | [IDE] | "Mở Customizations" | Agent side panel → Customizations → Rules; quay rõ AGENTS.md đang active | 25s |
+| 7 | [IDE] | "Tạo docs architecture…" | Tạo `docs/architecture.md`, `docs/database-schema.md`; zoom hai rule có điều kiện đọc | 35s |
+| 8 | [IDE] | "Yêu cầu agent đọc Users và Auth" | Submit prompt audit convention; tua nhanh processing, narration giải thích rule chung và riêng | 45s |
+| 9 | [IDE] | "Agent muốn đưa hash password…" | Dừng tua; highlight đề xuất sai, host phản biện và yêu cầu bỏ business rule | 30s |
+| 10 | [IDE] | "Cho agent tạo AGENTS.md, docs và Skill" | Host approve; agent tạo các file đã duyệt; quay processing ở fast-forward | 45s |
+| 11 | [BROWSER] | "Antigravity dùng progressive disclosure" | Mở Antigravity Skills docs; highlight discovery → activation → execution | 20s |
+| 12 | [IDE] | "Mở git diff và đọc từng file" | Review diff AGENTS.md, docs và Skill; zoom các rule quan trọng | 35s |
+| 13 | [TERM] | "Git diff check, lint và test" | `git diff --check`, `git diff --stat`, `npm run lint`, `npm test`; giữ output xanh | 45s |
+| 14 | [IDE] | "AGENTS.md và Skill đều xuất hiện" | Customizations → Rules/Skills; quay `AGENTS.md` và `nest-feature` đang active | 30s |
+| 15 | [IDE] | "Conversation mới… Roles và Permissions" | Prompt tự nhiên, không gọi tên Skill; agent trả plan và dừng, tuyệt đối chưa edit | 45s |
+| 16 | [IDE] | "Kiểm tra dependency direction" | Review plan; highlight controller → service → contract ← adapter | 30s |
+| 17 | [IDE] | "Sửa typo README" | Conversation sạch; prompt typo, kiểm tra context để chứng minh Skill không được dùng | 20s |
+| 18 | [DIAGRAM] | "MCP giống cổng USB-C" | Agent ↔ MCP ↔ database/docs/API; animation nhẹ từng kết nối | 20s |
+| 19 | [IDE] | "Antigravity hỗ trợ MCP Store…" | Mở MCP Servers; quay Store, raw config và đường dẫn `.agents/mcp_config.json` | 35s |
+| 20 | [IDE] | "Chỉ bật tool cần dùng" | Mở config mẫu; highlight `enabledTools`, không lộ token hoặc credential | 25s |
+| 21 | [IDE] | "Ba tầng rõ ràng" | Tree view: AGENTS.md, docs/, `.agents/skills/`, `.agents/mcp_config.example.json` | 20s |
+| 22 | [B-ROLL] | Closing | Desk shot, monitor glow, chuyển sang teaser refresh token rồi fade out | 20s |
 
-**Tổng: 500s ≈ 8:20 quay + ~2 min buffer cho fast-forward AI = ~10:20 runtime**
+**Tổng: 650s ≈ 10:50. Giữ scene 5, 8 và 10 ở fast-forward để không có dead time.**
 
 ### Cấu trúc project files cần tạo khi quay
 
@@ -116,6 +133,7 @@ taskflow/
 │   ├── architecture.md                # Cold Memory — module map
 │   └── database-schema.md             # Cold Memory — Prisma 8 contract
 ├── .agents/
+│   ├── mcp_config.example.json        # mẫu Antigravity, không chứa secret
 │   ├── skills/
 │   │   └── nest-feature/
 │   │       ├── SKILL.md
@@ -176,11 +194,13 @@ Before editing, read `references/architecture.md` and the nearest completed feat
 10. Run contract emit and migration check when the contract changes; then run lint, tests and show the diff summary.
 ```
 
-### Prompt kiểm chứng
+### Prompt kiểm chứng auto-trigger
 
 ```text
-Use $nest-feature to plan Roles and Permissions inside the TaskFlow access-control domain.
-Do not edit yet. Show the folders, dependency direction, business rules and verification commands.
+Plan Roles and Permissions inside the TaskFlow access-control domain using
+the existing project conventions.
+Do not edit. Show the files, dependency direction, business rules and
+verification commands.
 ```
 
 ### Nguồn chính thức — mở trên màn hình khi quay
@@ -188,10 +208,11 @@ Do not edit yet. Show the folders, dependency direction, business rules and veri
 | Topic | URL |
 |---|---|
 | AGENTS.md spec | `https://agents.md` |
-| Claude Code Memory | `https://code.claude.com/docs/en/memory.md` |
+| Antigravity Rules | `https://www.antigravity.google/docs/rules/` |
+| Antigravity Skills | `https://www.antigravity.google/docs/skills?tab=ide` |
+| Antigravity MCP | `https://www.antigravity.google/docs/mcp/` |
 | Agent Skills standard | `https://agentskills.io` |
 | MCP Protocol | `https://modelcontextprotocol.io` |
-| GitHub Copilot instructions | `https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot` |
 
 ### Bảng so sánh Agent Config — overlay khi quay
 
@@ -199,11 +220,11 @@ Do not edit yet. Show the folders, dependency direction, business rules and veri
 ┌─────────────────────┬───────────────────────────────────────┬──────────────┐
 │ Tool                │ File / Folder                         │ AGENTS.md?   │
 ├─────────────────────┼───────────────────────────────────────┼──────────────┤
+│ Antigravity         │ AGENTS.md + .agents/rules/*.md         │ ✅ native    │
 │ Codex               │ AGENTS.md, hỗ trợ nested files         │ ✅ native    │
-│ Claude Code         │ CLAUDE.md → AGENTS.md fallback         │ ✅ có điều kiện│
 │ Cursor              │ .cursor/rules/*.mdc + AGENTS.md        │ ✅ recognized│
 │ GitHub Copilot      │ .github/copilot-instructions.md        │ ✅ coding agent│
-│ Windsurf            │ .windsurf/rules/ + AGENTS.md           │ ✅ supported │
+│ Claude Code         │ CLAUDE.md hoặc AGENTS.md               │ ✅ supported │
 └─────────────────────┴───────────────────────────────────────┴──────────────┘
 ```
 
@@ -237,18 +258,20 @@ Do not edit yet. Show the folders, dependency direction, business rules and veri
 ### 4b. SEO Description
 
 ```text
-Mỗi AI tool đòi file convention riêng. Copy-paste qua lại giữa CLAUDE.md, .cursorrules, copilot-instructions — rồi quên cập nhật. EP06 giải quyết bằng 3 tầng context:
+Nhiều AI tool có cơ chế convention riêng. Copy-paste qua lại giữa nhiều file rồi quên cập nhật. EP06 giải quyết bằng 3 tầng context:
 
 ✅ AGENTS.md — định dạng mở được nhiều coding agent hỗ trợ; cách nạp và ưu tiên tùy client
 ✅ docs/ — Cold Memory: schema, kiến trúc, ADR, AI chỉ đọc khi cần
 ✅ Agent Skill — đóng gói workflow scaffold feature thành SKILL.md
 ✅ MCP — Model Context Protocol, kết nối AI với database/API
 ✅ Progressive disclosure: AI chỉ nạp context cần thiết
-✅ Demo: scaffold Roles/Permissions theo convention TaskFlow
+✅ Demo: tạo AGENTS.md + Skill theo đủ workflow plan → review → approve → code → verify
 ✅ Kiểm chứng: skill không kích hoạt khi prompt không liên quan
 
 🔗 AGENTS.md spec: https://agents.md
-🔗 Claude Code Memory: https://code.claude.com/docs/en/memory.md
+🔗 Antigravity Rules: https://www.antigravity.google/docs/rules/
+🔗 Antigravity Skills: https://www.antigravity.google/docs/skills?tab=ide
+🔗 Antigravity MCP: https://www.antigravity.google/docs/mcp/
 🔗 Agent Skills standard: https://agentskills.io
 🔗 MCP Protocol: https://modelcontextprotocol.io
 
@@ -257,8 +280,8 @@ Mỗi AI tool đòi file convention riêng. Copy-paste qua lại giữa CLAUDE.m
 ⏱ 2:15 Tạo AGENTS.md + docs/ (Hot vs Cold Memory)
 ⏱ 4:00 Agent Skill — progressive disclosure
 ⏱ 5:30 Viết SKILL.md cho TaskFlow
-⏱ 7:00 Kiểm chứng: scaffold Roles/Permissions
-⏱ 8:30 MCP — ổ cắm USB cho AI
+⏱ 7:00 Kiểm chứng: diff/test + auto-route Skill
+⏱ 8:45 MCP Store và quyền truy cập
 ⏱ 9:30 Toàn cảnh 3 tầng context
 
 #AGENTS_md #AgentSkill #MCP #NestJS #AICoding #PromptEngineering #SoftwareArchitecture #TypeScript #LapTrinhLaCuocSong
@@ -267,7 +290,7 @@ Mỗi AI tool đòi file convention riêng. Copy-paste qua lại giữa CLAUDE.m
 ### 4c. Keywords / Tags
 
 ```text
-AGENTS.md, agents md nestjs, agent skill, SKILL.md, MCP model context protocol, hot memory cold memory, ai coding convention, progressive disclosure ai, claude code agents md, cursor rules mdc, copilot instructions, windsurf rules, kiro steering, scaffold nestjs bằng ai, nestjs tập 6, ai context management, prompt engineering coding, ai coding workflow, lập trình là cuộc sống
+AGENTS.md, agents md nestjs, Antigravity rules, Antigravity skills, agent skill, SKILL.md, MCP model context protocol, mcp_config.json, hot memory cold memory, ai coding convention, progressive disclosure ai, scaffold nestjs bằng ai, nestjs tập 6, ai context management, prompt engineering coding, ai coding workflow, lập trình là cuộc sống
 ```
 
 ---
@@ -281,8 +304,8 @@ AGENTS.md, agents md nestjs, agent skill, SKILL.md, MCP model context protocol, 
 
 **Text spec:**
 - Line 1: `MỘT FILE` — WHITE `#FFFFFF`
-- Line 2: `MỌI AI` — NEON GREEN `#00FF41`
-- Line 3: `ĐỀU ĐỌC` — NEON GREEN `#00FF41`
+- Line 2: `NHIỀU AGENT` — NEON GREEN `#00FF41`
+- Line 3: `CÙNG ĐỌC` — NEON GREEN `#00FF41`
 
 ### Option 2
 
@@ -326,16 +349,14 @@ AGENTS.md, agents md nestjs, agent skill, SKILL.md, MCP model context protocol, 
 
 | Fact | Source |
 |---|---|
-| Claude Code đọc AGENTS.md nếu không có CLAUDE.md (từ v2.1.277) | [memory.md](https://code.claude.com/docs/en/memory.md) — bảng "Your repository has / Claude reads" |
+| Antigravity nạp `AGENTS.md` như rule luôn bật theo directory scope | [Antigravity Rules](https://www.antigravity.google/docs/rules/) — “Directory-scoped rules” |
+| Antigravity hiển thị rule và skill đang active trong Customizations | [Antigravity Rules](https://www.antigravity.google/docs/rules/) và [Skills](https://www.antigravity.google/docs/skills?tab=ide) |
+| Antigravity discover workspace Skill tại `.agents/skills/<name>/SKILL.md` | [Antigravity Skills](https://www.antigravity.google/docs/skills?tab=ide) — “Antigravity IDE skill locations” |
+| Antigravity Skill dùng progressive disclosure: discovery → activation → execution | [Antigravity Skills](https://www.antigravity.google/docs/skills?tab=ide) — “How the agent uses skills” |
+| Antigravity workspace MCP config nằm tại `.agents/mcp_config.json`; có `enabledTools` và `disabledTools` | [Antigravity MCP](https://www.antigravity.google/docs/mcp/) |
 | Codex tự tìm AGENTS.md theo cây thư mục, file gần hơn có độ ưu tiên cao hơn | [OpenAI Codex Prompting Guide](https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide) — section "Using agents.md" |
-| Claude Code CLAUDE.md load order: managed → user → project → local | [memory.md](https://code.claude.com/docs/en/memory.md) — bảng "Choose where to put CLAUDE.md files" |
-| Claude Code auto memory: user, feedback, project, reference types | [memory.md](https://code.claude.com/docs/en/memory.md) — section "Auto memory" |
-| Claude Code skills follow Agent Skills open standard (agentskills.io) | [skills.md](https://code.claude.com/docs/en/skills.md) — paragraph 1 |
-| Claude Code skill locations: enterprise, personal, project, nested, plugin | [skills.md](https://code.claude.com/docs/en/skills.md) — bảng "Where skills load" |
-| Claude Code MCP = open standard at modelcontextprotocol.io | [mcp.md](https://code.claude.com/docs/en/mcp.md) — intro |
 | GitHub Copilot đọc AGENTS.md (+ CLAUDE.md, GEMINI.md fallback) | [GitHub docs](https://docs.github.com/en/copilot/customizing-copilot/adding-repository-custom-instructions-for-github-copilot) — section "Agent instructions" |
 | Copilot: repo-wide = `.github/copilot-instructions.md`, path-specific = `.github/instructions/*.instructions.md` | GitHub docs — section "Creating custom instructions" |
-| Cursor: `.cursor/rules/*.mdc` với YAML frontmatter (description, globs, alwaysApply) | Cursor docs + web search confirmation |
-| Skill nạp metadata trước, chỉ đọc toàn bộ instruction khi task khớp | [OpenAI Skills docs](https://developers.openai.com/plugins/concepts/skills) |
+| Cursor: `.cursor/rules/*.mdc` với YAML frontmatter (description, globs, alwaysApply) | [Cursor Rules](https://cursor.com/docs/rules) |
 | MCP là chuẩn mở kết nối ứng dụng AI với data, tools và workflows; config thuộc từng client | [MCP introduction](https://modelcontextprotocol.io/docs/getting-started/intro) |
 | AGENTS.md managed by Agentic AI Foundation (Linux Foundation) | agents.md website |
