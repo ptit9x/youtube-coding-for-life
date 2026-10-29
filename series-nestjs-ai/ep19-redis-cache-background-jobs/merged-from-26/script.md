@@ -105,7 +105,7 @@ Observe hiển thị trace của worker riêng với thời gian, log và lỗi 
 
 Mình đặt cảnh báo khi failed count tăng hoặc queue lag kéo dài.
 
-Kết Season 2, TaskFlow có docs, security header, rate limit, log, trace và upload an toàn.
+Kết Season 2, User Management có docs, security header, rate limit, log, trace và upload an toàn.
 
 Nó có pagination, quan hệ, transaction, cache và background job.
 
@@ -245,7 +245,7 @@ Task đã lưu nhưng mail timeout khiến cả request thất bại. Tập 26 �
 ### 4c. Keywords / Tags
 
 ```text
-nestjs bullmq, background jobs nestjs, bullmq retry backoff, nestjs queue redis, workerhost nestjs, bullmq idempotent job, duplicate email prevention, dead letter queue bullmq, at least once delivery, job id bullmq deduplication, mail retry nestjs, queue observability, taskflow nestjs, học nestjs bằng ai, nestjs tập 26, typescript backend, lập trình là cuộc sống
+nestjs bullmq, background jobs nestjs, bullmq retry backoff, nestjs queue redis, workerhost nestjs, bullmq idempotent job, duplicate email prevention, dead letter queue bullmq, at least once delivery, job id bullmq deduplication, mail retry nestjs, queue observability, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 26, typescript backend, lập trình là cuộc sống
 ```
 
 ---

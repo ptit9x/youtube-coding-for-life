@@ -1,9 +1,9 @@
-# TaskFlow
+# nestjs-base-with-ai
 
-Task management REST API built with NestJS 12, TypeScript 5.9+, Prisma 8 and
+User management REST API built with NestJS 12, TypeScript 6, Prisma 8 and
 PostgreSQL. Runs on Node 24 with ESM. Architecture: modular monolith organized
-by business domain. Authentication currently uses JWT access tokens. Refresh
-token rotation is introduced in EP07.
+by business domain. Authentication uses JWT access tokens via `@nestjs/authentication`.
+Refresh token rotation is planned for EP07.
 
 ## Directory layout
 
@@ -17,9 +17,7 @@ src/
 ├── database/            # DatabaseModule, Prisma provider, repository adapters
 └── modules/
     ├── users/           # User registration, profile
-    ├── auth/            # JWT auth, refresh tokens, session
-    ├── access-control/  # Roles, Permissions, assignments, guards
-    └── tasks/           # Business feature: task CRUD with ownership
+    └── auth/            # JWT auth (access token only at EP06)
 migrations/app/          # Prisma 8 migration history
 prisma.config.ts         # Prisma CLI config
 ```

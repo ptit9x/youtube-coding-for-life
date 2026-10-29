@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Scene 14b — Convention Drift</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    margin: 0; background: #000;
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    background: #0a0a1a;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex; align-items: center; justify-content: center;
+    transform-origin: center center;
+    position: relative;
+  }
+  .wrapper { display: flex; gap: 120px; padding: 0 80px; }
+  .panel { width: 720px; opacity: 0; transform: translateY(30px); }
+  .panel:nth-child(1) { animation: fadeUp 0.6s 0.5s forwards; }
+  .panel:nth-child(2) { animation: fadeUp 0.6s 12s forwards; }
+  .panel-header {
+    font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 32px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .panel:nth-child(1) .panel-header { color: #ff6666; }
+  .panel:nth-child(2) .panel-header { color: #00FF41; }
+  .timeline { display: flex; flex-direction: column; gap: 4px; }
+  .conv { display: flex; align-items: center; gap: 16px; height: 36px; }
+  .conv-num { width: 24px; font-size: 11px; color: #444466; text-align: right; }
+  .conv-bar {
+    height: 28px; border-radius: 4px; display: flex; align-items: center;
+    padding: 0 12px; font-size: 11px; position: relative;
+  }
+  .conv-label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .drift .conv-bar { background: rgba(255,68,68,0.08); border: 1px solid rgba(255,68,68,0.2); color: #aa6666; }
+  .drift .conv:nth-child(1) .conv-bar { width: 600px; border-color: rgba(0,255,65,0.3); background: rgba(0,255,65,0.05); color: #66aa66; }
+  .drift .conv:nth-child(2) .conv-bar { width: 580px; border-color: rgba(0,255,65,0.2); background: rgba(0,255,65,0.03); color: #66aa66; }
+  .drift .conv:nth-child(3) .conv-bar { width: 560px; border-color: rgba(255,200,0,0.2); background: rgba(255,200,0,0.05); color: #aaaa66; }
+  .drift .conv:nth-child(4) .conv-bar { width: 520px; }
+  .drift .conv:nth-child(5) .conv-bar { width: 480px; }
+  .drift .conv:nth-child(6) .conv-bar { width: 430px; }
+  .drift .conv:nth-child(7) .conv-bar { width: 380px; }
+  .drift .conv:nth-child(8) .conv-bar { width: 350px; }
+  .drift .conv:nth-child(9) .conv-bar { width: 300px; }
+  .drift .conv:nth-child(10) .conv-bar { width: 260px; }
+  .drift .conv:nth-child(n+8) .conv-bar { border-color: rgba(255,68,68,0.4); background: rgba(255,68,68,0.12); }
+  .anchored .conv-bar {
+    width: 600px; background: rgba(0,255,65,0.05);
+    border: 1px solid rgba(0,255,65,0.2); color: #66aa66;
+  }
+  .drift-badge, .anchor-badge {
+    position: absolute; right: -140px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; letter-spacing: 1px; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 4px; white-space: nowrap;
+  }
+  .drift-badge { background: rgba(255,68,68,0.15); color: #ff6666; border: 1px solid rgba(255,68,68,0.3); }
+  .anchor-badge { background: rgba(0,255,65,0.15); color: #00FF41; border: 1px solid rgba(0,255,65,0.3); }
+  .summary {
+    margin-top: 24px; font-size: 13px; padding: 12px 16px; border-radius: 8px;
+  }
+  .panel:nth-child(1) .summary { color: #ff8888; background: rgba(255,68,68,0.05); border: 1px solid rgba(255,68,68,0.15); }
+  .panel:nth-child(2) .summary { color: #00FF41; background: rgba(0,255,65,0.05); border: 1px solid rgba(0,255,65,0.15); }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+  <div class="wrapper">
+    <div class="panel">
+      <div class="panel-header">✕ Không có AGENTS.md</div>
+      <div class="timeline drift">
+        <div class="conv"><span class="conv-num">1</span><div class="conv-bar"><span class="conv-label">✓ Đúng convention — repository contract, thin controller</span></div></div>
+        <div class="conv"><span class="conv-num">2</span><div class="conv-bar"><span class="conv-label">✓ Vẫn ổn — copy pattern từ conversation 1</span></div></div>
+        <div class="conv"><span class="conv-num">3</span><div class="conv-bar"><span class="conv-label">⚠ Bắt đầu dùng any — quên strict mode</span></div></div>
+        <div class="conv"><span class="conv-num">4</span><div class="conv-bar"><span class="conv-label">⚠ Logic trong controller — quên thin rule</span></div></div>
+        <div class="conv"><span class="conv-num">5</span><div class="conv-bar"><span class="conv-label">⚠ Import @prisma/client trực tiếp</span></div></div>
+        <div class="conv"><span class="conv-num">6</span><div class="conv-bar"><span class="conv-label">⚠ Naming convention bị đổi</span></div></div>
+        <div class="conv"><span class="conv-num">7</span><div class="conv-bar"><span class="conv-label">✕ Generic CRUD base class</span></div></div>
+        <div class="conv"><span class="conv-num">8</span><div class="conv-bar"><span class="conv-label">✕ Dùng schema.prisma</span><span class="drift-badge">Drift</span></div></div>
+        <div class="conv"><span class="conv-num">9</span><div class="conv-bar"><span class="conv-label">✕ migrate dev thay vì workflow</span></div></div>
+        <div class="conv"><span class="conv-num">10</span><div class="conv-bar"><span class="conv-label">✕ Hoàn toàn lệch convention</span></div></div>
+      </div>
+      <div class="summary">AI không sai vì kém. Nó sai vì quên — mỗi conversation bắt đầu từ zero.</div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">✓ Có AGENTS.md</div>
+      <div class="timeline anchored">
+        <div class="conv"><span class="conv-num">1</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">2</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">3</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">4</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">5</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">6</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">7</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">8</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span><span class="anchor-badge">Anchored</span></div></div>
+        <div class="conv"><span class="conv-num">9</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+        <div class="conv"><span class="conv-num">10</span><div class="conv-bar"><span class="conv-label">✓ Đọc AGENTS.md → đúng convention</span></div></div>
+      </div>
+      <div class="summary">AGENTS.md là neo. Mỗi conversation bắt đầu từ cùng một bộ rule.</div>
+    </div>
+  </div>
+</div>
+<script>
+function scale() {
+  const c = document.querySelector('.canvas');
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  c.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', scale);
+scale();
+</script>
+</body>
+</html>

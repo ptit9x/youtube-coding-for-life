@@ -1,8 +1,8 @@
-# TaskFlow — Target Architecture Reference
+# nestjs-base-with-ai — Target Architecture Reference
 
 > This file is loaded by the `nest-feature` skill when scaffolding or extending
 > a business feature. It describes the current directory layout and dependency
-> rules of the TaskFlow project.
+> rules of the nestjs-base-with-ai project.
 
 ## Directory layout
 
@@ -16,12 +16,8 @@ src/
 │   ├── contract.d.ts                # Emitted types (committed)
 │   └── db.ts                        # Database facade (Prisma 8)
 ├── common/                          # Cross-cutting, domain-independent
-│   ├── decorators/                  # @CurrentUser, @Public, etc.
 │   ├── filters/                     # Global exception filters
-│   ├── guards/                      # Global guards (if any)
-│   ├── interceptors/                # Logging, transform response
 │   ├── pipes/                       # AppValidationPipe
-│   ├── constants/                   # App-wide constants
 │   └── utils/                       # Pure utility functions
 ├── config/
 │   ├── app.config.ts                # App configuration factory
@@ -29,8 +25,9 @@ src/
 │   └── env.validation.ts            # Zod schema for .env
 ├── database/
 │   ├── database.module.ts           # Prisma provider registration
-│   ├── prisma.provider.ts           # DI token + factory
-│   └── repositories/               # Prisma adapters implement contracts
+│   ├── db-facade.token.ts           # DI token for Prisma 8 facade
+│   ├── index.ts                     # Barrel export
+│   └── prisma-*.repository.ts       # Prisma adapters implement contracts
 └── modules/
     ├── users/
     │   ├── users.module.ts
@@ -43,21 +40,8 @@ src/
     │   ├── auth.controller.ts
     │   ├── auth.service.ts
     │   ├── dto/
-    │   ├── guards/                  # JwtAuthGuard
-    │   └── strategies/              # JwtStrategy
-    ├── access-control/              # Roles, Permissions, assignments
-    │   ├── roles/
-    │   ├── permissions/
-    │   ├── assignments/
-    │   ├── decorators/              # @RequirePermissions
-    │   ├── guards/                  # PermissionGuard
-    │   └── types/
-    └── tasks/
-        ├── tasks.module.ts
-        ├── tasks.controller.ts
-        ├── tasks.service.ts
-        ├── dto/
-        └── tasks.repository.ts
+    │   └── jwt-auth.provider.ts     # JwtBearerProvider (credential validation)
+    └── ...                          # Future feature modules
 
 migrations/
 └── app/                             # Prisma 8 migration history

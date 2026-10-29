@@ -1,10 +1,10 @@
-# NestJS #17 — Pagination, Filtering và Sorting với Prisma 8
+# NestJS #17 — Pagination, Project, Label và migration không xóa lịch sử
 
 - **Series:** Học NestJS bằng AI — tập 17/29
-- **Recording status:** CHƯA READY — script hiện mới có pagination; phải merge Project + Label trong `merged-from-23/`.
-- **Target runtime:** khoảng 6 phút 20 giây (581 từ thoại)
-- **Outcome:** GET `/tasks` có filter, sort allowlist và cursor ổn định với `createdAt + id`.
-- **Pain tập kế:** Task vẫn là danh sách phẳng, chưa thuộc project hay có label.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~775 từ thoại + khoảng nghỉ migration)
+- **Outcome:** Pagination ổn định; Project, Label và TaskLabel được thêm bằng expand-backfill-contract an toàn.
+- **Pain tập kế:** Create Task và attach Label vẫn là nhiều write có thể thành công một nửa.
 
 ---
 
@@ -92,9 +92,43 @@ Và một API có giới hạn rõ ràng thường sống lâu hơn API cố tr�
 
 Task đã tải theo phần, nhưng vẫn nằm trong một danh sách phẳng.
 
-Tập sau, mình sẽ thêm Project, Label và migration an toàn cho dữ liệu đang tồn tại.
+Mình thêm `projectId` bắt buộc rồi chạy migration. PostgreSQL từ chối vì task cũ chưa có project.
 
-Nếu bạn muốn hiểu query thay vì copy pagination snippet, hãy đồng hành cùng series này.
+Xóa database làm demo xanh, nhưng production không có nút quay lại tuổi thơ.
+
+Bước ngoặt là xem migration như quá trình chuyển trạng thái.
+
+Project và Task là một-nhiều. Task và Label là nhiều-nhiều qua `TaskLabel`.
+
+Junction giữ `attachedAt` và `attachedBy`, nên nó là entity thật chứ không phải đường nối vô danh.
+
+Composite key `taskId + labelId` ngăn cùng label bị gắn hai lần.
+
+Label chỉ unique bên trong một Project. Service từ chối gắn Label của project khác.
+
+Xóa Label có thể cascade junction. Xóa Project còn Task thì bị restrict.
+
+AI không thể tự chọn delete policy. Đây là business rule.
+
+Migration đi theo expand, backfill, contract.
+
+Đầu tiên, mình thêm `projectId` nullable. Sau đó tạo Inbox cho từng owner và backfill task cũ.
+
+Khi không còn dòng null, migration tiếp theo mới đặt cột thành bắt buộc.
+
+Mình review foreign key, unique index và delete action trước khi apply.
+
+Query list dùng `select` tối thiểu. Query detail chỉ `include` Project và Label khi màn hình cần.
+
+Task cũ nằm trong Inbox. Task mới chọn Project và gắn Label an toàn.
+
+Nhưng create Task và attach Label vẫn là nhiều write rời.
+
+Tập sau, transaction sẽ biến nhiều write thành một lời hứa duy nhất.
+
+Migration tốt không chỉ làm schema mới đúng. Nó còn đưa dữ liệu cũ sang tương lai nguyên vẹn.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -104,20 +138,22 @@ Mình là Richard. Lập trình là cuộc sống.
 
 | # | Type | Lời thoại / nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | GET `/tasks` trả payload lớn; DevTools cho thấy kích thước và thời gian | 30s |
-| 2 | [DIAGRAM] | Offset “bỏ N dòng” so với cursor “sau bản ghi X” | 30s |
-| 3 | [BROWSER] | Highlight cursor chỉ có `createdAt`; tạo phản ví dụ timestamp trùng | 25s |
-| 4 | [IDE] | `ListTasksQueryDto`: limit, status, owner, sort allowlist | 35s |
-| 5 | [IDE] | Repository compose filter và ownership scope | 35s |
-| 6 | [IDE] | Prisma 8 `orderBy([createdAt, id]).cursor().take().all()` | 40s |
-| 7 | [IDE] | Lấy `limit + 1`, tạo `hasNext` và `nextCursor` | 35s |
-| 8 | [TERM] | Seed hai task cùng timestamp; chèn task giữa hai request | 35s |
-| 9 | [DIAGRAM] | So sánh kết quả offset bị lặp với cursor kép ổn định | 40s |
-| 10 | [BROWSER] | UI load-more với filter status và sort | 30s |
-| 11 | [BROWSER] | Observe trace hoặc query timing cho page đầu và page sâu | 25s |
-| 12 | [B-ROLL] | Danh sách mượt; chuyển sang task được kéo vào các project | 20s |
+| 1 | [BROWSER] | GET `/tasks` trả payload lớn | 25s |
+| 2 | [DIAGRAM] | Offset so với cursor kép `createdAt + id` | 35s |
+| 3 | [IDE] | Submit yêu cầu; AI plan pagination, host review allowlist | 40s |
+| 4 | [IDE] | DTO, ownership filter, `limit + 1` và next cursor | 50s |
+| 5 | [TERM] | Timestamp trùng và insert giữa hai page | 40s |
+| 6 | [BROWSER] | Load-more ổn định, query page sâu | 35s |
+| 7 | [TERM] | Migration fail khi thêm `projectId` bắt buộc | 35s |
+| 8 | [DIAGRAM] | Project–Task và TaskLabel explicit junction | 40s |
+| 9 | [IDE] | Review composite key, project-scoped label và delete policy | 45s |
+| 10 | [DIAGRAM] | Expand → backfill Inbox → contract | 40s |
+| 11 | [TERM] | Migration plan, DDL review, apply và verify | 50s |
+| 12 | [BROWSER] | Task cũ trong Inbox; task mới có project/labels | 45s |
+| 13 | [IDE] | `select` list và `include` detail để tránh N+1 | 35s |
+| 14 | [B-ROLL] | Nhiều write rời; teaser transaction | 20s |
 
-**Tổng mục tiêu: 6 phút 20 giây.** One Dark Pro, JetBrains Mono 18–20px. Zoom đủ lớn để thấy thứ tự `createdAt` và `id`.
+**Tổng: 535 giây ≈ 8:55; cộng khoảng nghỉ review thành 9–10 phút.** One Dark Pro, JetBrains Mono 18–20px.
 
 ### Code cốt lõi
 
@@ -171,13 +207,18 @@ Plan cursor pagination for the current Prisma 8 TasksRepository.
 
 ### 4a. Titles
 
-1. Pagination sai làm Task bị lặp — EP17
-2. Cursor Pagination với Prisma 8 — EP17
-3. Vì sao Offset chậm dần theo từng trang? — EP17
-4. Năm nghìn Task và một Cursor ổn định — EP17
-5. Filtering, Sorting, Pagination cho NestJS — EP17
+1. Một Migration suýt xóa lịch sử Task — EP17 | Lập trình là cuộc sống
+2. Pagination đúng nhưng Schema mới vẫn có thể phá Data — EP17 | Lập trình là cuộc sống
+3. Cursor kép và Migration ba bước với Prisma 8 — EP17 | Lập trình là cuộc sống
+4. Đừng thêm Foreign Key bắt buộc trong một bước — EP17 | Lập trình là cuộc sống
+5. Expand, Backfill, Contract cứu dữ liệu cũ — EP17 | Lập trình là cuộc sống
+6. Join Table có lịch sử riêng — EP17 | Lập trình là cuộc sống
+7. Vì sao Offset làm Task bị lặp? — EP17 | Lập trình là cuộc sống
+8. Project, Label và năm nghìn Task — EP17 | Lập trình là cuộc sống
+9. Delete Cascade hay Restrict? AI không thể tự chọn — EP17 | Lập trình là cuộc sống
+10. Schema mới phải đưa Data cũ đi cùng — EP17 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Title 1. A/B test Title 2 cho intent kỹ thuật.
+**Khuyên dùng:** Title 1; A/B với Title 5 cho hook migration.
 
 ### 4b. SEO Description
 
@@ -210,7 +251,7 @@ Offset nói “bỏ qua hai mươi dòng”. Cursor nói “tiếp tục sau b�
 ### 4c. Keywords / Tags
 
 ```text
-prisma 8 pagination, cursor pagination nestjs, nestjs filtering sorting, offset vs cursor pagination, composite cursor createdAt id, prisma 8 orderBy cursor take, stable pagination postgres, api pagination best practices, list tasks nestjs, pagination ownership rbac, taskflow nestjs, học nestjs bằng ai, nestjs tập 17, prisma tiếng việt, typescript backend, lập trình là cuộc sống
+prisma 8 pagination, cursor pagination nestjs, nestjs filtering sorting, offset vs cursor pagination, composite cursor createdAt id, prisma 8 orderBy cursor take, stable pagination postgres, api pagination best practices, list tasks nestjs, pagination ownership rbac, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 17, prisma tiếng việt, typescript backend, lập trình là cuộc sống
 ```
 
 ---

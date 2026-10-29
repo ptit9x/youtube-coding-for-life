@@ -95,7 +95,7 @@ Log cho ta lời kể. Trace cho ta thời gian. Code cho ta nguyên nhân.
 
 Khi ba thứ khớp nhau, mình mới sửa production.
 
-Tập sau, TaskFlow sẽ nhận file mà không tin tên file người dùng gửi lên.
+Tập sau, User Management sẽ nhận file mà không tin tên file người dùng gửi lên.
 
 Nếu bạn muốn quan sát hệ thống trước khi tối ưu nó, hãy đồng hành cùng series này.
 
@@ -140,7 +140,7 @@ ObserveModule.forRootAsync({
   useFactory: (config: ConfigService) => ({
     appKey: config.getOrThrow('OBSERVE_APP_KEY'),
     appSecret: config.getOrThrow('OBSERVE_APP_SECRET'),
-    serviceId: 'taskflow-api',
+    serviceId: 'nestjs-base-with-ai-api',
     serviceVersion: config.getOrThrow('GIT_SHA'),
     forwardLogs: true,
   }),
@@ -156,7 +156,7 @@ const app = await NestFactory.create(AppModule, {
 ### Prompt cho AI
 
 ```text
-Plan a minimal NestJS Observe integration for TaskFlow using only current official docs.
+Plan a minimal NestJS Observe integration for nestjs-base-with-ai using only current official docs.
 - Verify the installed @nestjs/core version is compatible before editing.
 - Load app key, app secret and release version from validated environment config.
 - Decide source context, log forwarding, redaction and trace sampling explicitly.

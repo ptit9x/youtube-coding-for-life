@@ -1,0 +1,193 @@
+# EP03 — Đăng Ký ChatGPT Miễn Phí: Không Cần Thẻ, Không Cần VPN
+
+---
+
+## PART 1 — SCRIPT
+
+Ba tin đồn cũ khiến dev Việt không dám bấm Sign up: cần thẻ Visa, cần số điện thoại Mỹ, cần VPN. Sự thật: bản miễn phí của ChatGPT không cần cái nào — năm phút là xong.
+
+Làm luôn. Mở chát-gi-pi-ti chấm com. Bấm Sign up. Email thường cũng được, nhưng nhanh nhất là chọn tiếp tục với Google — khỏi xác nhận link. Chọn tài khoản Gmail, bấm cho phép. Nếu hệ thống hỏi thêm số điện thoại để xác thực, số Việt Nam dùng bình thường. Điền tên, ngày sinh. Vậy là xong. Không một bước nào hỏi thẻ tín dụng. Không một bước nào hỏi tiền.
+
+Bạn vừa có trợ lý AI miễn phí — và không có ngày hết hạn. Bản free dùng model mới nhất, với giới hạn mỗi ngày. Tìm kiếm web, đọc file, phân tích ảnh — đều có. Tạo ảnh cũng có, ít hơn thôi. Khi chạm trần, nó mời bạn đợi reset, hoặc tự chuyển sang model nhẹ hơn để chat tiếp. Hôm sau, quota lại đầy. Có app trên điện thoại, lịch sử chat đồng bộ — giờ nghỉ trưa cũng hỏi được việc.
+
+Giờ mới nói vì sao nhiều người chưa làm. Tuần đầu đi làm, cả team bảo mình: cứ hỏi AI đi. Mình mở lên, thấy dòng Plus hai mươi đô mỗi tháng, rồi tin cả ba tin đồn kia. Càng đọc group, càng không dám bấm nút. Nhìn lại mới thấy: thứ chặn mình không phải tiền — là tin đồn. Rào cản lớn nhất của dev mới thường nằm ở đó.
+
+Giới hạn đó quen thuộc chứ? Đúng y free tier của cloud mà dev nào cũng từng xài: quota mỗi ngày, reset định kỳ. Dùng khéo là đủ. Ba thói quen tiết kiệm quota. Một — dán đúng đoạn code liên quan, đừng ném cả file năm trăm dòng. Hai — hỏi ngắn, dồn đủ ngữ cảnh vào một câu. Ba — dùng AI để giải thích và phản biện, đừng dùng nó viết hộ rồi copy. Câu cuối đó, chính là ranh giới giữa học và tự lừa dối mình.
+
+Nói thẳng luôn: có nên nâng Plus không? Nếu bạn code tám tiếng mỗi ngày cùng agent, hai mươi đô đáng đồng tiền. Còn nếu bạn đang học — bản free đủ. Và một cảnh báo: đừng tạo năm, sáu email ảo để lách giới hạn. Tài khoản bị khóa là mất luôn lịch sử chat — thứ giá trị nhất bạn đã tích lũy.
+
+Câu hỏi đầu tiên mình từng hỏi nó: giải thích hàm này cho mình như cho người mới.
+
+### 🎬 PROMPT 1 — Hiểu một hàm lạ
+
+> **Mục đích:** Dùng AI để hiểu code, không yêu cầu viết hộ.  
+> **Conversation:** Mới, ngay sau khi đăng ký.  
+> **Prompt:**
+> ```text
+> Giải thích hàm này cho mình như cho người mới học Node.js.
+> Đi từng bước, nêu input, output và một chỗ dễ gây bug.
+> Đừng viết lại code nếu mình chưa yêu cầu.
+> 
+> <dán một hàm ngắn vào đây>
+> ```
+> **Kết quả mong đợi:** AI giải thích từng bước và chỉ ra rủi ro để người học tự sửa.
+
+Nó trả lời chậm rãi, từng bước, dễ hiểu hơn một buổi họp mặt. Khoảnh khắc đó mình hiểu: rào cản chưa bao giờ là nút thanh toán.
+
+Hai mươi đô mua được tốc độ, không mua được tư duy. Tài khoản miễn phí đủ để bạn bắt đầu.
+
+Nếu muốn xem AI agent làm việc thật, series Muse nằm trong phần mô tả. Mình là Richard. Lập trình là cuộc sống.
+
+---
+
+## PART 2 — SHOT LIST / SCREEN RECORDING GUIDE
+
+**Tổng thời lượng mục tiêu: ~5:40 (340s visuals, ~510 từ @ ~100 wpm, fill ~90%)**
+
+**Cài đặt chung:** Dark mode toàn bộ (browser + ChatGPT dark theme), font ≥18px, ẩn bookmark bar, đóng tab thừa. Blur email/số điện thoại cá nhân khi edit. Dùng account demo riêng để quay — đừng dùng account chính có lịch sử cá nhân.
+
+| # | Thời lượng | Loại | Narration tương ứng | Footage | Ghi chú cắt ghép |
+|---|-----------|------|---------------------|---------|-----------------|
+| 1 | 20s | **[BROWSER]** | "Ba tin đồn cũ...năm phút là xong." | Mở chatgpt.com → zoom nút Plus + giá "20 USD/tháng" → 3 badge text hiện lần lượt: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" rồi gạch ngang đỏ | Hook 2 nhịp — KHÔNG intro, không chào; giữ 2s ở lúc gạch ngang |
+| 2 | 75s | **[BROWSER]** | "Làm luôn...không một bước nào hỏi tiền." | Quay thật: chatgpt.com → Sign up → "Continue with Google" → chọn Gmail demo → Allow → form tên + ngày sinh (blur thông tin thật) | Speed-up 1.5x phần chờ load, giữ tốc độ thật phần bấm nút. Quay cảnh **không có field thẻ tín dụng** — điểm nhấn |
+| 3 | 35s | **[BROWSER]** | "Bạn vừa có trong tay...hỏi được việc." | Giao diện chat mới: hover model picker, icon search web, nút upload file, nút tạo ảnh; mở app điện thoại 2s cho câu cuối | Nền tối; cuộn chậm rãi, không vội |
+| 4 | 20s | **[BROWSER]** | "Khi chạm trần, nó mời bạn đợi reset..." | Staged: thông báo giới hạn hàng ngày (screenshot từ help docs của OpenAI hoặc tự mô phỏng overlay) | KHÔNG bịa UI — không có screenshot thật thì dùng overlay text neutral: "giới hạn hàng ngày → reset sau XX giờ" |
+| 5 | 20s | **[B-ROLL]** | "Giờ mới nói vì sao...thường nằm ở đó." | Tay cầm điện thoại scroll tin nhắn group (staged) hoặc máy tính scroll Reddit/Facebook | Quick cuts 3 nhịp — mỗi nhịp một "tin đồn" hiện overlay: "cần thẻ Visa?" / "số ĐT Mỹ?" / "cần VPN?" |
+| 6 | 20s | **[DIAGRAM]** | "Đúng y free tier của cloud...reset định kỳ." | Excalidraw: thanh quota ngày (thanh neon xanh đầy → vơi → reset mũi tên vòng) | Metaphor duy nhất của video — vẽ tối giản |
+| 7 | 50s | **[IDE]** | "Ba thói quen tiết kiệm quota...học và tự lừa dối mình." | VS Code (One Dark, JetBrains Mono 18px): copy đúng 1 hàm Node.js ngắn → paste vào ChatGPT với prompt "giải thích hàm này như cho người mới" → câu trả lời hiện ra | Chia 3 jump cuts tương ứng 3 thói quen. Cảnh "dán cả file 500 dòng" diễn bằng scroll nhanh file dài rồi undo |
+| 8 | 25s | **[BROWSER]** | "Nói thẳng luôn...mất luôn lịch sử chat." | Mở nhanh trang Compare plans (bảng Free vs Plus) → đóng tab sau 2s (beat humor). Overlay text cảnh báo "email ảo = rủi ro khóa" | Đóng tab dứt khoát — đúng nhịp narration "bản free đủ" |
+| 9 | 35s | **[BROWSER]** | "Câu hỏi đầu tiên...người học tự sửa." | Paste Prompt 1, thêm một hàm Node.js ngắn, xem câu trả lời giải thích từng bước | Zoom prompt và phần rủi ro; không yêu cầu AI viết lại code |
+| 10 | 40s | **[B-ROLL]** | "Nó trả lời chậm rãi...Lập trình là cuộc sống." | Desk night → ChatGPT free → card dẫn sang `series-muse-ai` | Fade to black, giữ outro ngắn |
+
+**Tổng: 340s visuals + breathing pauses ≈ 5:40**
+
+**Lưu ý quay:**
+- Quay account demo từ đầu đến cuối trong 1 session — đừng ghép account khác nhau (email khác nhau lộ cut).
+- Scene 2 là shot quan trọng nhất: nếu OpenAI đổi UI signup, quay theo UI mới, narration vẫn đúng vì không đọc tên nút cứng.
+- Font browser ≥18px (Ctrl/Cmd +), zoom 125% nếu cần cho mobile viewing.
+
+---
+
+## PART 3 — THUMBNAIL IMAGE PROMPTS
+
+**Prompt 1:**
+A cinematic photograph of a young developer at a dark desk at night staring at a large monitor showing a minimal dark chat interface with a glowing green input box, a translucent floating price tag glowing beside the screen, the developer's face half-lit by warm amber monitor glow, code visible on a second screen with syntax highlighting in green and cyan on dark background, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a high-end tech commercial or developer documentary. Not a screenshot, not a tutorial, not cartoon.
+
+**Prompt 2:**
+A cinematic macro photograph of hands typing on a backlit mechanical keyboard in a dark room, a browser signup form with a single glowing neon green button reflected on the black keycaps, purple and cyan ambient lighting, coffee cup steam rising softly in the background, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a developer documentary. Not a screenshot, not a tutorial, not cartoon.
+
+**Prompt 3:**
+A cinematic photograph of a dark IDE screen in a dim room displaying a bright neon green checkmark, a developer's eyeglasses in the foreground reflecting lines of green and cyan code, dramatic low-key lighting with deep shadows and warm amber desk lamp glow on one side, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a high-end tech commercial. Not a screenshot, not a tutorial, not cartoon.
+
+---
+
+## PART 4 — TITLES (10)
+
+1. Đăng ký ChatGPT miễn phí trong 5 phút — không cần thẻ, không cần VPN | Lập trình là cuộc sống
+2. Ai cũng bảo "hỏi AI đi" — nhưng không ai chỉ bạn cách đăng ký miễn phí | Lập trình là cuộc sống
+3. 20 đô một tháng? Bản miễn phí này đủ cho dev mới đi làm | Lập trình là cuộc sống
+4. 3 tin đồn khiến dev Việt không dám bấm nút Sign up | Lập trình là cuộc sống
+5. ChatGPT free 2026: những gì bạn dùng được mà không mất một đồng | Lập trình là cuộc sống
+6. Từ số 0 đến trợ lý AI đầu tiên — chỉ cần một cái Gmail | Lập trình là cuộc sống
+7. Đừng trả tiền cho AI trước khi xem cái này | Lập trình là cuộc sống
+8. Rào cản lớn nhất để dùng AI không phải tiền — là tin đồn | Lập trình là cuộc sống
+9. Bản free ChatGPT có đủ để học code? Nói thật luôn | Lập trình là cuộc sống
+10. Dev mới ra trường: 5 phút, 0 đồng, mở cánh cửa AI | Lập trình là cuộc sống
+
+---
+
+## PART 5 — THUMBNAIL PACKAGE (3 options)
+
+### Option 1 — "0 ĐỒNG"
+
+**5a. Image prompt:**
+A cinematic photograph, developer silhouette from behind sitting at a desk in a dark room, one large monitor glowing with a chat input box in neon green, a huge translucent glowing "0" made of floating code fragments hovering above the monitor, dramatic neon green and cyan lighting, dark moody background with city bokeh through window, high contrast, dramatic rim lighting, deep shadows, vivid saturated neon colors, subject positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+
+**5b. Text spec:**
+- Line 1: **0 ĐỒNG** — `#00FF41` neon green
+- Line 2: **TRỢ LÝ AI** — `#FFFFFF` white
+- Line 3 (small badge): **5 PHÚT ĐĂNG KÝ** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+
+**5c. Typography specs:**
+- Canvas 1280×720. Font **Anton** (Google Fonts, free).
+- Mỗi line cao 110–140px. Line spacing 0.85. Text block chiếm ~1/3 khung hình, bên trái.
+- Neon glow: duplicate text layer, blur 10–12px, opacity 60–70%, màu trùng chữ. Black outline 6–10px mỗi chữ.
+- KHÔNG đè text lên silhouette hay con số "0". Scan-line/noise overlay nhẹ. Giữ bản text-free để tái dùng.
+
+### Option 2 — "Không Cần Thẻ"
+
+**5a. Image prompt:**
+A cinematic photograph, dramatic close-up of a mechanical keyboard and a mouse on a dark desk, a glowing credit card made of light shattering into green code particles above the keyboard, neon green and purple lighting from monitor glow, dark moody background with cyan bokeh city lights through window, high contrast, dramatic rim lighting, deep shadows, vivid saturated neon colors, keyboard positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+
+**5b. Text spec:**
+- Line 1: **KHÔNG CẦN THẺ** — `#FFFFFF` white
+- Line 2: **KHÔNG CẦN VPN** — `#00FF41` neon green
+- Line 3 (small badge): **CHATGPT FREE** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+
+**5c. Typography specs:**
+- Canvas 1280×720. Font **JetBrains Mono** (free) — đúng chất code.
+- Mỗi line cao 110–130px. Line spacing 0.85. Text block bên trái ~1/3 khung.
+- Neon glow: duplicate layer, blur 8–12px, opacity 65%. Black outline 8px.
+- Scan-line overlay. Giữ bản text-free.
+
+### Option 3 — "Bản Free Đủ"
+
+**5a. Image prompt:**
+A cinematic photograph, a developer's face in profile lit by monitor glow in a dark room, reflection of a glowing chat conversation with green and cyan bubbles visible on the eyeglasses, one hand resting on a backlit keyboard, a subtle floating price tag dissolving into particles in the background, dramatic low-key lighting, deep shadows, purple ambient glow, high contrast, vivid saturated neon colors, subject positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.
+
+**5b. Text spec:**
+- Line 1: **PLUS 20 ĐÔ?** — `#FFFFFF` white
+- Line 2: **BẢN FREE ĐỦ** — `#00FF41` neon green
+- Line 3 (small badge): **CHO DEV MỚI** — `#00FF41` neon green, nền badge `#1a1a2e` viền neon
+
+**5c. Typography specs:**
+- Canvas 1280×720. Font **Anton** cho line 1–2, **JetBrains Mono** cho badge.
+- Mỗi line cao 110–140px. Line spacing 0.85. Text block bên trái.
+- Neon glow: duplicate layer, blur 10px, opacity 60–70%. Black outline 8px.
+- KHÔNG đè text lên mặt người. Scan-line overlay. Giữ bản text-free.
+
+---
+
+## PART 6 — YOUTUBE SEO
+
+### Description
+
+```
+Ba tin đồn cũ khiến dev Việt không dám bấm Sign up: cần thẻ Visa, cần số điện thoại Mỹ, cần VPN. Sự thật: bản miễn phí của ChatGPT không cần cái nào trong ba cái đó.
+
+Video này cho bạn thấy:
+⏩ 0:00 — Ba tin đồn cũ
+⏩ 0:20 — Đăng ký ChatGPT free: walkthrough thật, không thẻ, không VPN
+⏩ 1:35 — Bản free có gì: model mới nhất, search web, đọc file
+⏩ 2:50 — Vì sao nhiều người vẫn chưa bấm nút
+⏩ 3:10 — Ba thói quen tiết kiệm quota mỗi ngày
+⏩ 4:00 — Có nên nâng Plus không? Nói thẳng luôn
+⏩ 4:25 — Câu hỏi đầu tiên bạn nên hỏi AI
+⏩ 5:00 — Rào cản thật sự không phải là tiền
+
+━━━━━━━━━━━━━━━━━━━━━━
+🔗 XEM TIẾP SERIES AI MIỄN PHÍ
+━━━━━━━━━━━━━━━━━━━━━━
+▸ EP01 — Lấy 1 tỷ token Muse AI miễn phí: https://youtu.be/hQzSDxDhX6s
+
+#ChatGPT #AIMienPhi #LapTrinhLaCuocSong #AI #Developer #FreeTools
+```
+
+### Tags (paste vào YouTube Studio)
+
+```
+ChatGPT miễn phí, đăng ký ChatGPT, chatgpt free 2026, chatgpt không cần thẻ, chatgpt việt nam, cách dùng ChatGPT free, ChatGPT free vs Plus, nên mua ChatGPT Plus không, tiết kiệm quota ChatGPT, AI miễn phí cho dev, trợ lý AI miễn phí, dev mới ra trường, fresher dùng AI, học code với AI, AI cho sinh viên IT, lập trình là cuộc sống
+```
+
+### Hashtags (3 hiển thị trên tiêu đề)
+
+```
+#ChatGPT #AIMienPhi #LapTrinhLaCuocSong
+```
+
+### Pinned Comment (ghim lên đầu)
+
+```
+Bạn đang dùng bản free của AI nào? Nó đủ cho công việc hằng ngày của bạn không?
+Comment chia sẻ — mình sẽ tổng hợp và làm video so sánh free tier AI cho dev Việt 👇
+```

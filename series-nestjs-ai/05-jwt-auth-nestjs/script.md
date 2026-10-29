@@ -103,9 +103,9 @@ Trong UsersController có endpoint `/users/me`. Endpoint này sử dụng `@Curr
 
 Vậy là cánh cửa đã biết người gõ là ai. Nhưng package chính thức không thay mình quyết định ai được phép làm gì.
 
-Tập sau, mình sẽ biến convention đã kiểm chứng thành Agent Skill. Đây là một tập rất đáng xem.
+Tập sau, mình thêm refresh token rotation và khả năng thu hồi session.
 
-AI sẽ nhớ cách scaffold, còn mình vẫn giữ quyền duyệt.
+Access token sẽ sống ngắn, nhưng người dùng không phải đăng nhập lại liên tục.
 
 Mình sẽ để lại link Git của nhánh này trong description. Nếu có câu hỏi gì, hãy để lại comment nhé. Hẹn gặp ở video sau.
 
@@ -206,7 +206,7 @@ export class JwtAuth extends JwtBearerProvider<PublicUser> {
     private readonly users: UsersRepository,
     registry: AuthenticationRegistry,
   ) {
-    super({ realm: 'taskflow' });
+    super({ realm: 'user-management' });
     registry.registerProvider(this);
   }
 

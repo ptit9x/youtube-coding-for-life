@@ -1,10 +1,10 @@
-# NestJS #09 — PermissionGuard: Phân biệt lỗi 401 và 403
+# NestJS #09 — PermissionGuard và Ownership: quyền chưa đủ
 
 - **Series:** Học NestJS bằng AI — tập 9/29
-- **Recording status:** CHƯA READY — script hiện mới có PermissionGuard; phải merge Tasks + ownership trong `merged-from-11/`.
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
-- **Outcome:** `@RequirePermissions`, PermissionGuard và response 401/403 đúng nghĩa.
-- **Pain mở EP11:** Cần một business feature thật để kiểm chứng permission và ownership.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~700 từ thoại + khoảng nghỉ demo)
+- **Outcome:** PermissionGuard bảo vệ hành động; TasksService và repository giới hạn đúng resource theo owner.
+- **Pain mở EP10:** Auth, permission và ownership có quá nhiều nhánh để tiếp tục thử tay.
 
 ---
 
@@ -40,7 +40,9 @@ Guard gọi AccessControlService, không query Prisma trực tiếp. Cách tính
 
 PermissionGuard nằm trong `modules/access-control/guards`. Nó phụ thuộc policy domain nên không thuộc `common`.
 
-Đến phần tự gõ, mình thêm lỗi 403 với message chung. Server log user ID và permission bị thiếu để điều tra, nhưng response không liệt kê policy nội bộ cho client.
+Đến phần tự gõ, mình thêm lỗi bốn-không-ba với message chung. Server log user ID và permission bị thiếu.
+
+Response không liệt kê policy nội bộ cho client.
 
 Mình protect endpoint tạo Permission. User member đăng nhập đúng vẫn nhận 403.
 
@@ -54,9 +56,41 @@ Route không có permission metadata vẫn phải đi qua global AuthGuard. Ch�
 
 Đăng nhập không phải tấm vé VIP. Nó chỉ giúp hệ thống biết tên người đang đứng trước cửa.
 
-Tập sau, ta tạo TasksModule. Khi đó permission trên route vẫn chưa đủ vì user có thể sửa task của người khác.
+Nhưng permission trên route vẫn chưa đủ. User A có `tasks.update` và vừa sửa được task của User B.
 
-Theo dõi series để thấy authorization đi từ route xuống đúng resource, không dừng ở một decorator đẹp mắt. Mình là Richard. Lập trình là cuộc sống.
+Permission trả lời hành động nào được phép. Ownership trả lời hành động đó áp dụng trên dữ liệu của ai.
+
+Mình dùng Agent Skill để scaffold TasksModule. Controller mỏng, service giữ policy, repository tách khỏi Prisma.
+
+AI đưa `ownerId` vào CreateTaskDto. Mình từ chối trước khi approve.
+
+Client không được tự khai mình là chủ sở hữu. `ownerId` phải lấy từ access token.
+
+Controller khai báo `tasks.update`. Guard kiểm tra hành động. Service kiểm tra resource cụ thể.
+
+Bản đầu tìm task theo ID rồi update ngay. Task tồn tại, nhưng code không kiểm tra owner.
+
+Mình sửa repository để tìm bằng cả `id` và `ownerId`.
+
+Không có kết quả thì service trả bốn-không-bốn. Client không biết task vắng mặt hay nằm ngoài scope.
+
+Danh sách task cũng luôn nhận `ownerId`. Ownership không chỉ áp dụng cho update và delete.
+
+Admin muốn đọc mọi task phải có permission riêng như `tasks.read.any`. Không mở cửa bằng tên role bí mật.
+
+Mình chạy lại bằng hai tài khoản. User A sửa task của mình thành công.
+
+Sửa task của User B nhận bốn-không-bốn. Thiếu `tasks.update` nhận bốn-không-ba ngay tại guard.
+
+Một status nói thiếu hành động. Status còn lại bảo vệ sự tồn tại của resource.
+
+Nhưng ma trận này đã quá lớn để bấm Postman bằng trí nhớ.
+
+Tập sau, Vitest và Supertest sẽ giữ auth, permission và ownership không trượt khỏi nhau.
+
+Security không thể dựa vào trí nhớ của người test tay. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
+Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -64,19 +98,21 @@ Theo dõi series để thấy authorization đi từ route xuống đúng resour
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | User thiếu quyền vẫn xóa Permission | 30s |
-| 2 | [DIAGRAM] | Authentication: ai; Authorization: được làm gì | 45s |
-| 3 | [IDE] | `@Roles('admin')` rải rác rồi thay bằng permission | 50s |
-| 4 | [IDE] | Decorator metadata và Reflector | 55s |
-| 5 | [DIAGRAM] | AuthGuard → PermissionGuard → Controller | 45s |
-| 6 | [IDE] | AI decision table; sửa 401 và 403 | 55s |
-| 7 | [IDE] | Guard gọi AccessControlService, không gọi Prisma | 60s |
-| 8 | [IDE] | Host tự gõ missing-permission error | 45s |
-| 9 | [BROWSER] | Member 403, assign role rồi 201 | 65s |
-| 10 | [BROWSER] | Revoke và direct DENY có hiệu lực với token cũ | 70s |
-| 11 | [B-ROLL] | Cửa API có hai lớp bảo vệ, teaser Tasks | 20s |
+| 1 | [BROWSER] | User thiếu quyền vẫn gọi route; dựng tension 401/403 | 30s |
+| 2 | [DIAGRAM] | AuthGuard → PermissionGuard → Controller → Service ownership | 40s |
+| 3 | [IDE] | Submit yêu cầu; AI plan decorator/guard, tua nhanh khi xử lý | 45s |
+| 4 | [IDE] | Review bỏ `@Roles('admin')`; approve permission metadata | 45s |
+| 5 | [IDE] | Reflector và AccessControlService, không gọi Prisma trực tiếp | 45s |
+| 6 | [BROWSER] | Member 403; assign/revoke có hiệu lực với token cũ | 45s |
+| 7 | [IDE] | Skill plan TasksModule; bắt lỗi `ownerId` trong DTO | 45s |
+| 8 | [IDE] | Controller mỏng, service policy, repository contract | 45s |
+| 9 | [BROWSER] | User A sửa task B thành công để lộ ownership bug | 35s |
+| 10 | [IDE] | Sửa query bằng `id + ownerId`; giải thích 404 chống lộ resource | 50s |
+| 11 | [IDE] | `findAllByOwner`; không dùng role name bí mật | 35s |
+| 12 | [TERM]+[BROWSER] | Test 403, 404 và success bằng hai tài khoản | 50s |
+| 13 | [B-ROLL] | Ma trận quá lớn để test tay; teaser Vitest/Supertest | 20s |
 
-**Tổng: 545 giây ≈ 9:05.** Font 18px, zoom decorator và guard; che token trong Postman.
+**Tổng: 530 giây ≈ 8:50; cộng khoảng nghỉ diff thành 9–10 phút.** Font 18px, che token và dữ liệu người dùng.
 
 ### Code cốt lõi
 
@@ -129,13 +165,18 @@ Plan claims-based authorization for the current AccessControlModule.
 
 ### 4a. Titles
 
-1. PermissionGuard NestJS: Phân biệt lỗi 401 và 403 — EP09
-2. Tạo decorator RequirePermissions trong NestJS — EP09
-3. Kiểm tra quyền truy cập API bằng PermissionGuard — EP09
-4. Authentication và Authorization khác nhau thế nào? — EP09
-5. Vì sao không nên lưu permission trong JWT? — EP09
+1. Có Permission vẫn sửa nhầm dữ liệu người khác — EP09 | Lập trình là cuộc sống
+2. PermissionGuard chưa đủ nếu thiếu Ownership — EP09 | Lập trình là cuộc sống
+3. 403 hay 404? Một quyết định bảo mật — EP09 | Lập trình là cuộc sống
+4. Đừng cho client tự gửi `ownerId` — EP09 | Lập trình là cuộc sống
+5. Authentication và Authorization khác nhau thế nào? — EP09 | Lập trình là cuộc sống
+6. Vì sao không nên lưu permission trong JWT? — EP09 | Lập trình là cuộc sống
+7. NestJS Guard bảo vệ hành động, Service bảo vệ dữ liệu — EP09 | Lập trình là cuộc sống
+8. Một DTO suýt tạo lỗ hổng Ownership — EP09 | Lập trình là cuộc sống
+9. User A sửa Task của User B như thế nào? — EP09 | Lập trình là cuộc sống
+10. Authorization phải đi tới từng Resource — EP09 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 3 cho search và Title 4 cho người mới.
+**Khuyên dùng:** Title 1; A/B với Title 2 cho search intent.
 
 ### 4b. SEO Description
 

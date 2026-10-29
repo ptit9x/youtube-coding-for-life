@@ -6,183 +6,108 @@
 
 ---
 
-## PROMPT 1 — Audit convention từ code đã hoàn thiện
+## PROMPT 1 — Hỏi banned patterns TRƯỚC khi có AGENTS.md
 
-> **Mục đích:** Cho AI đọc Users và Auth module — hai feature đã stable — rồi
-> rút ra convention chung đủ ổn định để đưa vào agent skill.
+> **Mục đích:** Cold open. Chứng minh AI chỉ biết cái đang dùng, không biết
+> cái bị cấm — vì code không chứa thông tin đó.
+>
+> ⚠️ **Reliable 100%:** Không phụ thuộc AI "sai" hay "đúng". Chỉ cần nó
+> không liệt kê được banned patterns (vì AGENTS.md chưa tồn tại).
 
 ```text
-Đọc toàn bộ code trong `src/modules/users/` và `src/modules/auth/`.
-Đọc thêm `src/prisma/`, `src/database/`, `src/common/` và `src/config/`.
+What Prisma patterns are BANNED in this project?
+List specific imports, commands, and file names that must NOT be used.
+```
 
-Liệt kê những convention chung mà CẢ HAI feature đều tuân thủ:
-- Cấu trúc file/folder bên trong module
-- Hướng dependency (controller → service → repository contract → adapter)
-- Cách tách repository contract khỏi Prisma adapter
-- Cách đăng ký module, provider và export
-- Cách dùng DTO, validation pipe
-- Cách tương tác với Prisma 8 database facade (`db.ts`)
-- Lệnh verify sau khi thay đổi code (lint, test, contract emit, migration)
+> **Kết quả mong đợi:** Agent nói cái project đang dùng
+> (`@prisma/orm-postgres`, `contract.prisma`), nhưng **không liệt kê
+> cái bị cấm** (`@prisma/client`, `PrismaClient`, `schema.prisma`,
+> `migrate dev`) vì không có nguồn nào ghi thông tin đó.
 
-Phân biệt rõ hai loại:
-1. Convention CHUNG — áp dụng được cho BẤT KỲ feature mới nào (file layout,
-   dependency direction, workflow)
-2. Convention RIÊNG — chỉ thuộc Users hoặc Auth (hash password, JWT, guard
-   logic cụ thể)
+---
 
-Chỉ đề xuất loại 1 để đưa vào agent skill.
-KHÔNG đề xuất loại 2 — đó là business rule của feature đó, không phải template.
+## PROMPT 2 — Audit convention từ code đã hoàn thiện
 
-Output dạng danh sách bullet, chia nhóm: File Layout, Dependency Direction,
-Database Workflow, Verification Steps. Mỗi mục tối đa 2 câu.
+> **Mục đích:** Cho AI đọc toàn bộ code — rút ra convention chung
+> giữa các feature đã stable.
+
+```text
+Read all code base.
+
+List the SHARED conventions that BOTH features follow — file layout,
+dependency direction, database workflow, verification steps.
+
+Exclude feature-specific rules (password hashing, JWT logic). Those are
+business rules, not architecture templates.
+
+Output as bullet list grouped by category. Max 2 sentences per item.
 ```
 
 ---
 
-## PROMPT 2 — Tạo SKILL.md từ convention đã duyệt
+## PROMPT 3 — Tạo AGENTS.md + docs/ + Skill từ convention đã duyệt
 
-> **Mục đích:** Sau khi host review output prompt 1, loại bỏ business rule
-> (ví dụ: hash password), thì dùng prompt này để AI sinh SKILL.md.
+> **Mục đích:** Sau khi host review output prompt 2 và loại bỏ business rule
+> (ví dụ: hash password), prompt này yêu cầu AI tạo toàn bộ convention files
+> trong 1 lần: AGENTS.md (Hot Memory), docs/ (Cold Memory) và nest-feature
+> Skill.
 
 ```text
-Dựa trên convention chung tôi vừa duyệt, tạo file:
-`.agents/skills/nest-feature/SKILL.md`
+Based on the shared conventions I just approved, read the current project
+structure and create these 5 files:
 
-Yêu cầu:
+1. `AGENTS.md` (repo root) — Hot Memory, always loaded.
+   Project overview, directory layout, dependency rules, database
+   conventions (Prisma 8, banned Prisma 7 patterns), conditional reading
+   rules for docs/, env/config, testing commands, agent workflow.
+   Target under 150 lines.
 
-### Frontmatter YAML
-- `name`: `nest-feature` (ngắn, ổn định, không đổi)
-- `description`: mô tả KHI NÀO dùng (scaffold hoặc mở rộng business feature
-  NestJS trong TaskFlow) VÀ KHI NÀO KHÔNG dùng (one-line fix, infrastructure
-  change, config-only change). Description là bộ routing — không phải quảng cáo.
+2. `docs/architecture.md` — Cold Memory, read when changing module
+   boundaries. Detailed src/ tree, dependency diagram, responsibility
+   table per layer (what each DOES and what is FORBIDDEN), module
+   dependency map. Based on actual code only.
 
-### Instruction (phần markdown sau frontmatter)
-Viết dưới dạng numbered list, mỗi rule 1–2 câu. Bao gồm:
+3. `docs/database-schema.md` — Cold Memory, read when changing models.
+   Current models from contract.prisma, migration workflow with concrete
+   commands, patterns in use, banned Prisma 7 patterns with WRONG vs
+   CORRECT examples. Based on actual code only.
 
-1. Trước khi edit, đọc `references/architecture.md` và feature lân cận
-   đã hoàn thiện gần nhất.
-2. Trình file plan và dependency direction trước. Chờ approve rồi mới code.
-3. Controller mỏng — chỉ xử lý transport (parse request, trả response).
-4. Business rule nằm trong service hoặc use case, explicit cho từng feature.
-5. KHÔNG tạo `BaseCrudService`, `CommonService<T>` hay bất kỳ generic
-   business CRUD nào chỉ vì method CRUD trùng tên.
-6. Repository contract không import Prisma — contract là interface thuần.
-7. Prisma adapter implement contract, nhận database facade qua DI token.
-8. Code thuộc riêng một domain KHÔNG đưa vào `common/`.
-9. Với mọi thay đổi database:
-   - Đọc Prisma 8 release status trước.
-   - Đọc tài liệu Prisma 8 docs, KHÔNG dùng snippet Prisma 6/7.
-   - Dùng `contract.prisma`, emitted contract và database facade.
-   - KHÔNG dùng `@prisma/client`, `PrismaClient`, `prisma generate`,
-     `schema.prisma`, `migrate dev`, `migrate deploy`.
-10. Verification sau mỗi thay đổi:
-    - `prisma contract emit` và `prisma migration check` khi contract thay đổi
-    - Lint, test, diff summary theo phạm vi thay đổi
+4. `.agents/skills/nest-feature/SKILL.md` — Skill for scaffolding NestJS
+   business features.
+   Frontmatter: name `nest-feature`, description as router (when to use,
+   when NOT to use).
+   Instructions as numbered rules: read references first, present plan
+   before coding, thin controllers, explicit business rules per feature,
+   no generic CRUD, repository contracts without Prisma imports, Prisma 8
+   only (ban @prisma/client, PrismaClient, schema.prisma, migrate dev),
+   verification after every change.
 
-### Tạo thêm file reference
-Tạo `.agents/skills/nest-feature/references/architecture.md` chứa:
-- Cây thư mục đích của `src/` (dựa trên cấu trúc hiện tại)
-- Dependency diagram dạng text (controller → service → contract ← adapter → db)
-- Giải thích ngắn từng layer (1–2 câu mỗi layer)
-
-Tách reference ra khỏi SKILL.md để agent chỉ nạp khi thật sự cần —
-progressive disclosure giúp tiết kiệm context.
+5. `.agents/skills/nest-feature/references/architecture.md` — Reference
+   loaded on demand. Directory tree, dependency diagram, layer explanation.
 ```
 
 ---
 
-## PROMPT 3 — Tạo AGENTS.md cho project TaskFlow
+## PROMPT 4 — Hỏi banned patterns SAU khi có AGENTS.md (conversation MỚI)
 
-> **Mục đích:** AGENTS.md là project-level instruction file được nhiều coding
-> agent hỗ trợ. Cách tìm file và độ ưu tiên tùy client, nên phải kiểm chứng bằng
-> một prompt nhỏ sau khi mở repo. Nó khác SKILL: skill chỉ được đọc đầy đủ khi
-> task khớp description.
-
-```text
-Đọc toàn bộ cấu trúc project hiện tại: `src/`, `package.json`,
-`prisma.config.ts`, `tsconfig.json`, `.env.example` và `docker-compose.yml`.
-
-Tạo file `AGENTS.md` ở root repo với nội dung:
-
-### 1. Project Overview (3–5 câu)
-- Tên project: TaskFlow
-- Loại: Task management REST API
-- Stack: NestJS 12, TypeScript 5.9+, Prisma 8, PostgreSQL, Node 24 ESM
-- Kiến trúc: modular monolith, module theo business domain
-- Auth: JWT access token + refresh token rotation
-
-### 2. Directory Layout
-- Cây thư mục `src/` ở mức folder chính (không liệt kê từng file)
-- Giải thích mục đích mỗi folder top-level: `modules/`, `common/`,
-  `config/`, `prisma/`, `database/`
-
-### 3. Dependency Rules (luật bắt buộc)
-Tóm tắt các luật kiến trúc quan trọng nhất:
-- Hướng dependency
-- Controller thin, service/use-case giữ business logic
-- Repository contract tách khỏi Prisma adapter
-- `common/` không import từ `modules/`
-- Không tạo generic business CRUD service
-
-### 4. Database Conventions (Prisma 8)
-- Contract file: `src/prisma/contract.prisma`
-- Emitted artifacts: `contract.json`, `contract.d.ts`
-- Database facade: `src/prisma/db.ts`
-- Migration: `migrations/app/`
-- Workflow: edit contract → emit → plan → review → apply → verify
-- CẤM: `@prisma/client`, `PrismaClient`, `prisma generate`,
-  `schema.prisma`, `migrate dev/deploy` (Prisma 7)
-
-### 5. Environment & Config
-- `.env` bị gitignore; `.env.example` chỉ có placeholder
-- ConfigModule + Zod validation cho mọi biến môi trường
-- Docker Compose dùng required interpolation
-
-### 6. Testing
-- Framework: Vitest 4 đã được TaskFlow chọn từ EP01 (`globals: true`)
-- Unit test: mock repository contract
-- E2E test: Supertest + database thật (test container hoặc test DB)
-- Chạy: `npm test`, `npm run test:e2e`
-
-### 7. Workflow cho Agent
-- Luôn trình plan trước, chờ approve rồi mới sửa code
-- Đọc feature lân cận trước khi tạo feature mới
-- Chạy verification đầy đủ sau mỗi thay đổi
-- Đối chiếu Prisma 8 docs, không dùng snippet từ search result
-
-Giữ AGENTS.md ngắn gọn (TaskFlow tự đặt mục tiêu dưới 150 dòng, không phải giới
-hạn của chuẩn). Đây là bản đồ tổng quan —
-chi tiết nằm trong skill và reference.
-```
-
----
-
-## PROMPT 4 — Kiểm chứng Skill (dùng trong conversation MỚI)
-
-> **Mục đích:** Mở conversation mới (context sạch) để xem agent có tự nhận
-> skill và tuân thủ convention không.
+> **Mục đích:** Cùng câu hỏi như Prompt 1. Lần này AGENTS.md đã tồn tại →
+> agent trả danh sách banned patterns rõ ràng, quote từ AGENTS.md.
+> Contrast reliable 100%.
 
 ```text
-Plan Roles and Permissions inside the TaskFlow access-control domain using
-the existing project conventions.
-
-Do not edit yet. Show:
-1. Folder structure for Roles and Permissions
-2. Dependency direction for each layer
-3. Repository contract boundaries without Prisma imports
-4. Business rules that must remain explicit per feature
-5. Verification commands to run after implementation
+What Prisma patterns are BANNED in this project?
+List specific imports, commands, and file names that must NOT be used.
 ```
 
-Không gọi tên Skill. Mục tiêu là kiểm chứng Antigravity tự route bằng
-`description`. Không approve và không cho agent sửa code; EP08 mới implement.
+> **Kết quả mong đợi:** Agent quote AGENTS.md, liệt kê: cấm `@prisma/client`,
+> `PrismaClient`, `schema.prisma`, `migrate dev`, `migrate deploy`,
+> `client generation`. Rõ ràng hơn Prompt 1.
 
 ---
 
 ## PROMPT 5 — Test negative: skill KHÔNG nên kích hoạt
 
-> **Mục đích:** Chứng minh description scope hoạt động — prompt không liên quan
-> thì skill không được dùng.
+> **Mục đích:** Prompt không liên quan → skill không được dùng.
 
 ```text
 Fix the typo in README.md line 3: change "Tsak" to "Task".
@@ -190,30 +115,53 @@ Fix the typo in README.md line 3: change "Tsak" to "Task".
 
 ---
 
-## PROMPT 6 — Test ranh giới: cố ép AI tạo generic CRUD
+## PROMPT 6a — MCP demo: TRƯỚC khi bật MCP
 
-> **Mục đích:** Chứng minh skill cấm generic business service ngay cả khi
-> prompt yêu cầu giảm duplicate.
+> **Mục đích:** Chứng minh agent không được đoán khi chưa có database tool.
+> **Điều kiện:** Docker PostgreSQL đang chạy, đã có ít nhất 1 user. Tắt terminal
+> cho workspace demo để loại bỏ đường truy cập khác ngoài MCP.
 
 ```text
-I want to minimize code duplication across Roles, Permissions and Users
-services. Create a BaseCrudService<T> that all three can extend.
+How many users are currently in the database? Query the actual PostgreSQL
+database and tell me the exact count.
 ```
 
-> **Kết quả mong đợi:** Agent từ chối tạo `BaseCrudService` vì skill cấm,
-> giải thích rằng business logic của mỗi feature khác nhau dù method name
-> trùng.
+> **Kết quả mong đợi:** Agent nói chưa có bằng chứng thay vì đoán số lượng.
+
+---
+
+## PROMPT 6b — MCP demo: SAU khi bật database MCP (cùng conversation)
+
+> **Mục đích:** Sau khi cấu hình MCP bằng PostgreSQL role chỉ có `SELECT`, hỏi
+> lại cùng câu. `enabledTools` chỉ giới hạn tool lộ cho agent; quyền read-only
+> phải được enforce ở PostgreSQL.
+
+```text
+How many users are currently in the database? Query the actual PostgreSQL
+database and tell me the exact count.
+```
+
+> **Kết quả mong đợi:** Agent dùng MCP tool, chạy SELECT count, trả kết quả
+> thật.
 
 ---
 
 ## Ghi chú quay video
 
-- **Prompt 1–3:** Chạy trong cùng conversation để AI có context liên tục.
-  Host review output từng prompt, loại bỏ business rule trước khi approve.
-- **Prompt 4–6:** Mở conversation MỚI (context sạch) để kiểm chứng Skill
-  hoạt động độc lập.
-- Mở **Customizations → Skills** trước prompt 4 để quay bằng chứng
-  `nest-feature` đã được Antigravity discover.
-- Quay cả lúc host đọc output, suy nghĩ và loại bỏ — đây là điểm khác biệt
-  "AI viết, mình hiểu" của series.
+- **Prompt 1:** Conversation đầu tiên. Hỏi banned patterns khi chưa có
+  AGENTS.md (chưa tồn tại → không cần ẩn gì).
+- **Prompt 2–3:** Conversation MỚI. Review prompt 2, loại business
+  rule, rồi prompt 3 tạo tất cả files.
+- **Prompt 4:** Conversation MỚI (AGENTS.md đã tồn tại). Cùng câu hỏi
+  như Prompt 1 → so sánh contrast.
+- **Prompt 5:** Conversation MỚI, test negative (typo).
+- **Prompt 6a:** Chưa bật MCP và đã tắt terminal. Agent không được đoán.
+- **Giữa 6a và 6b:** MCP Store → database server → PostgreSQL role chỉ có
+  `SELECT` → chỉ expose query tool.
+- **Prompt 6b:** Cùng conversation với 6a. Agent query thành công.
+- Mở **Customizations → Skills** trước prompt 4 để quay Skill đang active.
+- **Chuẩn bị MCP demo:**
+  - `docker compose -f docker-compose.postgres.yml up -d`
+  - Register ít nhất 1 user qua POST `/auth/register`
+  - Che credential khi quay
 - IDE theme: One Dark Pro, font ≥18px, ẩn sidebar/minimap khi chiếu terminal.

@@ -3,9 +3,9 @@
 - **Format:** 23 tập xây modular monolith, 6 tập Microservices, cộng các bonus xen giữa season khi một quyết định kỹ thuật xứng đáng có riêng một tập. Host tự quay màn hình + tự thoại âm.
 - **Thời lượng:** EP01–EP04 giữ thời lượng thực tế đã quay. Các video chưa quay hướng tới 8–12 phút với khoảng 800–1100 từ thoại; chỉ dài hơn khi outcome không thể tách hợp lý.
 - **Nguyên tắc tách tập:** Mỗi tập có một outcome chính và một pain nối sang tập sau. Nếu cần quá 18 phút để hoàn thành hai outcome độc lập, tách thành hai tập.
-- **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript theo lockfile của TaskFlow, npm, ESM (`"type": "module"`) và PostgreSQL. Nest CLI 12 hiện scaffold TypeScript 6, nhưng series không nâng compiler giữa chừng chỉ để đuổi theo template mới. Data layer dùng **Prisma ORM 8 RC** với PSL contract; Node 24 nạp `temporal-polyfill/full/global` vì timestamp Prisma 8 là `Temporal.Instant`. Khi setup, luôn hiện exact version thực tế trên màn hình.
+- **Technical baseline mở màn:** NestJS 12, Node.js `24.11+`, TypeScript theo lockfile của repo `nestjs-base-with-ai`, npm, ESM (`"type": "module"`) và PostgreSQL. Nest CLI 12 hiện scaffold TypeScript 6, nhưng series không nâng compiler giữa chừng chỉ để đuổi theo template mới. Data layer dùng **Prisma ORM 8 RC** với PSL contract; Node 24 nạp `temporal-polyfill/full/global` vì timestamp Prisma 8 là `Temporal.Instant`. Khi setup, luôn hiện exact version thực tế trên màn hình.
 - **AI tool:** **Opus trong IDE Antigravity** (agent panel đọc codebase thật). Pattern: hỏi – đọc – chất vấn – verify.
-- **Spine:** build MỘT project thật từ đầu đến cuối — **TaskFlow**, task manager API — từ folder rỗng đến modular monolith production, rồi tách sang Microservices có chủ đích. Phần nền tảng hoàn thiện User–Role–Permission trước khi đưa Tasks vào làm business feature đầu tiên.
+- **Spine:** build MỘT project thật từ đầu đến cuối — **User Management**, repo `nestjs-base-with-ai` — từ folder rỗng đến modular monolith production, rồi tách sang Microservices có chủ đích. Phần nền tảng hoàn thiện User–Role–Permission trước khi đưa Tasks vào làm business feature đầu tiên.
 - **Chain rule:** tập sau mở bằng NỖI ĐAU tập trước tạo ra (không phải "hôm nay ta học X"). Dưới đây mỗi tập ghi rõ "← pain" kế thừa.
 - **Differentiator:** mỗi tập đúng MỘT AI sequence liền mạch — theo **AI-Driven Development Workflow 6 bước: Yêu cầu → Plan → Review → Approve → Thực hiện → Kiểm chứng**. Không bao giờ copy-blind.
 
@@ -154,7 +154,7 @@ npx prisma --version
 1. Node.js tối thiểu `22.18`; nếu dùng Node 24 thì tối thiểu `24.11`. Series chuẩn hóa Node `24.11+` để tránh lệch môi trường.
 2. TypeScript tối thiểu `5.9`, project chạy ESM.
 3. Trên Node 24, cài `temporal-polyfill` và import `temporal-polyfill/full/global` ở đầu `src/prisma/db.ts`; field cập nhật dùng `temporal.updatedAt()`, type runtime là `Temporal.Instant`.
-4. Không có `@prisma/client` trong dependency tree của TaskFlow.
+4. Không có `@prisma/client` trong dependency tree của User Management.
 5. Mọi feature dùng trong tập phải có trong [Prisma 8 release status](https://www.prisma.io/docs/prisma-orm/release-status). Không nhờ AI đoán API còn thiếu.
 6. Query và command phải đối chiếu [Prisma 8 docs](https://www.prisma.io/docs/orm), không lấy snippet Prisma 6/7 từ search result.
 
@@ -259,30 +259,30 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 - **Thumbnail đã đăng:** `05-jwt-auth-nestjs/assets/thumbnail-05-jwt-auth-v4-final.png`
 - ← pain: EP04 xong nhưng bất kỳ ai cũng đọc và sửa dữ liệu user.
 - Học: `@nestjs/authentication`, `PasswordHasher` dùng scrypt, `JwtBearerProvider`, global guard, `@Public()`, `@CurrentUser()` và bảo vệ `/users/me`; mở rộng config boundary với JWT access secret/TTL có startup validation.
-- Package `@nestjs/authentication` còn ở nhánh `0.x`, nên pin exact version theo lockfile và quay rõ version thật. EP05 đặt `refreshToken: false`; EP07 mới thêm store, rotation và reuse detection.
+- Package `@nestjs/authentication` còn ở nhánh `0.x`, nên pin exact version theo lockfile và quay rõ version thật. EP05 đặt `refreshToken: false`; EP06 mới thêm store, rotation và reuse detection.
 - AI moment: agent đề xuất flow `@nestjs/jwt` + bcrypt theo tutorial cũ; host mở docs NestJS 12, phát hiện API authentication chính thức mới và bắt agent lập lại plan.
-- Thành quả: không token → 401; có token → đọc đúng hồ sơ của mình. → **pain: sắp tạo thêm Role và Permission, nhưng mỗi lần lại phải nhắc AI cùng convention. Cài mỗi tool AI tạo một file convention riêng.**
+- Thành quả: không token → 401; có token → đọc đúng hồ sơ của mình. → **pain: access token sống ngắn buộc người dùng đăng nhập lại; token sống dài làm tăng thời gian rủi ro khi bị lộ.**
 - File: `05-jwt-auth-nestjs/05-jwt-auth-nestjs.md`
 
-### EP 06 — AGENTS.md, Skills và MCP: Dạy AI nhớ project ✅ script mới
+### EP 06 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên
+- ← pain: access token ngắn hạn an toàn hơn, nhưng người dùng bị yêu cầu đăng nhập lại liên tục.
+- Học: access/refresh flow, hash refresh token, rotation, reuse detection, revoke session và logout; thêm refresh TTL vào config đã validate, không tạo refresh JWT secret vì refresh token là opaque random value.
+- AI moment: AI đề xuất lưu refresh token nguyên văn → host threat-model database leak rồi sửa thiết kế trước khi code.
+- Thành quả: phiên có thể gia hạn, xoay vòng và thu hồi. → **pain: sắp thêm Role và Permission, nhưng convention vẫn phải nhắc lại trong từng conversation và từng tool.**
+- File: `06-refresh-token-nestjs/script.md`
+
+### EP 07 — AGENTS.md, Skills và MCP: Dạy AI nhớ project ✅ script mới
 - ← pain: mỗi tool AI có cơ chế rule riêng (`CLAUDE.md`, `.cursor/rules/*.mdc`, `.github/copilot-instructions.md`). Copy-paste qua lại, đổi convention chỗ A quên cập nhật B và C.
 - Học 3 tầng context cho AI coding agent:
   - **Tầng 1 — AGENTS.md (Hot Memory):** định dạng mở được nhiều coding agent hỗ trợ, không phải lời hứa rằng mọi tool nạp giống nhau. Chuẩn do Agentic AI Foundation thuộc Linux Foundation quản lý. Video kiểm chứng trực tiếp trong Antigravity qua Customizations thay vì suy đoán từ tên file.
-  - **Tầng 2 — docs/ (Cold Memory):** architecture.md, database-schema.md — AGENTS.md ghi rõ điều kiện phải đọc từng file. Giữ instruction ngắn và bền vững; `<150 dòng` là convention riêng của TaskFlow, không phải giới hạn của chuẩn.
+  - **Tầng 2 — docs/ (Cold Memory):** architecture.md, database-schema.md — AGENTS.md ghi rõ điều kiện phải đọc từng file. Giữ instruction ngắn và bền vững; `<150 dòng` là convention riêng của User Management, không phải giới hạn của chuẩn.
   - **Tầng 3 — Skills (On-demand workflow):** `.agents/skills/nest-feature/SKILL.md` đóng gói scaffold convention. Progressive disclosure — agent chỉ nạp instruction khi prompt khớp.
   - **MCP (Tool connectivity):** giới thiệu Model Context Protocol — "USB-C cho ứng dụng AI" kết nối database/API. Antigravity hỗ trợ workspace config tại `.agents/mcp_config.json`; config này không portable sang mọi client. Review quyền và chỉ bật tool cần dùng.
 - Bảng so sánh Agent Config trên màn hình: Antigravity, Codex, Cursor, Copilot, Claude Code + file paths + điều kiện AGENTS.md thực tế.
 - AI sequence: tạo AGENTS.md + docs/ + nest-feature skill theo đủ workflow plan/review/approve/code/verify → dùng prompt Roles/Permissions để kiểm chứng auto-route nhưng không implement trước EP08 → kiểm chứng skill không kích hoạt với README typo.
 - Kiểm chứng: prompt không liên quan (fix README typo) → skill không kích hoạt.
-- Thành quả: convention sống trong repo, đổi tool vẫn giữ. AI biết kiến trúc trước khi viết dòng đầu tiên. → **pain: access token ngắn hạn làm phiên đăng nhập liên tục bị ngắt.**
-- File: `06-agent-skill-nestjs/script.md`
-
-### EP 07 — Refresh Token: Gia hạn đăng nhập và thu hồi phiên
-- ← pain: access token ngắn hạn an toàn hơn, nhưng người dùng bị yêu cầu đăng nhập lại liên tục.
-- Học: access/refresh flow, hash refresh token, rotation, reuse detection, revoke session và logout; thêm refresh TTL vào config đã validate, không tạo refresh JWT secret vì refresh token là opaque random value.
-- AI moment: AI đề xuất lưu refresh token nguyên văn → host threat-model database leak rồi sửa thiết kế trước khi code.
-- Thành quả: phiên có thể gia hạn, xoay vòng và thu hồi. → **pain: xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.**
-- File: `07-refresh-token-nestjs/07-refresh-token-rotation-nestjs.md`
+- Thành quả: convention sống trong repo, đổi tool vẫn giữ. AI biết kiến trúc trước khi viết dòng đầu tiên. → **pain: xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.**
+- File: `07-agent-skill-nestjs/script.md`
 
 ### EP 08 — Role, Permission và quan hệ many-to-many *(gộp EP cũ 08+09)*
 - ← pain: EP07 xác định được người gọi và phiên, nhưng chưa mô tả được họ được phép làm gì. Role và Permission tồn tại nhưng chưa gắn cho user hay cho nhau.
@@ -305,7 +305,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 
 ### EP 10 — Testing phân quyền bằng Vitest và Supertest
 - ← pain: EP09 thay guard hoặc ownership rule là phải thử tay hàng loạt tài khoản và route.
-- Học: Vitest unit test service/guard với mock (TaskFlow đã chọn Vitest từ EP01, `globals: true`), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì. Nest CLI 12 hiện scaffold Jest 30 mặc định, nên không gọi Vitest là mặc định mới của CLI.
+- Học: Vitest unit test service/guard với mock (User Management đã chọn Vitest từ EP01, `globals: true`), e2e Supertest, database test riêng, đỏ→xanh; coverage là gì và không phải là gì. Nest CLI 12 hiện scaffold Jest 30 mặc định, nên không gọi Vitest là mặc định mới của CLI.
 - Ma trận bắt buộc: user không role; nhiều role; permission trùng qua hai role; revoke role; revoke permission; thiếu permission; ownership sai; direct ALLOW/DENY nếu bật override.
 - AI moment: AI sinh test chỉ assert status chung chung → host mutation nhỏ vào guard để chứng minh test vẫn xanh, rồi viết lại assertion có giá trị.
 - Thành quả: `test` và `test:e2e` bảo vệ luồng auth/RBAC/ownership. → **pain: duplication giữa ba feature bắt đầu rõ, rất dễ refactor quá tay.**
@@ -315,7 +315,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 - ← pain: UsersService, RolesService và PermissionsService có nhiều method cùng tên, nhìn rất muốn gom thành `CommonService<T>`. Copy nguyên `common/` sang repo khác sẽ tạo nhiều bản lệch nhau.
 - Học: duplicate code khác duplicate knowledge; YAGNI; abstraction boundary; khi nào repository generic nhẹ có ích. So sánh nhanh TypeORM entity với Prisma 8 contract (~2 min). Tách phần portable thành workspace library hoặc private package.
 - AI sequence: AI giảm duplicate → tạo BaseCrudService → host dùng test chứng minh business rule khác nhau → loại bỏ. AI audit `common/` → lọc phần không phụ thuộc domain → host duyệt → tách library.
-- Kiểm chứng: dùng library trong TaskFlow và một Nest app sạch; consumer build được.
+- Kiểm chứng: dùng library trong User Management và một Nest app sạch; consumer build được.
 - Thành quả: cross-cutting code ổn định có phiên bản; business policy vẫn thuộc project. → **pain: middleware, guard, pipe, filter và interceptor đã nhiều đến mức request lỗi không biết dừng ở lớp nào.**
 - Ước lượng: ~950–1100 từ thoại → 10–11 min
 - Files gốc: `13-dry-abstraction-nestjs/`, `bonus-13-5-typeorm-nestjs/`, `14-common-library-nestjs/`
@@ -325,7 +325,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 
 ### Bonus 11.5 — Zod vs class-validator: một nguồn sự thật cho validation
 - **Vị trí:** xen giữa EP11 và EP12. Không renumber; tiêu đề đánh `NestJS #11.5:`. Pain mở phải khớp pain-đóng của EP11 (library tách ra nhưng validation pipe kéo theo dependency cũ) và pain-đóng phải nối sang pain mở EP12 (debug request qua nhiều layer) — bonus không phá chain 29 tập.
-- ← pain: EP11 tách common library xong, phát hiện validation pipe kéo `class-validator` + `class-transformer` vào package dùng chung — mà `class-transformer` lần publish cuối là 22/11/2021 (verify trên npm registry 23/10/2026). Cùng lúc, env của app lại được validate bằng Zod từ EP03 (`env.validation.ts`) — TaskFlow đang có hai hệ validation song song.
+- ← pain: EP11 tách common library xong, phát hiện validation pipe kéo `class-validator` + `class-transformer` vào package dùng chung — mà `class-transformer` lần publish cuối là 22/11/2021 (verify trên npm registry 23/10/2026). Cùng lúc, env của app lại được validate bằng Zod từ EP03 (`env.validation.ts`) — User Management đang có hai hệ validation song song.
 - Học: một nguồn sự thật (schema Zod → `z.infer` ra type TS luôn, không viết interface + decorator riêng); error chi tiết có path + expected/received (`age: Expected number, received string`) so với custom message thủ công từng field; maintenance status hai library (có số npm trên màn hình); viết `ZodValidationPipe` (~vài chục dòng: `schema.parse` + map `ZodError` → `BadRequestException`); demo swap đúng MỘT endpoint (POST /tasks) — phần còn lại giữ class-validator.
 - AI moment: nhờ AI plan swap Zod cho một endpoint → AI đề xuất rewrite toàn bộ DTO trong một sweep → host từ chối: dự án đang chạy ngon thì không migrate cho mệt, YAGNI, incremental. Đúng format "host bắt AI quá tay".
 - Giá phải trả (nói thẳng trong video): mất Swagger auto-gen từ decorator → cần `nestjs-zod` hoặc `zod-openapi` (và phải đợi tới EP13 mới thấy trên màn hình, tập đó vẫn dùng class-validator — không retrofit). Tài liệu NestJS chính thống viết theo class-validator → team toàn junior thì tra cứu nhanh hơn với class-validator.
@@ -436,7 +436,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 
 ### EP 24 — Event-Driven + Modular Monolith Recap *(gộp EP cũ 36+37)*
 - ← pain: TasksService trở thành file nóng vì mail, audit, notification cùng bám vào nó. 24 tập nhiều khái niệm, cần bản đồ.
-- Học: domain event trong monolith, `TaskCompleted`, listener, eventual side effect, failure boundary. Vẽ lại TaskFlow, dependency direction, auth/RBAC, production stack, câu hỏi phỏng vấn.
+- Học: domain event trong monolith, `TaskCompleted`, listener, eventual side effect, failure boundary. Vẽ lại User Management, dependency direction, auth/RBAC, production stack, câu hỏi phỏng vấn.
 - AI moment: thêm tính năng điểm thưởng bằng listener không sửa use case. AI đóng vai interviewer → host trả lời bằng trade-off đã implement.
 - Thành quả: modular monolith hoàn chỉnh, có lý do rõ ràng nếu muốn tách service. → **pain: notification workload ảnh hưởng API chính.**
 - Ước lượng: ~950–1100 từ thoại → 10–11 min
@@ -479,7 +479,7 @@ Nguồn chuẩn: [Prisma 8 với NestJS](https://www.prisma.io/docs/guides/frame
 - ← pain: từng pattern chạy riêng, chưa biết hệ thống chịu deploy, retry và service failure đồng thời ra sao.
 - Học: health/readiness, deploy order, backward-compatible contract, failure drill, runbook và cost review.
 - AI moment: AI đóng vai incident commander trên sự cố dựng sẵn → host yêu cầu evidence trước mỗi hành động.
-- Thành quả: TaskFlow distributed chạy end-to-end và người học hiểu cả giá phải trả của Microservices.
+- Thành quả: User Management distributed chạy end-to-end và người học hiểu cả giá phải trả của Microservices.
 
 > [!NOTE]
 > **Tổng Season 4:** 5 tập.

@@ -20,7 +20,7 @@ class-transformer.
 
 Lần publish cuối của nó là ngày hai-mươi-hai, tháng mười-một, năm hai-ngàn-không-trăm-hai-mươi-mốt. Tính đến hôm nay, gần năm năm.
 
-Mọi request của TaskFlow đều đi qua pipe dựa trên thư viện đó.
+Mọi request của User Management đều đi qua pipe dựa trên thư viện đó.
 
 Và điều buồn cười: từ tập ba, file `.env` của chính app này đã được validate bằng Zod.
 
@@ -42,11 +42,11 @@ Thứ hai: error. class-validator muốn message rõ ràng thì tự viết từ
 
 Thứ ba, lý do nặng ký nhất: class-validator kéo theo class-transformer — thư viện gần năm năm không cập nhật. Zod đang publish đều tháng, kèm hệ sinh thái nestjs-zod và zod-openapi.
 
-Mình đưa AI mục tiêu: chuyển đúng endpoint POST /tasks sang Zod, viết một ZodValidationPipe đặt trong common, mọi endpoint khác giữ nguyên. Plan trước, chưa sửa code.
+Mình yêu cầu AI chuyển đúng endpoint POST /tasks sang Zod. Pipe mới nằm trong common. Mọi endpoint khác giữ nguyên.
 
 AI trả plan — và như thường lệ, nó phình to. Plan của AI muốn migrate toàn bộ DTO và xóa class-validator khỏi repo trong một sweep.
 
-Nghe rất quyết đoán. Nhưng TaskFlow đang chạy ổn, test đang xanh. Migrate mười mấy DTO chỉ để cảm giác gọn hơn là mua rủi ro không cần thiết.
+Nghe rất quyết đoán. Nhưng User Management đang chạy ổn, test đang xanh. Migrate mười mấy DTO chỉ để cảm giác gọn hơn là mua rủi ro không cần thiết.
 
 Mình cắt plan về đúng một endpoint. Rồi approve.
 
@@ -54,7 +54,7 @@ Trong lúc AI xử lý, nói về pipe này.
 
 Nó ngắn. Constructor nhận một Zod schema. `transform` gọi `schema.parse`.
 
-Nếu parse fail, Zod ném ZodError. Đoạn map error này mình tự gõ: lấy từng issue, ghép path thành chuỗi, ném BadRequestException kèm danh sách field sai kèm lý do.
+Nếu parse fail, Zod ném ZodError. Mình tự gõ đoạn map từng issue thành path và lý do. Sau đó pipe ném BadRequestException.
 
 Không magic. Vài chục dòng, nằm trong tầm kiểm soát của mình.
 
@@ -76,7 +76,9 @@ Tài liệu chính thức của NestJS vẫn viết theo class-validator. Team t
 
 Chốt lại: dự án mới, mình chọn Zod — một nguồn sự thật, error tốt, thư viện đang sống. Dự án đang chạy class-validator ngon thì để yên. Đừng migrate chỉ vì trend.
 
-Tập sau quay lại trục chính: request đi qua middleware, guard, interceptor, pipe — và khi nó lỗi ở đâu đó giữa chuỗi đó mà không có bản đồ, debug là địa ngục.
+Tập sau, request đi qua middleware, guard, interceptor và pipe. Không có bản đồ, debug chuỗi đó là địa ngục.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -157,7 +159,7 @@ create(
 ### Prompt cho AI
 
 ```text
-TaskFlow validates DTOs with class-validator and a global ValidationPipe.
+nestjs-base-with-ai validates DTOs with class-validator and a global ValidationPipe.
 We already use Zod for env validation (src/config/env.validation.ts).
 Plan a migration to Zod for the POST /tasks endpoint ONLY.
 Write one reusable ZodValidationPipe in src/common/pipes.
@@ -169,19 +171,32 @@ Present the plan first. Do not modify code before approval.
 
 ---
 
-## PART 3 — TITLES, SEO DESCRIPTION & KEYWORDS
+## PART 3 — THUMBNAIL IMAGE PROMPTS
 
-### 3a. Titles
+1. `A cinematic photograph of two dark IDE error panels facing each other on a developer monitor, the left panel dim and fragmented while the right panel shows a sharp structured validation path in neon green and cyan, dark moody lighting, monitor glow illuminating the scene, code visible on screen with syntax highlighting in green and cyan on dark background, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a high-end tech commercial or developer documentary. Not a screenshot, not a tutorial, not cartoon.`
+2. `A cinematic photograph of a Vietnamese developer on the right studying one glowing Zod schema that branches into type, validation and error output, dark moody lighting, monitor glow illuminating the scene, code visible on screen with syntax highlighting in green and cyan on dark background, shallow depth of field, bokeh city lights through window, 8k, photorealistic, like a high-end tech commercial or developer documentary. Not a screenshot, not a tutorial, not cartoon.`
+3. `A cinematic photograph of code reflected on developer eyeglasses while a dark IDE shows an old decorator stack fading beside a bright Zod schema, neon syntax highlighting, dark IDE theme, cinematic lighting, film grain, anamorphic lens flare, shallow depth of field, city bokeh, 8k, 16:9, photorealistic. Not a screenshot, not a tutorial, not cartoon.`
 
-1. NestJS #11.5: Zod vs class-validator — Chọn gì cho dự án mới?
-2. NestJS #11.5: Đừng viết Type và Validator hai lần
-3. NestJS #11.5: class-validator còn đáng tin không?
-4. NestJS #11.5: ZodValidationPipe — vài chục dòng thay cả thư viện
-5. NestJS #11.5: Một schema Zod = Schema + Type + Error
+---
+
+## PART 4 — TITLES, SEO DESCRIPTION & KEYWORDS
+
+### 4a. Titles
+
+1. Zod hay class-validator cho dự án NestJS mới? — #11.5 | Lập trình là cuộc sống
+2. Đừng viết Type và Validator hai lần — NestJS #11.5 | Lập trình là cuộc sống
+3. class-validator còn đáng tin không? — NestJS #11.5 | Lập trình là cuộc sống
+4. Một ZodValidationPipe thay đổi cách tôi viết DTO — #11.5 | Lập trình là cuộc sống
+5. Một schema Zod làm ba việc — NestJS #11.5 | Lập trình là cuộc sống
+6. Hai hệ validation trong một app là quá nhiều — #11.5 | Lập trình là cuộc sống
+7. AI muốn migrate toàn bộ DTO, tôi chỉ đổi một endpoint — #11.5 | Lập trình là cuộc sống
+8. Zod thắng ở đâu và thua ở đâu? — NestJS #11.5 | Lập trình là cuộc sống
+9. Đừng migrate validation chỉ vì thư viện mới hơn — #11.5 | Lập trình là cuộc sống
+10. TypeScript không tự validate request — NestJS #11.5 | Lập trình là cuộc sống
 
 **Khuyên dùng:** Title 1 (đúng intent search "zod vs class-validator"). A/B thêm Title 2 cho concept và Title 4 cho người muốn code ngay.
 
-### 3b. SEO Description
+### 4b. SEO Description
 
 ```text
 class-transformer gần 5 năm không update, trong khi .env của chính app đã validate bằng Zod từ EP03. Một app, hai hệ validation — tập này chốt: chọn gì cho dự án mới?
@@ -203,29 +218,41 @@ class-transformer gần 5 năm không update, trong khi .env của chính app đ
 #NestJS #Zod #class-validator #TypeScript #Validation #Backend #LapTrinhLaCuocSong
 ```
 
-### 3c. Keywords / Tags
+### 4c. Keywords / Tags
 
 ```text
-zod nestjs, zod vs class-validator, zodvalidationpipe, zod validation nestjs, nestjs validation, nestjs dto validation, zod infer typescript, class-validator nestjs, class-transformer, nestjs validation pipe custom, zod tiếng việt, nestjs #11.5, học nestjs bằng ai, taskflow nestjs, lập trình là cuộc sống
+zod nestjs, zod vs class-validator, zodvalidationpipe, zod validation nestjs, nestjs validation, nestjs dto validation, zod infer typescript, class-validator nestjs, class-transformer, nestjs validation pipe custom, zod tiếng việt, nestjs #11.5, học nestjs bằng ai, nestjs-base-with-ai nestjs, lập trình là cuộc sống
 ```
 
 ---
 
-## PART 4 — THUMBNAIL PACKAGE (code-centric, theo visual grammar series)
-
-- Canvas 1280×720, nền đen/navy đậm, NEST RED `#E0234E` + WHITE, không nhân vật.
-- Bố cục: headline lớn bên trái (~1/3 frame), bên phải là monitor hai JSON error cạnh nhau — trái mờ xám (class-validator, badge đỏ `2021`), phải sáng rõ (Zod, badge `#path`). Badge số tập `#11.5` nhỏ.
-- Font condensed đậm (Anton + JetBrains Mono cho JSON), stroke đen, shadow gọn, không neon glow.
-- Kiểm tra dấu tiếng Việt ở bản thu nhỏ 320×180 trước khi chốt.
+## PART 5 — THUMBNAIL PACKAGE
 
 ### Option 1 — khuyên dùng
-- `ZOD` — WHITE
-- `THẮNG?` — NEST RED `#E0234E`
+
+**Image prompt:** `A cinematic photograph, a Vietnamese developer silhouette on the right facing two oversized floating validation error panels, the old panel cracked and fading while the Zod panel glows sharply, dramatic neon lighting in green cyan and purple, code text floating and reflecting in the scene, dark moody background with city bokeh and rain, high contrast, dramatic rim lighting, deep shadows, vivid saturated neon colors, subject positioned on the right side of the frame leaving empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.`
+
+- `ZOD` — WHITE `#FFFFFF`
+- `THẮNG?` — NEON GREEN `#00FF41`
 
 ### Option 2
-- `1 SCHEMA` — WHITE
-- `3 TRONG 1` — NEST RED `#E0234E`
+
+**Image prompt:** `A cinematic photograph, a glowing Zod schema on the right splitting into three floating code layers for type validation and error output, dramatic neon lighting in green cyan and purple, exaggerated code reflections, dark moody background with fog and city bokeh, extreme contrast, dramatic rim lighting, deep shadows, vivid saturated neon colors, empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.`
+
+- `1 SCHEMA` — WHITE `#FFFFFF`
+- `3 TRONG 1` — NEON GREEN `#00FF41`
 
 ### Option 3
-- `5 NĂM` — WHITE
-- `KHÔNG UPDATE` — NEST RED `#E0234E`
+
+**Image prompt:** `A cinematic photograph, a developer silhouette on the right watching an old validation package timestamp dissolve beside fresh neon Zod code, dramatic green cyan and purple lighting, floating code text, rain on the window, city bokeh, extreme contrast, deep shadows, empty dark space on the left for text, 8k, 16:9. Photorealistic, not cartoon or illustration.`
+
+- `5 NĂM` — NEON GREEN `#00FF41`
+- `KHÔNG UPDATE` — WHITE `#FFFFFF`
+
+### Typography specs — áp dụng cả ba option
+
+- Canvas 1280×720. Dùng Anton cho hook hoặc JetBrains Mono cho cảm giác code.
+- Mỗi dòng cao khoảng 110–140px, line spacing 0.85; text chiếm khoảng một phần ba khung bên trái.
+- Tạo neon glow bằng layer nhân bản, blur 8–12px, opacity 60–70%; thêm stroke đen 6–10px.
+- Không đặt chữ lên mặt hoặc key visual. Thêm scan-line hoặc noise nhẹ trên background.
+- Nên tạo ảnh sạch không chữ rồi typeset trong Canva để typography ổn định giữa các tập.

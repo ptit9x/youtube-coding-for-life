@@ -1,10 +1,10 @@
-# NestJS #12 — Request Lifecycle: Middleware, Guard và Pipe chạy thế nào?
+# NestJS #12 — Request Lifecycle và Docker Deploy
 
 - **Series:** Học NestJS bằng AI — tập 12/29
-- **Recording status:** CHƯA READY — script hiện mới có request lifecycle; phải merge Docker deploy trong `merged-from-16/`.
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
-- **Outcome:** Đọc đúng thứ tự middleware, guard, interceptor, pipe, handler và filter.
-- **Pain mở EP16:** Ứng dụng rõ luồng nhưng vẫn chỉ chạy trên máy lập trình viên.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~720 từ thoại + khoảng nghỉ terminal)
+- **Outcome:** Đọc đúng request lifecycle, đóng gói API/PostgreSQL và deploy với migration gate cùng health check.
+- **Pain mở EP13:** API đã public nhưng consumer chưa có contract để biết cách gọi.
 
 ---
 
@@ -14,7 +14,7 @@ Mình đặt breakpoint trong TasksController. Request trả 400, nhưng breakpo
 
 Controller không hề lỗi. Request đã bị chặn trước khi chạm tới nó.
 
-TaskFlow hiện có middleware, hai guard, interceptor, pipe và exception filter.
+User Management hiện có middleware, hai guard, interceptor, pipe và exception filter.
 
 Không hiểu thứ tự, debug chỉ còn là đoán mò.
 
@@ -98,7 +98,41 @@ Từ giờ, ta không cần đặt log ngẫu nhiên khắp business code.
 
 Nhưng toàn bộ hệ thống vẫn phụ thuộc máy mình có đúng Node và PostgreSQL.
 
-Tập cuối Season 1, ta đóng gói TaskFlow bằng Docker và đưa lên internet.
+Dockerfile biến môi trường đó thành công thức lặp lại được. Image là gói build từ công thức. Container là process đang chạy.
+
+Database không nằm chung container API. Compose chạy hai service và nối chúng qua network.
+
+Mình yêu cầu AI giải thích từng layer trước khi viết Dockerfile.
+
+Target `build` cài dependency và compile. Target `migrate` giữ Prisma CLI cùng migration history.
+
+Target `runtime` chỉ nhận production dependency, `dist` và contract artifact cần lúc chạy.
+
+Prisma 8 không sinh client package. `contract.json` phải nằm đúng chỗ `db.js` import sau compile.
+
+`.dockerignore` loại `.env`, Git metadata và `node_modules` local.
+
+Trong container API, hostname database là `db`, không phải `localhost`.
+
+AI dùng `localhost`. Container khởi động rồi báo connection refused. Đây là lỗi mình giữ lại để giải thích network của Compose.
+
+Release gate chạy migration check, xem plan, apply rồi `db verify`.
+
+Migration lỗi thì deploy dừng. Không chạy code mới trên schema cũ.
+
+Secret nằm trong dashboard của nền tảng, không truyền bằng Docker build argument.
+
+Nest lắng nghe `0.0.0.0` trên port từ environment. `/health` cho nền tảng biết app đã sẵn sàng.
+
+Build xanh. Migration xanh. Public URL trả health check.
+
+Mình đăng ký user, login và tạo task. Ownership vẫn đúng ngoài localhost.
+
+User Management đã public, nhưng consumer chưa biết endpoint nhận gì.
+
+Tập sau, Swagger và GraphQL sẽ buộc API nói rõ contract mà không nhân đôi business rule.
+
+Deploy không làm code trưởng thành hơn. Nó chỉ khiến mọi giả định môi trường lộ ra. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -108,19 +142,22 @@ Mình là Richard. Lập trình là cuộc sống.
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [IDE] | Breakpoint controller không được chạm | 35s |
-| 2 | [DIAGRAM] | Vẽ request lifecycle tổng quát | 75s |
-| 3 | [IDE] | Middleware tạo request ID | 70s |
-| 4 | [IDE] | AuthGuard rồi PermissionGuard | 70s |
-| 5 | [TERMINAL] | Log request dừng tại permission | 50s |
-| 6 | [DIAGRAM] | Interceptor bao quanh handler, pipe xử lý argument | 75s |
-| 7 | [AI] | Sửa đề xuất validation trong interceptor | 50s |
-| 8 | [IDE] | Exception filter thêm request ID | 65s |
-| 9 | [BROWSER] | Gửi ba request và đối chiếu log | 100s |
-| 10 | [DIAGRAM] | Response quay qua interceptor theo chiều ngược | 45s |
-| 11 | [B-ROLL] | Từ localhost tới container | 25s |
+| 1 | [IDE] | Breakpoint controller không chạm; mở request lỗi | 30s |
+| 2 | [DIAGRAM] | Middleware → guards → interceptor → pipe → handler → filter | 45s |
+| 3 | [IDE] | Submit yêu cầu lifecycle; AI vẽ plan trong lúc voice-over | 40s |
+| 4 | [IDE] | Middleware request ID, hai guard và pipe | 50s |
+| 5 | [IDE] | Interceptor bao handler; filter thêm request ID | 45s |
+| 6 | [BROWSER]+[TERM] | Ba request dừng ở ba layer; đối chiếu log | 50s |
+| 7 | [DIAGRAM] | Dockerfile, image, container và Compose network | 40s |
+| 8 | [IDE] | Review ba target build/migrate/runtime | 50s |
+| 9 | [IDE] | Contract artifact, `.dockerignore`, secret boundary | 45s |
+| 10 | [TERM] | Giữ lỗi `localhost`; sửa hostname thành `db` | 40s |
+| 11 | [TERM] | Migration gate: check, show, apply, verify | 45s |
+| 12 | [BROWSER] | Dashboard deploy, health xanh, public URL | 45s |
+| 13 | [BROWSER] | Register/login/create task trên production | 40s |
+| 14 | [B-ROLL] | Public API chưa có contract; teaser Swagger | 20s |
 
-**Tổng: 660 giây ≈ 11 phút.** Font tối thiểu 18px; dùng màu riêng cho từng lifecycle layer.
+**Tổng: 585 giây = 9:45.** One Dark Pro, JetBrains Mono tối thiểu 18px; che secret và URL quản trị.
 
 ### Code cốt lõi
 
@@ -173,13 +210,18 @@ Produce a sequence diagram, then verify it against logs from three requests.
 
 ### 4a. Titles
 
-1. Request Lifecycle NestJS: Middleware, Guard và Pipe chạy thế nào? — EP12
-2. Thứ tự Middleware, Guard, Interceptor và Pipe — EP12
-3. Vì sao request chưa chạy vào Controller? — EP12
-4. Theo dõi request bằng Request ID trong NestJS — EP12
-5. Debug Request Lifecycle trong NestJS — EP12
+1. Request chưa tới Controller, Deploy đã lỗi — EP12 | Lập trình là cuộc sống
+2. Từ Request Lifecycle tới Docker Production — EP12 | Lập trình là cuộc sống
+3. Vì sao `localhost` làm Container crash? — EP12 | Lập trình là cuộc sống
+4. Middleware, Guard, Pipe và Docker chạy thế nào? — EP12 | Lập trình là cuộc sống
+5. Một Request đi qua NestJS rồi ra Internet — EP12 | Lập trình là cuộc sống
+6. Dockerfile AI viết thiếu Migration Gate — EP12 | Lập trình là cuộc sống
+7. Deploy xanh nhưng Schema vẫn có thể sai — EP12 | Lập trình là cuộc sống
+8. Debug Request Lifecycle bằng Log thật — EP12 | Lập trình là cuộc sống
+9. Ba Docker Target cho một NestJS API — EP12 | Lập trình là cuộc sống
+10. Code chạy máy tôi chưa phải Production — EP12 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 3 cho tình huống debug.
+**Khuyên dùng:** Title 1; A/B với Title 3 cho hook Docker.
 
 ### 4b. SEO Description
 

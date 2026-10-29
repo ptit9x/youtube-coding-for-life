@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Scene 16 — MCP giống cổng USB-C</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: #000;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .canvas {
+      width: 1920px;
+      height: 1080px;
+      background: #0a0a1a;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform-origin: center center;
+    position: relative;
+      background-image: radial-gradient(ellipse at 50% 50%, rgba(189, 147, 249, 0.03) 0%, transparent 60%);
+    }
+
+    .wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+
+    .agent-side,
+    .mcp-hub,
+    .servers-side {
+      opacity: 0;
+    }
+
+    .agent-side {
+      animation: slideRight 0.6s 0.5s forwards;
+    }
+
+    .mcp-hub {
+      animation: popIn 0.6s 3.5s forwards;
+    }
+
+    .servers-side {
+      animation: slideLeft 0.6s 7s forwards;
+    }
+
+    .agent-box {
+      width: 280px;
+      height: 200px;
+      border: 2px solid #00D4FF;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.1);
+      margin-right: 40px;
+    }
+
+    .agent-icon {
+      font-size: 60px;
+      margin-bottom: 12px;
+    }
+
+    .agent-label {
+      font-size: 20px;
+      font-weight: 700;
+      color: #00D4FF;
+    }
+
+    .agent-sub {
+      font-size: 12px;
+      color: #557788;
+      margin-top: 4px;
+    }
+
+    .connector {
+      width: 80px;
+      height: 4px;
+      position: relative;
+    }
+
+    .connector-line {
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, #00D4FF, #BD93F9);
+      position: absolute;
+      top: 50%;
+      box-shadow: 0 0 10px rgba(189, 147, 249, 0.3);
+    }
+
+    .connector-dot {
+      width: 10px;
+      height: 10px;
+      background: #BD93F9;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      box-shadow: 0 0 15px rgba(189, 147, 249, 0.5);
+      animation: pulse 2s infinite;
+    }
+
+    .hub {
+      width: 200px;
+      height: 200px;
+      border: 3px solid #BD93F9;
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 60px rgba(189, 147, 249, 0.15), inset 0 0 40px rgba(189, 147, 249, 0.05);
+      position: relative;
+    }
+
+    .hub-icon {
+      font-size: 40px;
+      margin-bottom: 8px;
+    }
+
+    .hub-label {
+      font-size: 18px;
+      font-weight: 700;
+      color: #BD93F9;
+    }
+
+    .hub-sub {
+      font-size: 10px;
+      color: #8877aa;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .hub-badge {
+      position: absolute;
+      bottom: -50px;
+      font-size: 11px;
+      color: #BD93F9;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: rgba(189, 147, 249, 0.1);
+      padding: 4px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(189, 147, 249, 0.2);
+    }
+
+    .server-connectors {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      margin: 0 40px;
+    }
+
+    .s-conn {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, #BD93F9, #00FF41);
+      box-shadow: 0 0 8px rgba(0, 255, 65, 0.2);
+      opacity: 0;
+    }
+
+    .s-conn:nth-child(1) {
+      animation: fadeIn 0.3s 9s forwards;
+    }
+
+    .s-conn:nth-child(2) {
+      animation: fadeIn 0.3s 9.5s forwards;
+    }
+
+    .s-conn:nth-child(3) {
+      animation: fadeIn 0.3s 10s forwards;
+    }
+
+    .s-conn:nth-child(4) {
+      animation: fadeIn 0.3s 10.5s forwards;
+    }
+
+    .servers {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .server {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 20px;
+      border: 1px solid rgba(0, 255, 65, 0.2);
+      border-radius: 10px;
+      background: rgba(0, 255, 65, 0.03);
+      opacity: 0;
+      transform: translateX(20px);
+    }
+
+    .server:nth-child(1) {
+      animation: slideLeft 0.4s 9s forwards;
+    }
+
+    .server:nth-child(2) {
+      animation: slideLeft 0.4s 9.5s forwards;
+    }
+
+    .server:nth-child(3) {
+      animation: slideLeft 0.4s 10s forwards;
+    }
+
+    .server:nth-child(4) {
+      animation: slideLeft 0.4s 10.5s forwards;
+    }
+
+    .server-icon {
+      font-size: 28px;
+    }
+
+    .server-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #00FF41;
+    }
+
+    .server-desc {
+      font-size: 11px;
+      color: #558855;
+    }
+
+    @keyframes slideRight {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes popIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(189, 147, 249, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(189, 147, 249, 0.6);
+      }
+    }
+  
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+
+<body>
+  <div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+    <div class="wrapper">
+      <div class="agent-side">
+        <div class="agent-box">
+          <div class="agent-icon">🤖</div>
+          <div class="agent-label">AI Agent</div>
+          <div class="agent-sub">Antigravity / Codex / Cursor</div>
+        </div>
+      </div>
+      <div class="connector">
+        <div class="connector-line"></div>
+        <div class="connector-dot"></div>
+      </div>
+      <div class="mcp-hub">
+        <div class="hub">
+          <div class="hub-icon">🔌</div>
+          <div class="hub-label">MCP</div>
+          <div class="hub-sub">USB-C cho AI</div>
+        </div>
+        <div class="hub-badge">Model Context Protocol</div>
+      </div>
+      <div class="server-connectors">
+        <div class="s-conn"></div>
+        <div class="s-conn"></div>
+        <div class="s-conn"></div>
+        <div class="s-conn"></div>
+      </div>
+      <div class="servers-side">
+        <div class="servers">
+          <div class="server">
+            <div class="server-icon">🗄️</div>
+            <div>
+              <div class="server-name">Database</div>
+              <div class="server-desc">PostgreSQL — SELECT only</div>
+            </div>
+          </div>
+          <div class="server">
+            <div class="server-icon">📚</div>
+            <div>
+              <div class="server-name">Documentation</div>
+              <div class="server-desc">API docs, wiki, specs</div>
+            </div>
+          </div>
+          <div class="server">
+            <div class="server-icon">🌐</div>
+            <div>
+              <div class="server-name">External API</div>
+              <div class="server-desc">REST, GraphQL endpoints</div>
+            </div>
+          </div>
+          <div class="server">
+            <div class="server-icon">🔧</div>
+            <div>
+              <div class="server-name">Dev Tools</div>
+              <div class="server-desc">Linter, formatter, CI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function scale() {
+      const c = document.querySelector('.canvas');
+      const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+      c.style.transform = 'scale(' + s + ')';
+    }
+    window.addEventListener('resize', scale);
+    scale();
+  </script>
+</body>
+
+</html>

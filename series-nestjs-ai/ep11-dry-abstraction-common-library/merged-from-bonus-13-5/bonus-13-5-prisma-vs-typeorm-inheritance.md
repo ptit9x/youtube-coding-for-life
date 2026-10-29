@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-Từ tập 3 đến giờ, TaskFlow dùng Prisma.
+Từ tập 3 đến giờ, nestjs-base-with-ai dùng Prisma.
 
 Schema nằm trong file riêng, contract được emit, adapter gọi qua facade.
 
@@ -319,7 +319,7 @@ Build the same RBAC system (User, Role, Permission, UserRole, RolePermission) us
 6. Prisma hay TypeORM? Đừng chọn theo số sao GitHub — Bonus 13.5
 7. Entity Inheritance trong TypeORM và cái giá phải trả — Bonus 13.5
 8. TypeORM RBAC từ đầu: AbstractEntity, Migration, Explicit Service — Bonus 13.5
-9. Nếu TaskFlow dùng TypeORM thì code trông thế nào? — Bonus 13.5
+9. Nếu nestjs-base-with-ai dùng TypeORM thì code trông thế nào? — Bonus 13.5
 10. Đổi ORM chỉ vì ba field lặp? Nghĩ lại đi — Bonus 13.5
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 3 cho curiosity gap và Title 6 cho controversy.

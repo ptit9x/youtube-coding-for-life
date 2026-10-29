@@ -3,7 +3,7 @@
 - **Series:** Học NestJS bằng AI — tập 7/29
 - **Target runtime:** 9–10 phút (~825 từ thoại)
 - **Outcome:** Tạo session, refresh rotation, reuse detection và logout có thu hồi.
-- **Pain mở EP08:** Xác thực đã hoàn chỉnh nhưng mọi user vẫn có quyền như nhau.
+- **Pain mở EP07:** Sắp mở rộng RBAC, nhưng convention vẫn phải được nhắc lại trong từng conversation.
 
 ---
 
@@ -47,15 +47,25 @@ Login bây giờ phát access token và refresh token ngẫu nhiên. Database ch
 
 Với browser, refresh token đi trong cookie `HttpOnly`. JavaScript phía client không đọc được cookie này.
 
-Cookie bật `Secure` ở production, `HttpOnly`, scope `Path` chỉ dành cho refresh/logout và chọn `SameSite` theo kiến trúc frontend. Nếu buộc dùng cross-site cookie, phải có CSRF protection riêng; cookie không tự giải quyết toàn bộ CSRF.
+Cookie bật `Secure` ở production và `HttpOnly`. Scope `Path` chỉ dành cho refresh cùng logout. `SameSite` phụ thuộc kiến trúc frontend.
 
-Endpoint refresh đọc cookie, hash giá trị và tìm session. Session hợp lệ phải được consume theo kiểu atomic compare-and-set trong cùng transaction: chỉ row chưa revoke mới được cập nhật. Unique index trên token hash bảo đảm không có hai row cùng đại diện một token.
+Nếu dùng cross-site cookie, hệ thống cần CSRF protection riêng. Cookie không tự giải quyết toàn bộ CSRF.
 
-Sau đó server tạo session thay thế, phát refresh token mới và trả access token mới. Nếu hai request refresh dùng cùng token đến gần như đồng thời, chỉ một request thắng; request còn lại không được tạo thêm session kế nhiệm.
+Endpoint refresh đọc cookie, hash giá trị và tìm session. Session được consume bằng atomic compare-and-set trong cùng transaction.
+
+Chỉ row chưa revoke mới được cập nhật. Unique index ngăn hai row cùng đại diện một token.
+
+Server tạo session thay thế, phát refresh token mới và trả access token mới.
+
+Nếu hai request dùng cùng token gần đồng thời, chỉ một request thắng. Request còn lại không tạo thêm session kế nhiệm.
 
 Nếu token đã revoke xuất hiện lại, server xem đó là reuse. Toàn bộ family bị thu hồi.
 
-Đây là chi tiết AI hay bỏ qua. Rotation không có reuse detection chỉ là thay token, chưa phải cơ chế phát hiện đánh cắp. Tuy nhiên request đồng thời do browser retry không tự động chứng minh token đã bị đánh cắp; client nên single-flight refresh và server cần policy grace/reuse được threat-model rõ để tránh tự revoke phiên hợp lệ.
+Đây là chi tiết AI hay bỏ qua. Rotation không có reuse detection chỉ là thay token.
+
+Nhưng browser retry đồng thời chưa chứng minh token bị đánh cắp. Client nên single-flight refresh.
+
+Server cũng cần threat-model rõ grace policy để tránh tự revoke phiên hợp lệ.
 
 Logout cũng revoke session hiện tại và clear cookie. Xóa cookie phía client thôi chưa đủ vì bản sao token vẫn dùng được.
 
@@ -75,13 +85,15 @@ Login lại, rồi logout. Cookie biến mất và session trong database có `r
 
 Security không nằm ở việc token dài bao nhiêu ký tự. Nó nằm ở lifecycle khi token được tạo, dùng, xoay và thu hồi.
 
-Phiên đăng nhập đã ổn. Nhưng authenticated không đồng nghĩa authorized.
+Phiên đăng nhập đã ổn. Nhưng feature tiếp theo sẽ mở rộng project qua nhiều module mới.
 
-Tập sau, ta tạo Role và Permission.
+Nếu convention chỉ nằm trong prompt, mỗi conversation lại bắt đầu từ con số không.
 
-Ta cũng xem vì sao ba CRUD giống nhau vẫn không nên dùng một CommonService.
+Tập sau, ta đưa convention vào AGENTS.md, Skill và MCP để AI nhớ đúng project.
 
-Theo dõi series nếu bạn muốn security được kiểm chứng bằng timeline, không bằng niềm tin. Mình là Richard. Lập trình là cuộc sống.
+Theo dõi series nếu bạn muốn security được kiểm chứng bằng timeline, không bằng niềm tin. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
+Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -188,11 +200,11 @@ refresh C → 401
 
 ### 4a. Titles
 
-1. Refresh Token NestJS: Gia hạn đăng nhập và thu hồi phiên — EP07
-2. Access Token và Refresh Token khác nhau thế nào? — EP07
-3. Refresh Token Rotation trong NestJS — EP07
-4. Logout và thu hồi phiên đăng nhập trong NestJS — EP07
-5. Phát hiện Refresh Token bị sử dụng lại — EP07
+1. Refresh Token NestJS: Gia hạn đăng nhập và thu hồi phiên — EP06
+2. Access Token và Refresh Token khác nhau thế nào? — EP06
+3. Refresh Token Rotation trong NestJS — EP06
+4. Logout và thu hồi phiên đăng nhập trong NestJS — EP06
+5. Phát hiện Refresh Token bị sử dụng lại — EP06
 
 **Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho người mới và Title 3 cho search.
 
@@ -228,7 +240,7 @@ Người dùng đã logout nhưng access token cũ vẫn gọi được API. Ref
 ### 4c. Keywords / Tags
 
 ```text
-nestjs refresh token, refresh token rotation, refresh token reuse detection, jwt nestjs, auth session database, opaque refresh token, hash refresh token, httpOnly cookie nestjs, logout revoke token, oauth security bcp, rfc 9700, nestjs tiếng việt, học nestjs, nestjs tập 7, backend security, typescript backend, ai coding mentor, lập trình là cuộc sống
+nestjs refresh token, refresh token rotation, refresh token reuse detection, jwt nestjs, auth session database, opaque refresh token, hash refresh token, httpOnly cookie nestjs, logout revoke token, oauth security bcp, rfc 9700, nestjs tiếng việt, học nestjs, nestjs tập 6, backend security, typescript backend, ai coding mentor, lập trình là cuộc sống
 ```
 
 ---

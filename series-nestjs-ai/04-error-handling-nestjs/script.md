@@ -100,9 +100,9 @@ try {
 
 ## PART 3 — THUMBNAIL IMAGE PROMPTS
 
-1. `A cinematic photograph matching the established TaskFlow NestJS thumbnail style, a Vietnamese developer with a tense expression on the right facing a dark monitor showing one large glowing HTTP 500 error caused by a duplicate email, deep black and navy room, dramatic NestJS red-pink #E0234E monitor light and rim light, simplified background, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a high-end developer documentary, not a screenshot, not a tutorial, not cartoon, no text, no logos, no watermark.`
-2. `A cinematic photograph matching the established TaskFlow NestJS thumbnail style, a Vietnamese developer on the right watching a red PostgreSQL unique-constraint warning transform into a clean 409 response on a dark code monitor, deep black and navy background, dramatic NestJS red-pink #E0234E lighting, one clear focal subject, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a high-end tech commercial, not a screenshot, not a tutorial, not cartoon, no text, no watermark.`
-3. `A cinematic photograph matching the established TaskFlow NestJS thumbnail style, a Vietnamese developer on the right with a dangerous stack trace locked behind a dark glass panel and a clean API error card visible on the monitor, deep shadows, black and navy palette with NestJS red-pink #E0234E highlights, simplified desk, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a developer documentary, not a screenshot, not a tutorial, not cartoon, no text, no logos, no watermark.`
+1. `A cinematic photograph matching the established User Management NestJS thumbnail style, a Vietnamese developer with a tense expression on the right facing a dark monitor showing one large glowing HTTP 500 error caused by a duplicate email, deep black and navy room, dramatic NestJS red-pink #E0234E monitor light and rim light, simplified background, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a high-end developer documentary, not a screenshot, not a tutorial, not cartoon, no text, no logos, no watermark.`
+2. `A cinematic photograph matching the established User Management NestJS thumbnail style, a Vietnamese developer on the right watching a red PostgreSQL unique-constraint warning transform into a clean 409 response on a dark code monitor, deep black and navy background, dramatic NestJS red-pink #E0234E lighting, one clear focal subject, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a high-end tech commercial, not a screenshot, not a tutorial, not cartoon, no text, no watermark.`
+3. `A cinematic photograph matching the established User Management NestJS thumbnail style, a Vietnamese developer on the right with a dangerous stack trace locked behind a dark glass panel and a clean API error card visible on the monitor, deep shadows, black and navy palette with NestJS red-pink #E0234E highlights, simplified desk, empty dark space on the left for bold typography, 16:9, 8k, photorealistic, like a developer documentary, not a screenshot, not a tutorial, not cartoon, no text, no logos, no watermark.`
 
 ---
 
@@ -110,11 +110,11 @@ try {
 
 ### 4a. Titles
 
-1. Một email trùng làm NestJS crash 500 — sửa đúng lỗi 409 | TaskFlow #4
+1. Một email trùng làm NestJS crash 500 — sửa đúng lỗi 409 | User Management #4
 2. NestJS trả 500 chỉ vì trùng email — tôi sửa thành 409 thế nào?
 3. Đừng biến mọi lỗi NestJS thành 400 | Error Handling #4
 4. API của bạn đang làm lộ stack trace? | NestJS + Prisma 8
-5. 400, 404, 409 hay 500? Cách API nói đúng lỗi | TaskFlow #4
+5. 400, 404, 409 hay 500? Cách API nói đúng lỗi | User Management #4
 
 **Khuyên dùng:** Đăng Title 1. Nếu impressions có nhưng CTR yếu sau khi đủ dữ liệu, thử Title 2. Title 5 là phương án thiên về search.
 

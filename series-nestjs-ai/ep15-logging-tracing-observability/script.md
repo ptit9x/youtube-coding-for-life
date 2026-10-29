@@ -1,16 +1,16 @@
-# NestJS #15 — Structured Logging và Correlation ID
+# NestJS #15 — Logging, Tracing và chọn Observability bằng bằng chứng
 
 - **Series:** Học NestJS bằng AI — tập 15/29
-- **Recording status:** CHƯA READY — script hiện mới có logging; phải merge tracing/observability từ các folder `merged-from-*`.
-- **Target runtime:** khoảng 6 phút (547 từ thoại)
-- **Outcome:** Log JSON bằng Pino, một correlation ID xuyên request và dữ liệu nhạy cảm được redact.
-- **Pain tập kế:** Log cho biết lỗi gì, nhưng chưa cho thấy Guard, Service hay database đang chậm.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~775 từ thoại + khoảng nghỉ dashboard)
+- **Outcome:** Log có correlation ID, trace chỉ đúng span chậm và decision matrix chọn observability stack theo workload.
+- **Pain tập kế:** API đã quan sát được lỗi nhưng chưa nhận attachment an toàn.
 
 ---
 
 ## PART 1 — SCRIPT
 
-Hai giờ sáng, TaskFlow báo năm-trăm giữa hàng nghìn dòng log.
+Hai giờ sáng, User Management báo năm-trăm giữa hàng nghìn dòng log.
 
 Một dòng nói permission fail. Dòng khác nói database timeout.
 
@@ -90,11 +90,43 @@ Một lỗi production từ đây có thể được tìm lại bằng đúng m�
 
 Log tốt không kể nhiều hơn. Nó giúp tìm đúng sự thật nhanh hơn.
 
-Nhưng correlation chỉ nối sự kiện. Nó chưa đo thời gian nằm ở lớp nào.
+Nhưng correlation chỉ nối sự kiện. Nó chưa nói ba giây biến mất ở Guard, Service hay database.
 
-Tập sau, mình sẽ nhìn request thành một trace waterfall bằng NestJS Observe.
+Trace là hành trình request. Span là từng chặng trên hành trình đó.
 
-Nếu bạn muốn debug bằng bằng chứng thay vì linh cảm, hãy đồng hành cùng series này.
+Mình tạo endpoint báo cáo chậm có kiểm soát. Query database mất tám mươi mili giây.
+
+Provider bên ngoài mất hơn hai giây. Waterfall làm khoảng chờ đó hiện ra ngay.
+
+AI đề xuất tối ưu database. Mình từ chối vì span không ủng hộ kết luận đó.
+
+Timeout và fallback được đặt tại external boundary. Request giảm xuống dưới một giây.
+
+Observability không sửa lỗi thay mình. Nó thu hẹp nơi cần suy nghĩ.
+
+Nhưng chọn tool nào cũng cần bằng chứng. Mình dùng cùng exception, request chậm và BullMQ job fail.
+
+Observe mạnh ở trace hiểu NestJS. Sentry mạnh ở error grouping, release và workflow xử lý lỗi.
+
+OpenTelemetry là chuẩn mở, cho phép đổi exporter và backend. Đổi lại, team phải vận hành nhiều mảnh hơn.
+
+Mình yêu cầu AI lập decision matrix theo setup, NestJS depth, error workflow, portability, vận hành và chi phí.
+
+Mỗi ô phải có tài liệu hoặc thử nghiệm. Không chấm điểm bằng logo quen thuộc.
+
+Team nhỏ cần điều tra NestJS nhanh có thể chọn Observe. Team xoay quanh error triage có thể chọn Sentry.
+
+Hệ thống nhiều ngôn ngữ cần chuẩn chung thường hợp OpenTelemetry hơn.
+
+Mình ghi lựa chọn của User Management vào ADR, gồm bối cảnh và trade-off đã chấp nhận.
+
+Không cài cả ba SDK chỉ để cảm thấy an toàn.
+
+Log cho ta lời kể. Trace cho ta thời gian. Code cho ta nguyên nhân.
+
+Tập sau, User Management sẽ nhận file mà không tin chiếc đuôi `.jpg`.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -104,19 +136,22 @@ Mình là Richard. Lập trình là cuộc sống.
 
 | # | Type | Lời thoại / nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [TERM] | Cuộn log xen kẽ từ ba request, dừng ở lỗi 500 | 30s |
-| 2 | [DIAGRAM] | Minh họa request ID như số vận đơn qua Guard, Service, DB, Filter | 30s |
-| 3 | [BROWSER] | Cho AI đọc log rối; highlight kết luận thiếu bằng chứng | 30s |
-| 4 | [IDE] | Cấu hình `LoggerModule`, `genReqId` và response header | 40s |
-| 5 | [IDE] | So sánh log nối chuỗi với log event + fields | 30s |
-| 6 | [IDE] | Cấu hình level theo môi trường và `redact.paths` | 35s |
-| 7 | [TERM] | Gửi login có password/token giả; kiểm tra log đã `[Redacted]` | 35s |
-| 8 | [TERM] | Bắn ba request song song; dùng `jq` lọc theo `req.id` | 50s |
-| 9 | [IDE] | Chạy test không rò password, authorization và cookie | 35s |
-| 10 | [BROWSER] | Network tab cho thấy `x-request-id` trong response | 20s |
-| 11 | [B-ROLL] | Một request ID sáng lên giữa màn hình log; chuyển sang trace waterfall | 15s |
+| 1 | [TERM] | Log xen kẽ từ ba request, dừng ở lỗi năm-trăm | 30s |
+| 2 | [DIAGRAM] | Correlation ID đi qua Guard, Service, DB, Filter | 30s |
+| 3 | [IDE] | Submit yêu cầu; AI plan logging, host review redaction | 40s |
+| 4 | [IDE] | LoggerModule, `genReqId`, fields và level | 45s |
+| 5 | [TERM] | Redact password/token; `jq` lọc một request | 45s |
+| 6 | [BROWSER] | `x-request-id` trong response | 20s |
+| 7 | [DIAGRAM] | Trace, span và waterfall của endpoint chậm | 35s |
+| 8 | [BROWSER] | Waterfall: database 80ms, external provider hơn 2s | 45s |
+| 9 | [IDE] | Từ chối tối ưu DB; thêm timeout/fallback đúng boundary | 45s |
+| 10 | [BROWSER] | Waterfall mới dưới một giây | 35s |
+| 11 | [DIAGRAM] | Observe vs Sentry vs OpenTelemetry theo sáu tiêu chí | 45s |
+| 12 | [BROWSER] | Cùng exception/request/job fail trên các công cụ thử nghiệm | 50s |
+| 13 | [IDE] | ADR ghi lựa chọn và trade-off cho User Management | 35s |
+| 14 | [B-ROLL] | Log + trace + code; teaser file upload | 20s |
 
-**Tổng mục tiêu: 5 phút 50 giây.** One Dark Pro, JetBrains Mono 18–20px, format JSON qua `jq`, tuyệt đối không quay secret thật.
+**Tổng: 520 giây ≈ 8:40; cộng khoảng nghỉ dashboard thành 9–10 phút.** One Dark Pro, JetBrains Mono 18–20px; không quay secret.
 
 ### Code cốt lõi
 
@@ -180,13 +215,18 @@ Plan production structured logging for the current NestJS API.
 
 ### 4a. Titles
 
-1. Một ID cứu cả đêm debug production — EP15
-2. Structured Logging và Correlation ID trong NestJS — EP15
-3. Vì sao nghìn dòng log vẫn không đủ? — EP15
-4. Đừng bao giờ log password và token — EP15
-5. Truy một Request xuyên toàn bộ NestJS — EP15
+1. Nghìn dòng Log vẫn không chỉ ra chỗ chậm — EP15 | Lập trình là cuộc sống
+2. Log nói gì, Trace đo gì, Code sửa gì? — EP15 | Lập trình là cuộc sống
+3. AI tối ưu nhầm Database vì thiếu Trace — EP15 | Lập trình là cuộc sống
+4. Observe, Sentry hay OpenTelemetry cho NestJS? — EP15 | Lập trình là cuộc sống
+5. Một Correlation ID cứu cả đêm Debug — EP15 | Lập trình là cuộc sống
+6. Structured Logging và Tracing trong NestJS — EP15 | Lập trình là cuộc sống
+7. Đừng cài ba SDK Observability cùng lúc — EP15 | Lập trình là cuộc sống
+8. Waterfall chỉ đúng hai giây biến mất — EP15 | Lập trình là cuộc sống
+9. Chọn Tool bằng Workload, không bằng Logo — EP15 | Lập trình là cuộc sống
+10. Production không quan tâm linh cảm của Dev — EP15 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Title 1. A/B test Title 2 cho search intent.
+**Khuyên dùng:** Title 1; A/B với Title 4 cho intent so sánh tool.
 
 ### 4b. SEO Description
 
@@ -219,7 +259,7 @@ Hàng nghìn dòng log không có nghĩa là bạn truy được một request. 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs structured logging, nestjs pino, correlation id nestjs, request id nodejs, pino redact password, log json nestjs, x-request-id, production logging nodejs, debug production nestjs, redact authorization header, nestjs logger, logging best practices, taskflow nestjs, học nestjs bằng ai, nestjs tập 15, typescript backend, lập trình là cuộc sống
+nestjs structured logging, nestjs pino, correlation id nestjs, request id nodejs, pino redact password, log json nestjs, x-request-id, production logging nodejs, debug production nestjs, redact authorization header, nestjs logger, logging best practices, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 15, typescript backend, lập trình là cuộc sống
 ```
 
 ---

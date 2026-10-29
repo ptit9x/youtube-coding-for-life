@@ -1,9 +1,9 @@
 # NestJS #11 — DRY: Khi nào không nên dùng BaseCrudService
 
 - **Series:** Học NestJS bằng AI — tập 11/29
-- **Recording status:** CHƯA READY — phải merge phần common library/versioning theo `00-plan.md`.
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
-- **Outcome:** Phân biệt duplicate code với duplicate knowledge, tránh generic business service.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~800 từ thoại + khoảng nghỉ review)
+- **Outcome:** Tránh generic business service và tách phần cross-cutting ổn định thành library có public API, version cùng consumer test.
 - **Pain mở EP12:** `common/` ổn định nhưng request đi qua quá nhiều layer, debug không còn trực quan.
 
 ---
@@ -108,11 +108,45 @@ DRY không phải xóa mọi dòng giống nhau.
 
 DRY là tránh nhiều nguồn sự thật cho cùng một kiến thức.
 
-Nhưng những helper ổn định trong `common/` đang được copy sang dự án khác.
+Nhưng những helper ổn định trong `common/` đang được copy sang dự án khác. Mỗi bản copy bắt đầu sửa theo một hướng.
 
-Mỗi bản copy bắt đầu sửa theo một hướng.
+Phần thật sự portable cần một library có phiên bản và public API rõ ràng.
 
-Tập sau, ta tách phần portable thành library có phiên bản. Mình là Richard. Lập trình là cuộc sống.
+Mình yêu cầu AI lập bảng dependency. Pagination helper chỉ cần TypeScript.
+
+Validation pipe và exception filter phụ thuộc NestJS. Permission decorator lại phụ thuộc AccessControl của User Management.
+
+Tên folder `common` không tự biến code thành reusable. Dependency mới là bằng chứng.
+
+Mình tạo package `@coding-for-life/nest-common` với filters, pipes và pagination.
+
+File `index.ts` là cửa public duy nhất. Consumer không import đường dẫn nội bộ.
+
+NestJS được khai báo peer dependency để app và library dùng cùng runtime.
+
+Library không được import User, Task hoặc AccessControl. Mũi tên chỉ đi từ ứng dụng tới library.
+
+Mình chuyển pagination trước, rồi validation pipe và exception filter.
+
+User Management đổi import sang package mới và chạy toàn bộ test.
+
+Tiếp theo, mình tạo một Nest app sạch làm consumer thứ hai.
+
+Hai consumer build được mới chứng minh package thật sự portable.
+
+Fix tương thích là patch. Thêm export là minor. Xóa public symbol là breaking change cần major version.
+
+PermissionGuard vẫn ở AccessControl. CurrentUser vẫn ở Auth vì chúng mang policy của ứng dụng.
+
+Ta tái sử dụng mechanics, không phát tán business rule.
+
+Nhưng request giờ đi qua middleware, guard, pipe, interceptor và filter.
+
+Tập sau, ta theo dấu toàn bộ lifecycle rồi đóng gói cùng ứng dụng bằng Docker.
+
+Code dùng chung tốt không có nghĩa là code xuất hiện ở nhiều nơi. Nó có nghĩa là thay đổi vì cùng một lý do. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
+Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -120,18 +154,21 @@ Tập sau, ta tách phần portable thành library có phiên bản. Mình là R
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [IDE] | Ba service có method cùng tên | 40s |
-| 2 | [AI] | Prompt giảm tối đa duplication | 55s |
-| 3 | [IDE] | BaseCrudService và chuỗi generic | 75s |
-| 4 | [DIAGRAM] | Duplicate code khác duplicate knowledge | 65s |
-| 5 | [IDE] | Thêm ba business rule làm base class phình ra | 95s |
-| 6 | [TERMINAL] | Chạy test trước và sau refactor | 65s |
-| 7 | [IDE] | Trả rule về từng service explicit | 80s |
-| 8 | [DIAGRAM] | Business semantics và persistence mechanics | 65s |
-| 9 | [IDE] | Pagination helper có hai consumer thật | 60s |
-| 10 | [B-ROLL] | Nhiều bản copy của common bị phân kỳ | 30s |
+| 1 | [IDE] | Ba service có method cùng tên | 35s |
+| 2 | [IDE] | Submit prompt giảm duplication; tua nhanh AI xử lý | 40s |
+| 3 | [IDE] | Review BaseCrudService phình theo business rule | 55s |
+| 4 | [DIAGRAM] | Duplicate code khác duplicate knowledge | 45s |
+| 5 | [TERM] | Mutation business rule làm generic test thất bại | 45s |
+| 6 | [IDE] | Trả policy về từng service; giữ helper persistence nhỏ | 45s |
+| 7 | [IDE] | Audit dependency từng file trong `common/` | 45s |
+| 8 | [DIAGRAM] | App → `nest-common`; library không import app | 40s |
+| 9 | [IDE] | Public `index.ts`, peer dependency và ba vùng package | 45s |
+| 10 | [TERM] | Build User Management và Nest app sạch | 50s |
+| 11 | [DIAGRAM] | Semver patch/minor/major và migration note | 35s |
+| 12 | [IDE] | PermissionGuard/CurrentUser ở lại domain module | 35s |
+| 13 | [B-ROLL] | Lifecycle nhiều lớp, teaser tập kế | 20s |
 
-**Tổng: 630 giây ≈ 10:30.** Dành thêm hai phút đọc diff; font IDE tối thiểu 18px.
+**Tổng: 535 giây ≈ 8:55; cộng khoảng nghỉ review thành 9–10 phút.** One Dark Pro, font tối thiểu 18px.
 
 ### Code cốt lõi
 
@@ -180,13 +217,18 @@ Do not create abstractions solely to reduce line count.
 
 ### 4a. Titles
 
-1. DRY trong NestJS: Khi nào không nên dùng BaseCrudService — EP11
-2. BaseCrudService có thật sự giúp code tốt hơn? — EP11
-3. Duplicate code và duplicate knowledge khác nhau thế nào? — EP11
-4. Refactor CRUD mà không che business logic — EP11
-5. Khi nào nên đưa code vào common? — EP11
+1. DRY quá tay biến code thành mê cung — EP11 | Lập trình là cuộc sống
+2. BaseCrudService có thật sự giúp code tốt hơn? — EP11 | Lập trình là cuộc sống
+3. Duplicate Code khác Duplicate Knowledge — EP11 | Lập trình là cuộc sống
+4. Folder `common` không có nghĩa là dùng chung — EP11 | Lập trình là cuộc sống
+5. Khi nào code nên trở thành Library? — EP11 | Lập trình là cuộc sống
+6. Hai Consumer mới chứng minh code Reusable — EP11 | Lập trình là cuộc sống
+7. Tách NestJS Common Library mà không kéo Business Rule — EP11 | Lập trình là cuộc sống
+8. Một Public API nhỏ cứu cả Package — EP11 | Lập trình là cuộc sống
+9. AI muốn xóa Duplication, tôi giữ lại — EP11 | Lập trình là cuộc sống
+10. Reuse Mechanics, đừng phát tán Policy — EP11 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho curiosity và Title 3 cho khái niệm cốt lõi.
+**Khuyên dùng:** Title 1; A/B với Title 4 cho góc nhìn `common`.
 
 ### 4b. SEO Description
 

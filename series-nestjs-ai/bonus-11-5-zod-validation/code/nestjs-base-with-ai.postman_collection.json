@@ -1,0 +1,460 @@
+{
+  "info": {
+    "_postman_id": "nestjs-base-with-ai-bonus-11-5",
+    "name": "User Management API",
+    "description": "Postman collection tích lũy cho User Management — Bonus 11.5. Tạo environment variable endpoint = http://localhost:3000 trước khi chạy.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [],
+  "item": [
+    {
+      "name": "Health Check",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{endpoint}}/",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                ""
+              ]
+            },
+            "description": "Kiểm tra app đang chạy. Route @Public(), không cần token."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Richard\",\n  \"email\": \"richard@example.com\",\n  \"password\": \"MyStr0ngP@ssword!\"\n}"
+            },
+            "url": {
+              "raw": "{{endpoint}}/auth/register",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            },
+            "description": "Tạo tài khoản mới. Route @Public(). Response 201 không chứa passwordHash."
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"richard@example.com\",\n  \"password\": \"MyStr0ngP@ssword!\"\n}"
+            },
+            "url": {
+              "raw": "{{endpoint}}/auth/login",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Đăng nhập, trả accessToken. Sai email hoặc password đều nhận 401 chung."
+          },
+          "response": []
+        },
+        {
+          "name": "Refresh session",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{endpoint}}/auth/refresh",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "auth",
+                "refresh"
+              ]
+            },
+            "description": "Dùng HttpOnly refresh cookie, rotate session và trả access token mới. Gọi Login trước."
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{endpoint}}/auth/logout",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "auth",
+                "logout"
+              ]
+            },
+            "description": "Revoke session phía server và clear refresh cookie."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get Current User (Me)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}",
+                "description": "Paste token từ Login response, hoặc dùng biến {{accessToken}} nếu đã set."
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/users/me",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users",
+                "me"
+              ]
+            },
+            "description": "Trả user đang đăng nhập. Cần Bearer token hợp lệ."
+          },
+          "response": []
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/users",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Lấy danh sách tất cả users."
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"New User\",\n  \"email\": \"newuser@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{endpoint}}/users",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Tạo user mới qua Users controller."
+          },
+          "response": []
+        },
+        {
+          "name": "Find User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/users/1",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "description": "Tìm user theo ID. Thay `1` bằng ID thực tế."
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Updated Name\"\n}"
+            },
+            "url": {
+              "raw": "{{endpoint}}/users/1",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "description": "Cập nhật user theo ID. Thay `1` bằng ID thực tế."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/users/1",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users",
+                "1"
+              ]
+            },
+            "description": "Xoá user theo ID. Thay `1` bằng ID thực tế."
+          },
+          "response": []
+        },
+        {
+          "name": "Count Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/users/count",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "users",
+                "count"
+              ]
+            },
+            "description": "Đếm tổng số users."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "Create Task",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/tasks",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            },
+            "description": "Tạo task cho user hiện tại; ownerId lấy từ access token.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Review access-control plan\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "List My Tasks",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/tasks",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "tasks"
+              ]
+            },
+            "description": "Chỉ trả task nằm trong ownership scope."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Task",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/tasks/{{taskId}}",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "tasks",
+                "{{taskId}}"
+              ]
+            },
+            "description": "Trả 404 nếu task không tồn tại hoặc nằm ngoài ownership scope."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/tasks/{{taskId}}",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "tasks",
+                "{{taskId}}"
+              ]
+            },
+            "description": "Cần tasks.update và ownership hợp lệ.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Updated task\"\n}"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{accessToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{endpoint}}/tasks/{{taskId}}",
+              "host": [
+                "{{endpoint}}"
+              ],
+              "path": [
+                "tasks",
+                "{{taskId}}"
+              ]
+            },
+            "description": "Cần tasks.delete và ownership hợp lệ."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

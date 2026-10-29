@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-TaskFlow phân trang được năm nghìn task, nhưng tất cả vẫn nằm trong một danh sách phẳng.
+User Management phân trang được năm nghìn task, nhưng tất cả vẫn nằm trong một danh sách phẳng.
 
 Không có Project. Không có Label. Chỉ có title và hy vọng.
 
@@ -172,7 +172,7 @@ npx prisma db verify
 ### Prompt cho AI
 
 ```text
-Plan Project and Label relations for the populated Prisma 8 TaskFlow database.
+Plan Project and Label relations for the populated Prisma 8 nestjs-base-with-ai database.
 - Model Project 1:N Task and Task N:N Label with an explicit TaskLabel junction.
 - Scope labels to one project and reject cross-project TaskLabel links.
 - Store attachedAt and attachedBy on the junction with a composite primary key.
@@ -201,7 +201,7 @@ Plan Project and Label relations for the populated Prisma 8 TaskFlow database.
 
 1. Thêm quan hệ mà không xóa dữ liệu cũ — EP23
 2. Project, Label và Many-to-Many với Prisma 8 — EP23
-3. Một migration suýt xóa lịch sử TaskFlow — EP23
+3. Một migration suýt xóa lịch sử nestjs-base-with-ai — EP23
 4. Cascade hay Restrict: AI không thể chọn hộ — EP23
 5. Expand, Backfill, Contract trong PostgreSQL — EP23
 
@@ -238,7 +238,7 @@ Schema mới có thể đúng cho ngày mai nhưng phá dữ liệu hôm qua. T�
 ### 4c. Keywords / Tags
 
 ```text
-prisma 8 relations, prisma 8 many to many, explicit junction prisma 8, nestjs project label task, postgres safe migration, expand backfill contract, cascade vs restrict database, prisma migration plan, prisma db verify, composite key task label, avoid n+1 prisma, populated database migration, taskflow nestjs, học nestjs bằng ai, nestjs tập 23, lập trình là cuộc sống
+prisma 8 relations, prisma 8 many to many, explicit junction prisma 8, nestjs project label task, postgres safe migration, expand backfill contract, cascade vs restrict database, prisma migration plan, prisma db verify, composite key task label, avoid n+1 prisma, populated database migration, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 23, lập trình là cuộc sống
 ```
 
 ---

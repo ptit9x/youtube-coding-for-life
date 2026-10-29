@@ -1,16 +1,16 @@
-# NestJS #19 — Caching với Redis: học cách quên
+# NestJS #19 — Redis Cache và BullMQ: nhanh nhưng không được sai
 
 - **Series:** Học NestJS bằng AI — tập 19/29
-- **Recording status:** CHƯA READY — script hiện mới có Redis cache; phải merge BullMQ/background jobs trong `merged-from-26/`.
-- **Target runtime:** khoảng 6 phút 25 giây (619 từ thoại)
-- **Outcome:** Dashboard dùng cache-aside qua Redis, key theo scope và invalidation đúng khi dữ liệu hoặc quyền đổi.
-- **Pain tập kế:** Gửi email nhắc deadline trong HTTP request làm user phải chờ mail server.
+- **Recording status:** READY
+- **Target runtime:** 10–11 phút (~850 từ thoại + khoảng nghỉ failure demo)
+- **Outcome:** Cache-aside giữ đúng scope; BullMQ tách email khỏi request với retry, idempotency và dead-letter handling.
+- **Pain tập kế:** Worker đã có nhưng reminder vẫn chưa được tạo theo lịch.
 
 ---
 
 ## PART 1 — SCRIPT
 
-Dashboard TaskFlow đúng dữ liệu, nhưng mỗi lần refresh lại join Project, Task và Label.
+Dashboard User Management đúng dữ liệu, nhưng mỗi lần refresh lại join Project, Task và Label.
 
 Query mất gần một giây. Mười tab mở cùng lúc biến database thành máy sưởi.
 
@@ -100,9 +100,49 @@ Cache tốt không phải cache giữ được nhiều. Nó là cache quên đú
 
 Dashboard đã nhanh. Email nhắc deadline vẫn giữ request chờ một mail server thất thường.
 
-Tập sau, BullMQ sẽ đưa việc nặng ra nền và buộc mình đối mặt với retry cùng duplicate.
+User tạo task trong hai trăm mili giây rồi chờ email thêm bốn giây.
 
-Nếu bạn muốn tối ưu mà không bán rẻ tính đúng đắn, hãy đồng hành cùng series này.
+Nếu mail timeout, request lỗi dù task đã lưu. Retry trong request chỉ bắt user chờ backend kiên trì.
+
+Bước ngoặt là tách “task đã tạo” khỏi “email sẽ được gửi”.
+
+BullMQ dùng Redis làm hàng chờ bền vững. HTTP request là producer; mail processor là worker.
+
+AI đề xuất `setTimeout`. Container restart là timer biến mất.
+
+Mình đổi plan sang queue có retry và exponential backoff.
+
+Payload chỉ giữ notification ID, task ID và recipient ID. Không đưa token hay user record vào Redis.
+
+Database commit và `queue.add` vẫn không phải một transaction. Mình ghi rõ khoảng trống này.
+
+Reconciliation xử lý mức hiện tại. Hệ thống chặt hơn cần transactional outbox.
+
+Mình tắt mail server. Job fail rồi retry, nhưng HTTP vẫn trả hai-không-một.
+
+Sau lần thử cuối, job đi vào dead-letter queue cùng reason và correlation context.
+
+Retry tạo thêm một bài toán: email có thể đã gửi trước khi worker chết.
+
+Idempotent nghĩa là chạy lại vẫn có cùng kết quả cuối.
+
+Notification ID ổn định trở thành idempotency key. Database giữ delivery record có unique key.
+
+Custom job ID hỗ trợ dedupe, nhưng không tạo bảo đảm exactly-once.
+
+Production thực tế thường là at-least-once. Handler phải chịu được chạy lại.
+
+Mình bật mail server. Retry thành công và user chỉ nhận một email.
+
+Replay job cũ với cùng key cũng không gửi trùng.
+
+Cache làm read path nhanh. Queue làm write side effect bền hơn. Cả hai đều phải thiết kế cho failure.
+
+Tập sau, cron job sẽ tự tạo reminder theo lịch.
+
+Production không phải nơi dependency luôn khỏe. Nó là nơi failure được dự đoán và giới hạn.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -112,21 +152,24 @@ Mình là Richard. Lập trình là cuộc sống.
 
 | # | Type | Lời thoại / nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | Dashboard load chậm; Observe cho thấy query lặp | 25s |
-| 2 | [TERM] | Redis cache hit làm latency giảm, rồi revoke quyền nhưng dữ liệu cũ còn | 30s |
-| 3 | [DIAGRAM] | Cache-aside: get → miss → DB → set → response | 25s |
-| 4 | [BROWSER] | Review đề xuất cache mọi GET và key `dashboard` | 25s |
-| 5 | [DIAGRAM] | Key `taskflow:v1:dashboard:userId:accessVersion` | 35s |
-| 6 | [IDE] | CacheModule với `createKeyv(REDIS_URL)` và TTL mili giây | 30s |
-| 7 | [IDE] | Dashboard service get/miss/set; DB là source of truth | 40s |
-| 8 | [DIAGRAM] | Invalidate sau commit; race khi delete trước commit | 30s |
-| 9 | [TERM] | Test bug revoke không bump version; thấy cache hit sai | 35s |
-| 10 | [IDE] | Sửa access version và invalidation; security test xanh | 40s |
-| 11 | [TERM] | Tắt Redis; minh họa fallback về database theo policy | 25s |
-| 12 | [BROWSER] | So sánh latency và query count trước/sau | 30s |
-| 13 | [B-ROLL] | Redis key biến mất; cut sang request chờ gửi email | 15s |
+| 1 | [BROWSER] | Dashboard chậm; trace cho thấy query lặp | 25s |
+| 2 | [DIAGRAM] | Cache-aside và database là source of truth | 30s |
+| 3 | [IDE] | Submit yêu cầu; AI đề xuất key quá rộng, host review | 40s |
+| 4 | [DIAGRAM] | Key theo user, accessVersion và schema version | 35s |
+| 5 | [IDE] | CacheModule, TTL và invalidation sau commit | 45s |
+| 6 | [TERM] | Revoke bug, sửa accessVersion, test Redis down | 50s |
+| 7 | [BROWSER] | Latency/query count trước và sau | 35s |
+| 8 | [BROWSER] | Request tạo task chờ mail bốn giây | 30s |
+| 9 | [DIAGRAM] | Producer → Redis/BullMQ → worker | 35s |
+| 10 | [IDE] | Review bỏ `setTimeout`; queue config và payload nhỏ | 45s |
+| 11 | [IDE] | Retry, exponential backoff và reconciliation gap | 45s |
+| 12 | [TERM] | Tắt mail; HTTP 201, job retry rồi dead-letter | 50s |
+| 13 | [DIAGRAM] | At-least-once, idempotency key và delivery record | 45s |
+| 14 | [TERM] | Bật mail, retry và replay không gửi trùng | 45s |
+| 15 | [BROWSER] | Worker trace, failed count và queue lag | 35s |
+| 16 | [B-ROLL] | Cache và queue dưới failure; teaser cron | 20s |
 
-**Tổng mục tiêu: 6 phút 25 giây.** One Dark Pro, JetBrains Mono 18–20px. Không quay Redis URL hoặc credential; dùng dữ liệu test khi demo quyền.
+**Tổng: 610 giây ≈ 10:10.** One Dark Pro, JetBrains Mono 18–20px; không quay Redis URL, credential hoặc dữ liệu thật.
 
 ### Code cốt lõi
 
@@ -141,7 +184,7 @@ CacheModule.registerAsync({
 ```
 
 ```ts
-const key = `taskflow:v1:dashboard:${user.id}:${authz.accessVersion}`;
+const key = `nestjs-base-with-ai:v1:dashboard:${user.id}:${authz.accessVersion}`;
 const cached = await this.cache.get<DashboardView>(key);
 if (cached) return cached;
 
@@ -153,7 +196,7 @@ return fresh;
 ### Prompt cho AI
 
 ```text
-Plan a narrow cache-aside optimization for the TaskFlow dashboard.
+Plan a narrow cache-aside optimization for the nestjs-base-with-ai dashboard.
 - Use Nest CacheModule with the current Keyv Redis adapter and validated REDIS_URL.
 - Keep PostgreSQL as the source of truth.
 - Cache only the expensive dashboard read, not every GET route.
@@ -180,13 +223,18 @@ Plan a narrow cache-aside optimization for the TaskFlow dashboard.
 
 ### 4a. Titles
 
-1. Cache nhanh nhưng vẫn có thể sai — EP19
-2. Caching với Redis: Học cách quên — EP19
-3. Bug Permission cũ còn sống trong Cache — EP19
-4. Cache-Aside cho NestJS đúng cách — EP19
-5. TTL không phải Security Policy — EP19
+1. API nhanh hơn, Email vẫn gửi hai lần — EP19 | Lập trình là cuộc sống
+2. Redis Cache và BullMQ: nhanh nhưng không được sai — EP19 | Lập trình là cuộc sống
+3. Retry có thể gửi Email trùng như thế nào? — EP19 | Lập trình là cuộc sống
+4. Cache Permission cũ là một lỗi bảo mật — EP19 | Lập trình là cuộc sống
+5. At-Least-Once không có nghĩa Exactly-Once — EP19 | Lập trình là cuộc sống
+6. Một Idempotency Key chặn Email gửi hai lần — EP19 | Lập trình là cuộc sống
+7. Cache-Aside và Background Job trong NestJS — EP19 | Lập trình là cuộc sống
+8. `setTimeout` chết cùng Container — EP19 | Lập trình là cuộc sống
+9. Dead-Letter Queue không phải thùng rác — EP19 | Lập trình là cuộc sống
+10. Tối ưu Read Path, bảo vệ Write Side Effect — EP19 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Title 1. A/B test Title 2 cho search intent.
+**Khuyên dùng:** Title 1; A/B với Title 2 cho search intent.
 
 ### 4b. SEO Description
 
@@ -219,7 +267,7 @@ Cache vừa làm hệ thống nhanh hơn, và sai nhanh hơn. Tập 19 dùng Red
 ### 4c. Keywords / Tags
 
 ```text
-nestjs redis cache, cache aside nestjs, keyv redis nestjs, cache invalidation permissions, redis stale data bug, nestjs cache manager, versioned cache key, access version rbac, ttl milliseconds cache, redis outage fallback, dashboard cache nestjs, postgres source of truth, taskflow nestjs, học nestjs bằng ai, nestjs tập 19, lập trình là cuộc sống
+nestjs redis cache, cache aside nestjs, keyv redis nestjs, cache invalidation permissions, redis stale data bug, nestjs cache manager, versioned cache key, access version rbac, ttl milliseconds cache, redis outage fallback, dashboard cache nestjs, postgres source of truth, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 19, lập trình là cuộc sống
 ```
 
 ---

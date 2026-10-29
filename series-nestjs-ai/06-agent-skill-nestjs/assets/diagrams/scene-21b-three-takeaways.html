@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Scene 21b — Ba điều đáng nhớ</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    margin: 0; background: #000;
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    background: #0a0a1a;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex; align-items: center; justify-content: center;
+    transform-origin: center center;
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 20% 30%, rgba(0,255,65,0.02) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 70%, rgba(189,147,249,0.02) 0%, transparent 50%);
+  }
+  .container { width: 1600px; padding: 0 80px; }
+  .title {
+    font-size: 22px; letter-spacing: 5px; text-transform: uppercase;
+    color: #555577; margin-bottom: 56px; opacity: 0; animation: fadeIn 0.5s 0.5s forwards;
+  }
+  .points { display: flex; flex-direction: column; gap: 32px; }
+  .point {
+    display: flex; align-items: flex-start; gap: 32px; padding: 32px 40px;
+    border-radius: 16px; border: 1px solid rgba(255,255,255,0.06);
+    background: rgba(255,255,255,0.01); opacity: 0; transform: translateX(-30px);
+  }
+  .point:nth-child(1) { animation: slideIn 0.6s 4s forwards; }
+  .point:nth-child(2) { animation: slideIn 0.6s 13s forwards; }
+  .point:nth-child(3) { animation: slideIn 0.6s 22s forwards; }
+  .point-num {
+    width: 64px; height: 64px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 700; flex-shrink: 0;
+  }
+  .point:nth-child(1) .point-num { background: rgba(0,212,255,0.1); color: #00D4FF; border: 2px solid rgba(0,212,255,0.3); box-shadow: 0 0 20px rgba(0,212,255,0.1); }
+  .point:nth-child(2) .point-num { background: rgba(255,200,0,0.1); color: #FFCC00; border: 2px solid rgba(255,200,0,0.3); box-shadow: 0 0 20px rgba(255,200,0,0.1); }
+  .point:nth-child(3) .point-num { background: rgba(255,68,68,0.1); color: #FF4444; border: 2px solid rgba(255,68,68,0.3); box-shadow: 0 0 20px rgba(255,68,68,0.1); }
+  .point-content { flex: 1; }
+  .point-title { font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+  .point:nth-child(1) .point-title { color: #00D4FF; }
+  .point:nth-child(2) .point-title { color: #FFCC00; }
+  .point:nth-child(3) .point-title { color: #FF4444; }
+  .point-desc { font-size: 20px; color: #888899; line-height: 1.7; }
+  .point-desc strong { font-weight: 600; }
+  .point:nth-child(1) .point-desc strong { color: #00D4FF; }
+  .point:nth-child(2) .point-desc strong { color: #FFCC00; }
+  .point:nth-child(3) .point-desc strong { color: #FF4444; }
+  .point-badge {
+    display: inline-block; margin-top: 12px; padding: 6px 16px;
+    border-radius: 4px; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;
+  }
+  .point:nth-child(1) .point-badge { background: rgba(0,212,255,0.1); color: #00D4FF; border: 1px solid rgba(0,212,255,0.2); }
+  .point:nth-child(2) .point-badge { background: rgba(255,200,0,0.1); color: #FFCC00; border: 1px solid rgba(255,200,0,0.2); }
+  .point:nth-child(3) .point-badge { background: rgba(255,68,68,0.1); color: #FF4444; border: 1px solid rgba(255,68,68,0.2); }
+  @keyframes fadeIn { to { opacity: 1; } }
+  @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+  <div class="container">
+    <div class="title">Ba điều đáng nhớ về AGENTS.md</div>
+    <div class="points">
+      <div class="point">
+        <div class="point-num">1</div>
+        <div class="point-content">
+          <div class="point-title">AGENTS.md ≠ README.md</div>
+          <div class="point-desc">
+            README viết cho <strong>người đọc</strong> — onboarding, business context.<br>
+            AGENTS.md viết cho <strong>máy thực thi</strong> — commands, boundaries, banned patterns.<br>
+            Copy README vào AGENTS.md = agent đọc marketing pitch, bỏ sót rule quan trọng.
+          </div>
+          <div class="point-badge">Hai file — Hai đối tượng</div>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-num">2</div>
+        <div class="point-content">
+          <div class="point-title">Lost in the Middle</div>
+          <div class="point-desc">
+            LLM chú ý mạnh nhất ở <strong>đầu</strong> và <strong>cuối</strong> context.<br>
+            Phần giữa bị mờ — logic quan trọng nằm giữa 500 file sẽ bị bỏ qua.<br>
+            AGENTS.md + conditional reading → context ngắn, tập trung, không mờ.
+          </div>
+          <div class="point-badge">Liu et al. 2023 — nghiên cứu đã chứng minh</div>
+        </div>
+      </div>
+      <div class="point">
+        <div class="point-num">3</div>
+        <div class="point-content">
+          <div class="point-title">Stale AGENTS.md = Bug</div>
+          <div class="point-desc">
+            AGENTS.md lỗi thời không vô hại — nó <strong>inject thông tin sai</strong> vào mọi conversation.<br>
+            Agent tin tuyệt đối vì đó là rule. Ghi sai = lặp sai trong mọi file agent tạo.<br>
+            Cập nhật AGENTS.md cùng pull request. Treat nó như code.
+          </div>
+          <div class="point-badge">⚠ Treat như bug — không phải "nice to have"</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function scale() {
+  const c = document.querySelector('.canvas');
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  c.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', scale);
+scale();
+</script>
+</body>
+</html>

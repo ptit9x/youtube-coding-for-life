@@ -1,10 +1,12 @@
 {
   "mcpServers": {
-    "project-docs-example": {
-      "serverUrl": "https://example.com/mcp/",
+    "user-management-postgres-readonly": {
+      "serverUrl": "https://YOUR_DATABASE_MCP_SERVER/mcp/",
+      "headers": {
+        "Authorization": "Bearer YOUR_DATABASE_MCP_TOKEN"
+      },
       "enabledTools": [
-        "search_docs",
-        "read_doc"
+        "query"
       ],
       "disabled": true
     }

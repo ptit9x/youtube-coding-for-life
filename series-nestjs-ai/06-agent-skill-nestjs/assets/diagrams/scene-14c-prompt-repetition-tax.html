@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Scene 14c — Prompt Repetition Tax</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    margin: 0; background: #000;
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    background: #0a0a1a;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex; align-items: center; justify-content: center;
+    transform-origin: center center;
+    position: relative;
+  }
+  .wrapper { display: flex; gap: 100px; align-items: center; padding: 0 80px; }
+  .tax-side, .free-side { opacity: 0; transform: translateY(30px); }
+  .tax-side { animation: fadeUp 0.6s 0.5s forwards; }
+  .free-side { animation: fadeUp 0.6s 8s forwards; }
+  .side-header {
+    font-size: 14px; letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 24px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .tax-side .side-header { color: #ff6666; }
+  .free-side .side-header { color: #00FF41; }
+  .bubble-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px; width: 600px; }
+  .bubble {
+    width: 52px; height: 40px; border-radius: 8px;
+    border: 1px solid rgba(255,68,68,0.2); background: rgba(255,68,68,0.05);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px; color: #886666; position: relative;
+  }
+  .bubble::after { content: '💬'; font-size: 14px; opacity: 0.4; }
+  .bubble:nth-child(-n+3)::after { opacity: 0.8; }
+  .tax-calc { margin-top: 24px; display: flex; align-items: center; gap: 16px; font-size: 16px; }
+  .tax-num { font-size: 56px; font-weight: 700; color: #ff4444; text-shadow: 0 0 30px rgba(255,68,68,0.3); }
+  .tax-label { color: #886666; font-size: 14px; }
+  .tax-times { color: #ff6666; font-size: 32px; }
+  .tax-instruction {
+    max-width: 200px; font-size: 11px; color: #886666;
+    padding: 8px 12px; border: 1px dashed rgba(255,68,68,0.3);
+    border-radius: 6px; line-height: 1.5;
+  }
+  .tax-equals { color: #ff6666; font-size: 32px; }
+  .tax-result {
+    font-size: 14px; color: #ff8888; padding: 8px 16px;
+    background: rgba(255,68,68,0.1); border: 1px solid rgba(255,68,68,0.3); border-radius: 8px;
+  }
+  .vs { font-size: 48px; color: #333355; opacity: 0; animation: fadeIn 0.5s 5s forwards; }
+  .free-file {
+    width: 360px; height: 400px; border: 2px solid #00FF41; border-radius: 16px;
+    padding: 32px; box-shadow: 0 0 60px rgba(0,255,65,0.1); position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .free-icon { font-size: 80px; margin-bottom: 20px; filter: drop-shadow(0 0 20px rgba(0,255,65,0.3)); }
+  .free-name { font-size: 28px; font-weight: 700; color: #00FF41; margin-bottom: 12px; }
+  .free-desc { font-size: 14px; color: #558855; text-align: center; line-height: 1.6; }
+  .free-badge {
+    margin-top: 24px; padding: 8px 20px; background: rgba(0,255,65,0.1);
+    border: 1px solid rgba(0,255,65,0.3); border-radius: 20px;
+    font-size: 14px; color: #00FF41; letter-spacing: 2px;
+  }
+  .free-calc { margin-top: 24px; display: flex; align-items: center; gap: 16px; }
+  .free-num { font-size: 56px; font-weight: 700; color: #00FF41; text-shadow: 0 0 30px rgba(0,255,65,0.3); }
+  .free-label { color: #558855; font-size: 14px; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+  <div class="wrapper">
+    <div class="tax-side">
+      <div class="side-header">✕ Không có AGENTS.md</div>
+      <div class="bubble-grid">
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+        <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+      </div>
+      <div class="tax-calc">
+        <div><div class="tax-num">50</div><div class="tax-label">conversations</div></div>
+        <div class="tax-times">×</div>
+        <div class="tax-instruction">"Dùng pattern này,<br>cấm cái kia,<br>structure theo kiểu này"</div>
+        <div class="tax-equals">=</div>
+        <div class="tax-result">🕐 Thuế thời gian<br>bạn đang trả</div>
+      </div>
+    </div>
+    <div class="vs">VS</div>
+    <div class="free-side">
+      <div class="side-header">✓ Có AGENTS.md</div>
+      <div class="free-file">
+        <div class="free-icon">📄</div>
+        <div class="free-name">AGENTS.md</div>
+        <div class="free-desc">Viết một lần.<br>Mỗi conversation tự đọc.</div>
+        <div class="free-badge">TRẢ 1 LẦN — DÙNG MÃI</div>
+      </div>
+      <div class="free-calc">
+        <div><div class="free-num">1</div><div class="free-label">file</div></div>
+        <div style="color: #00FF41; font-size: 32px;">→</div>
+        <div><div class="free-num">∞</div><div class="free-label">conversations</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function scale() {
+  const c = document.querySelector('.canvas');
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  c.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', scale);
+scale();
+</script>
+</body>
+</html>

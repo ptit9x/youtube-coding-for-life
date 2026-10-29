@@ -33,7 +33,7 @@ NestJS là một framework backend chạy trên Node.js. Ở bên dưới, mặc
 
 ### 1:16 — Tạo project, chọn npm, Vitest và ES module
 
-Bây giờ mình chạy `nest new nestjs-base-with-ai` để tạo project mới. CLI hỏi package manager thì mình chọn npm. Phần observability mình chọn No. Test framework mình chọn Vitest và module system mình chọn ES module.
+Bây giờ mình chạy `nest new nestjs-base-with-ai` để tạo repo cho project User Management. CLI hỏi package manager thì mình chọn npm. Phần observability mình chọn No. Test framework mình chọn Vitest và module system mình chọn ES module.
 
 Sau khi cài đặt xong, mình đi vào thư mục project rồi chạy `npm run start:dev`. Mở trình duyệt tại `localhost:3000`, chúng ta thấy dòng Hello World. Như vậy project NestJS đầu tiên đã chạy thành công.
 

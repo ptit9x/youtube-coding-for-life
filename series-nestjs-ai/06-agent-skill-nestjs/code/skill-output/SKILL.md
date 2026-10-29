@@ -1,7 +1,7 @@
 ---
 name: nest-feature
 description: >
-  Scaffold or extend a TaskFlow NestJS business feature module.
+  Scaffold or extend a nestjs-base-with-ai NestJS business feature module.
   Use when creating or modifying modules, controllers, services, DTOs,
   repository contracts and Prisma adapters within src/modules/.
   Do NOT use for one-line fixes, README edits, infrastructure-only changes,

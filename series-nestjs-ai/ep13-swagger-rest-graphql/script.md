@@ -1,16 +1,16 @@
-# NestJS #13 — Swagger: API tự viết hồ sơ
+# NestJS #13 — Swagger, REST và GraphQL: một nghiệp vụ, hai cửa vào
 
 - **Series:** Học NestJS bằng AI — tập 13/29, Season 2
-- **Recording status:** CHƯA READY — script hiện mới có Swagger; phải merge REST vs GraphQL trong `merged-from-bonus-17-5/`.
-- **Target runtime:** khoảng 6 phút (535 từ thoại)
-- **Outcome:** `/docs` và OpenAPI JSON mô tả đúng request, response, lỗi, bearer auth và permission.
-- **Pain tập kế:** Dashboard phải gọi nhiều REST endpoint để ghép một màn hình.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~750 từ thoại + khoảng nghỉ demo)
+- **Outcome:** OpenAPI kiểm chứng REST contract; GraphQL dùng lại cùng service, auth và ownership thay vì copy business logic.
+- **Pain tập kế:** Public API cần rate limit và security headers trước lưu lượng thật.
 
 ---
 
 ## PART 1 — SCRIPT
 
-TaskFlow đã chạy trên production, nhưng người dùng không biết phải gọi nó thế nào.
+User Management đã chạy trên production, nhưng người dùng không biết phải gọi nó thế nào.
 
 Mỗi câu hỏi đều giống nhau. Endpoint ở đâu, body gồm gì, và token đặt chỗ nào.
 
@@ -86,9 +86,45 @@ Và lời hứa đã nhìn thấy thì khó bị sửa lén hơn.
 
 Nhưng một tài liệu đẹp không làm REST bớt nhiều request.
 
-Tập sau, mình sẽ dùng cùng service cho REST và GraphQL, không nhân đôi business logic.
+Dashboard cần user, task và permission. Client gọi ba endpoint rồi tự ghép response.
 
-Nếu bạn muốn theo TaskFlow tới production thật, hãy đồng hành cùng series này.
+Mình thêm GraphQL. AI lập tức copy logic từ controller sang resolver.
+
+Hai API chạy được, nhưng ownership bắt đầu có hai phiên bản.
+
+Bước ngoặt là xem REST và GraphQL như hai cửa vào cùng một use case.
+
+Controller và resolver chỉ dịch input, gọi service rồi định dạng output. Chúng không sở hữu policy.
+
+GraphQL cho client chọn field cần lấy. Nó không tự làm query nhanh hơn.
+
+Mình chọn code-first vì project đã dùng TypeScript decorator.
+
+AI phải phân loại code transport và code nghiệp vụ trước khi sửa.
+
+Sau khi review, REST `GET /tasks/:id` và GraphQL `task(id)` cùng gọi `TasksService.getVisibleTask`.
+
+Service nhận actor cùng task ID, rồi kiểm tra permission và ownership đúng một lần.
+
+Resolver không gọi Prisma trực tiếp. Nó cũng không tự map exception.
+
+GraphQL có execution context riêng. Adapter dùng `GqlExecutionContext` để lấy cùng HTTP request.
+
+Token parser và permission service tiếp tục được dùng lại.
+
+REST DTO và GraphQL object type vẫn khác nhau. Hai transport phục vụ hai contract khác nhau.
+
+Mình chạy cùng một user qua cả hai cửa. Kết quả và policy giống nhau.
+
+Sau đó mình mutation ownership rule trong service. Cả hai bộ test cùng đỏ.
+
+GraphQL vẫn có bẫy N cộng một. Mình đo query count rồi batch theo use case dashboard.
+
+Không có transport thắng tuyệt đối. Boundary tốt mới giữ business rule có một nguồn sự thật.
+
+Tập sau, API public sẽ học cách tự vệ bằng rate limit và security header.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -98,25 +134,27 @@ Mình là Richard. Lập trình là cuộc sống.
 
 | # | Type | Lời thoại / nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [BROWSER] | Mở public API trả JSON rồi cắt sang README đã lỗi thời | 25s |
-| 2 | [DIAGRAM] | Vẽ `Controller + DTO + metadata → OpenAPI JSON → Swagger UI/client` | 30s |
-| 3 | [BROWSER] | Prompt AI lập plan annotate controller; dừng ở bước review | 30s |
-| 4 | [IDE] | Cài `@nestjs/swagger`; cấu hình `DocumentBuilder` và `/docs-json` trong `main.ts` | 40s |
-| 5 | [IDE] | Annotate `CreateTaskDto` và `TasksController` | 40s |
-| 6 | [IDE] | Zoom ba annotation sai của AI rồi đối chiếu code/test | 35s |
-| 7 | [IDE] | Tạo `ApiRequirePermissions()` bằng `applyDecorators` và `ApiExtension` | 40s |
-| 8 | [IDE] | Mở `ApiErrorResponseDto`; annotate 400/401/403/409 | 30s |
-| 9 | [BROWSER] | Authorize trong Swagger; thử POST thành công, validation fail và thiếu quyền | 45s |
-| 10 | [TERM] | Tải `/docs-json`; chạy test kiểm tra operation và `x-permissions` | 30s |
-| 11 | [B-ROLL] | Giữ khung Swagger cạnh màn hình code; chuyển sang dashboard nhiều request | 20s |
+| 1 | [BROWSER] | Public API và README lỗi thời | 25s |
+| 2 | [DIAGRAM] | DTO + metadata → OpenAPI → Swagger UI/client | 30s |
+| 3 | [IDE] | Submit yêu cầu; AI plan annotations, host review | 40s |
+| 4 | [IDE] | DocumentBuilder, DTO, controller và error response | 50s |
+| 5 | [IDE] | Bắt ba annotation sai; tạo `ApiRequirePermissions` | 45s |
+| 6 | [BROWSER]+[TERM] | Swagger authorize, validation/403 và contract test | 50s |
+| 7 | [DIAGRAM] | REST và GraphQL là hai transport gọi cùng service | 35s |
+| 8 | [IDE] | Review resolver mỏng; bỏ business logic bị copy | 45s |
+| 9 | [IDE] | `GqlExecutionContext` dùng lại auth request | 40s |
+| 10 | [BROWSER] | REST và GraphQL trả cùng resource/policy | 45s |
+| 11 | [TERM] | Mutation ownership rule làm hai test cùng đỏ | 40s |
+| 12 | [DIAGRAM]+[IDE] | N+1 query và batch loader/application query | 45s |
+| 13 | [B-ROLL] | Một nghiệp vụ, hai cửa; teaser security | 20s |
 
-**Tổng mục tiêu: 6 phút 05 giây.** Dùng One Dark Pro, JetBrains Mono 18–20px, ẩn minimap và che token trước khi quay.
+**Tổng: 510 giây = 8:30; cộng khoảng nghỉ review thành 9–10 phút.** One Dark Pro, JetBrains Mono 18–20px; che token.
 
 ### Code cốt lõi
 
 ```ts
 const config = new DocumentBuilder()
-  .setTitle('TaskFlow API')
+  .setTitle('nestjs-base-with-ai API')
   .setVersion('2.0')
   .addBearerAuth()
   .build();
@@ -166,13 +204,18 @@ Audit the current NestJS REST API and propose an OpenAPI documentation plan.
 
 ### 4a. Titles
 
-1. Swagger cho NestJS: API tự viết hồ sơ — EP13
-2. Tài liệu API sai còn nguy hiểm hơn không có — EP13
-3. Biến Controller NestJS thành OpenAPI chuẩn — EP13
-4. Document Auth và RBAC trong Swagger — EP13
-5. Đừng để README nói khác code — EP13
+1. REST và GraphQL không nên có hai Business Rule — EP13 | Lập trình là cuộc sống
+2. Swagger đẹp vẫn không cứu được Logic bị Copy — EP13 | Lập trình là cuộc sống
+3. Một Service, hai API: REST và GraphQL — EP13 | Lập trình là cuộc sống
+4. API tự viết hồ sơ rồi học thêm ngôn ngữ mới — EP13 | Lập trình là cuộc sống
+5. Tài liệu API sai còn nguy hiểm hơn không có — EP13 | Lập trình là cuộc sống
+6. GraphQL không tự làm Query nhanh hơn — EP13 | Lập trình là cuộc sống
+7. Đừng Copy Controller sang Resolver — EP13 | Lập trình là cuộc sống
+8. OpenAPI, Auth và RBAC trong NestJS — EP13 | Lập trình là cuộc sống
+9. N cộng một Query xuất hiện thế nào? — EP13 | Lập trình là cuộc sống
+10. Transport mới không được tạo nguồn sự thật mới — EP13 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Title 1. A/B test Title 2 để tăng curiosity.
+**Khuyên dùng:** Title 1; A/B với Title 3 cho search intent.
 
 ### 4b. SEO Description
 
@@ -204,7 +247,7 @@ API đã lên production, nhưng endpoint, payload và permission vẫn nằm r�
 ### 4c. Keywords / Tags
 
 ```text
-nestjs swagger, nestjs openapi, swagger nestjs tiếng việt, document api nestjs, api bearer auth swagger, nestjs api response, api permissions openapi, x-permissions openapi, taskflow nestjs, nestjs production, rest api documentation, dto api property, openapi contract test, học nestjs bằng ai, nestjs tập 13, typescript backend, lập trình là cuộc sống
+nestjs swagger, nestjs openapi, swagger nestjs tiếng việt, document api nestjs, api bearer auth swagger, nestjs api response, api permissions openapi, x-permissions openapi, nestjs-base-with-ai nestjs, nestjs production, rest api documentation, dto api property, openapi contract test, học nestjs bằng ai, nestjs tập 13, typescript backend, lập trình là cuộc sống
 ```
 
 ---

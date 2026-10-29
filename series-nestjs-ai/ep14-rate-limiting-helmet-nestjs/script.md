@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-Swagger vừa công khai toàn bộ cửa ra vào của TaskFlow.
+Swagger vừa công khai toàn bộ cửa ra vào của User Management.
 
 Một bot không cần đọc source. Nó chỉ cần bấm login nhanh hơn người thật.
 
@@ -95,6 +95,8 @@ Tập sau, mỗi request sẽ có một correlation ID đi xuyên toàn bộ log
 
 Nếu bạn muốn học những lỗi chỉ xuất hiện sau khi deploy, hãy đồng hành cùng series này.
 
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
 Mình là Richard. Lập trình là cuộc sống.
 
 ---
@@ -142,7 +144,7 @@ app.use(helmet()); // Gắn trước các route/setup phụ thuộc middleware.
 ### Prompt cho AI
 
 ```text
-Threat-model rate abuse for the current TaskFlow API before changing code.
+Threat-model rate abuse for the current nestjs-base-with-ai API before changing code.
 - Separate login, refresh, public docs, authenticated reads and admin mutations.
 - Propose named @nestjs/throttler policies with reasons, not one global number.
 - Explain tracker choice before and after authentication.

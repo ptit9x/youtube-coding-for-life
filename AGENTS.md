@@ -222,6 +222,17 @@ POSTMAN STANDARDIZATION (bắt buộc cho series hướng dẫn):
   environment variable `endpoint`, và test luôn.
 - Khi tập mới thêm endpoint, cập nhật collection cũ chứ KHÔNG tạo file mới.
   File tên chuẩn: `<tên-project>.postman_collection.json`.
+PROMPT INLINE (bắt buộc cho series hướng dẫn):
+- KHÔNG tạo file `code/prompts.md` riêng. Gộp tất cả prompt vào PART 1 — SCRIPT,
+  xen kẽ đúng vị trí trong flow kịch bản.
+- Mỗi prompt block dùng blockquote (`>`) với heading `### 🎬 PROMPT N — Tên`
+  để phân biệt rõ với lời thoại.
+- Mỗi prompt block gồm: mục đích, điều kiện conversation (mới/cùng), nội dung
+  prompt trong code fence, và kết quả mong đợi.
+- Thứ tự: prompt xuất hiện ngay SAU đoạn thoại mô tả hành động tương ứng.
+  Người quay đọc 1 file từ trên xuống, gặp prompt thì paste, gặp thoại thì đọc.
+- Ghi chú quay video (conversation nào, chuẩn bị gì) nhúng luôn trong prompt
+  block — KHÔNG tách phần riêng.
 
 ### 3. Voice and technique (mandatory)
 
@@ -257,7 +268,8 @@ This channel is **dark-mode cinematic**, never whiteboard / tutorial screencap.
 ### 5. OUTPUT FORMAT (this order, clearly separated)
 
 **PART 1 — SCRIPT** (pure Vietnamese narration, no labels/markdown/annotations.
-Flowing prose only, line break between beats.)
+Flowing prose only, line break between beats. Prompt blocks inline as
+blockquotes with `### 🎬 PROMPT N` headings — xen kẽ đúng vị trí trong flow.)
 
 **PART 2 — SHOT LIST / SCREEN RECORDING GUIDE** (numbered scenes. Each:
 matching narration line + what the user should show on screen.)
@@ -369,6 +381,8 @@ for text.
 - [ ] Beat 3's insight is genuinely counter-intuitive?
 - [ ] Beat 6 closing is concise — 1–2 sentences, not a 3-paragraph sermon?
 - [ ] SCRIPT is clean: no brackets/markdown/labels?
+- [ ] **Prompts inline trong PART 1?** (blockquote `### 🎬 PROMPT N`, không tách
+      file `code/prompts.md` riêng)
 - [ ] Shot list has recording type tags ([IDE]/[TERM]/[BROWSER]/[DIAGRAM]/[B-ROLL])?
 - [ ] Shot list includes pacing estimates that add up to target runtime?
 - [ ] Shot list specifies concrete code/commands/UI to record for each scene?
@@ -415,7 +429,9 @@ Pick and deepen these lanes across multiple videos:
     - Tập gộp có subfolder `merged-from-*` chứa script/assets gốc từ tập cũ
     - Inside the episode directory, always name the main script file exactly `script.md`.
     - Generate an `assets/` sub-directory for all media assets (thumbnails, screenshots, diagrams).
-    - Generate a `code/` sub-directory for all code snippets, examples, and prompt templates.
+    - Generate a `code/` sub-directory for all code snippets and examples.
+      **KHÔNG** tạo `code/prompts.md` — prompt phải inline trong `script.md`
+      (xem PROMPT INLINE ở section 2).
     - **Postman collection:** Mỗi tập series hướng dẫn phải có file
       `<tên-project>.postman_collection.json` trong `code/`. File này tích lũy
       — tập sau kế thừa và mở rộng collection của tập trước, KHÔNG tạo file

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Scene 3 — Ba tầng context</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    margin: 0; background: #000;
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    background: #0a0a1a;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex; align-items: center; justify-content: center;
+    transform-origin: center center;
+    position: relative;
+    background-image:
+      radial-gradient(ellipse at 30% 50%, rgba(0,255,65,0.03) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 50%, rgba(0,212,255,0.03) 0%, transparent 60%);
+  }
+  .container { display: flex; gap: 80px; align-items: flex-start; padding: 0 80px; }
+
+  .layer {
+    width: 420px;
+    border: 2px solid;
+    border-radius: 16px;
+    padding: 36px 32px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  .layer.hot {
+    border-color: #00FF41;
+    box-shadow: 0 0 30px rgba(0,255,65,0.15), inset 0 0 30px rgba(0,255,65,0.03);
+    animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .layer.skill {
+    border-color: #00D4FF;
+    box-shadow: 0 0 30px rgba(0,212,255,0.15), inset 0 0 30px rgba(0,212,255,0.03);
+    animation: fadeUp 0.8s 3.5s forwards;
+  }
+  .layer.mcp {
+    border-color: #BD93F9;
+    box-shadow: 0 0 30px rgba(189,147,249,0.15), inset 0 0 30px rgba(189,147,249,0.03);
+    animation: fadeUp 0.8s 6.5s forwards;
+  }
+  .layer-tag {
+    position: absolute; top: -14px; left: 24px;
+    background: #0a0a1a; padding: 0 12px;
+    font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+  }
+  .hot .layer-tag { color: #00FF41; }
+  .skill .layer-tag { color: #00D4FF; }
+  .mcp .layer-tag { color: #BD93F9; }
+  .layer-title { font-size: 32px; font-weight: 700; margin-bottom: 16px; }
+  .hot .layer-title { color: #00FF41; }
+  .skill .layer-title { color: #00D4FF; }
+  .mcp .layer-title { color: #BD93F9; }
+  .layer-desc { color: #8888aa; font-size: 16px; line-height: 1.6; margin-bottom: 20px; }
+  .layer-files { list-style: none; font-size: 14px; color: #ccccdd; }
+  .layer-files li { padding: 6px 0; border-top: 1px solid rgba(255,255,255,0.05); }
+  .layer-files li code { padding: 2px 8px; border-radius: 4px; font-size: 13px; }
+  .hot .layer-files li code { background: rgba(0,255,65,0.1); color: #00FF41; }
+  .skill .layer-files li code { background: rgba(0,212,255,0.1); color: #00D4FF; }
+  .mcp .layer-files li code { background: rgba(189,147,249,0.1); color: #BD93F9; }
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-top: 12px;
+  }
+  .hot .badge { background: rgba(0,255,65,0.15); color: #00FF41; border: 1px solid rgba(0,255,65,0.3); }
+  .skill .badge { background: rgba(0,212,255,0.15); color: #00D4FF; border: 1px solid rgba(0,212,255,0.3); }
+  .mcp .badge { background: rgba(189,147,249,0.15); color: #BD93F9; border: 1px solid rgba(189,147,249,0.3); }
+  .arrow {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; color: #333355; margin-top: 80px; opacity: 0;
+  }
+  .arrow:nth-of-type(1) { animation: fadeIn 0.5s 9.5s forwards; }
+  .arrow:nth-of-type(2) { animation: fadeIn 0.5s 10.5s forwards; }
+  .sub-block {
+    margin-top: 16px; border: 1px dashed rgba(0,255,65,0.3);
+    border-radius: 8px; padding: 12px 16px;
+  }
+  .sub-label { font-size: 11px; color: #556655; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px; }
+  @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+  <div class="container">
+    <div class="layer hot">
+      <span class="layer-tag">Tầng 1</span>
+      <div class="layer-title">AGENTS.md</div>
+      <div class="layer-desc">Hot Memory — luôn bật mỗi conversation</div>
+      <ul class="layer-files">
+        <li><code>AGENTS.md</code> — rules, commands, boundaries</li>
+      </ul>
+      <div class="sub-block">
+        <div class="sub-label">Cold Memory — đọc khi cần</div>
+        <ul class="layer-files">
+          <li><code>docs/architecture.md</code></li>
+          <li><code>docs/database-schema.md</code></li>
+        </ul>
+      </div>
+      <div class="badge">Always Loaded</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer skill">
+      <span class="layer-tag">Tầng 2</span>
+      <div class="layer-title">Skill</div>
+      <div class="layer-desc">Workflow nạp theo nhu cầu</div>
+      <ul class="layer-files">
+        <li><code>SKILL.md</code> — nest-feature scaffold</li>
+        <li><code>references/</code> — deep context</li>
+      </ul>
+      <div class="badge">On-demand</div>
+    </div>
+    <div class="arrow">→</div>
+    <div class="layer mcp">
+      <span class="layer-tag">Tầng 3</span>
+      <div class="layer-title">MCP</div>
+      <div class="layer-desc">Kết nối tool bên ngoài</div>
+      <ul class="layer-files">
+        <li><code>mcp_config.json</code> — database, API</li>
+        <li><code>enabledTools</code> — giới hạn quyền</li>
+      </ul>
+      <div class="badge">External Tools</div>
+    </div>
+  </div>
+</div>
+<script>
+function scale() {
+  const c = document.querySelector('.canvas');
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  c.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', scale);
+scale();
+</script>
+</body>
+</html>

@@ -79,7 +79,7 @@ E2E dùng database riêng, không dùng database development.
 
 Mỗi test tự tạo dữ liệu cần thiết. Test không phụ thuộc thứ tự chạy.
 
-`DATABASE_URL` của test phải trỏ tới database `taskflow_test` độc lập.
+`DATABASE_URL` của test phải trỏ tới database `nestjs_base_with_ai_test` độc lập.
 
 Trước suite, chạy migration. Trước mỗi test, dọn các bảng theo thứ tự quan hệ.
 
@@ -105,7 +105,9 @@ AI đề nghị gom chúng vào `BaseCrudService` để giảm code.
 
 Nghe rất DRY, nhưng đó có thể là một chiếc bẫy.
 
-Tập sau, ta refactor bằng bằng chứng thay vì cảm giác. Mình là Richard. Lập trình là cuộc sống.
+Tập sau, ta refactor bằng bằng chứng thay vì cảm giác. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
+Mình là Richard. Lập trình là cuộc sống.
 
 ---
 

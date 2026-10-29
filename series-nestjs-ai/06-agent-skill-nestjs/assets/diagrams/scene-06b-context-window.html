@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Scene 6b — Context Window vs Large Repo</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    margin: 0; background: #000;
+    width: 100vw; height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .canvas {
+    width: 1920px; height: 1080px;
+    background: #0a0a1a;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    display: flex; align-items: center; justify-content: center;
+    transform-origin: center center;
+    position: relative;
+    background-image: radial-gradient(ellipse at 50% 50%, rgba(0,255,65,0.02) 0%, transparent 70%);
+  }
+  .wrapper { display: flex; align-items: center; gap: 60px; padding: 0 80px; }
+  .repo-block, .window-block, .result-block { opacity: 0; transform: scale(0.9); }
+  .repo-block { animation: popIn 0.6s 0.5s forwards; }
+  .window-block { animation: popIn 0.6s 6s forwards; }
+  .result-block { animation: popIn 0.6s 13s forwards; }
+  .block-label { text-align: center; font-size: 14px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 16px; }
+  .repo {
+    width: 340px; height: 500px; border: 2px solid #ff4444; border-radius: 12px;
+    padding: 20px; overflow: hidden; position: relative;
+    box-shadow: 0 0 40px rgba(255,68,68,0.1);
+  }
+  .repo-label { color: #ff6666; }
+  .repo-file { font-size: 11px; color: #554444; padding: 3px 0; border-bottom: 1px solid rgba(255,255,255,0.02); white-space: nowrap; overflow: hidden; }
+  .repo-file:nth-child(-n+5) { color: #887777; }
+  .repo-count {
+    position: absolute; bottom: 20px; left: 0; right: 0; text-align: center;
+    font-size: 48px; font-weight: 700; color: #ff4444;
+    text-shadow: 0 0 30px rgba(255,68,68,0.3);
+  }
+  .repo-count span { font-size: 16px; color: #886666; display: block; margin-top: 4px; }
+  .arrow-wrong {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: popIn 0.6s 4s forwards;
+  }
+  .arrow-wrong .line { font-size: 60px; color: #ff4444; }
+  .arrow-wrong .label {
+    font-size: 12px; color: #ff6666; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(255,68,68,0.1); padding: 4px 12px; border-radius: 4px;
+  }
+  .window {
+    width: 280px; height: 320px; border: 2px solid #00D4FF; border-radius: 12px;
+    padding: 20px; position: relative; box-shadow: 0 0 40px rgba(0,212,255,0.1);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .window-label { color: #00D4FF; }
+  .window-size { font-size: 36px; font-weight: 700; color: #00D4FF; text-shadow: 0 0 20px rgba(0,212,255,0.3); }
+  .window-size span { font-size: 14px; color: #558899; display: block; text-align: center; margin-top: 4px; }
+  .window-note { font-size: 12px; color: #556677; text-align: center; margin-top: 16px; line-height: 1.5; }
+  .arrow-right {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    opacity: 0; animation: popIn 0.6s 10s forwards;
+  }
+  .arrow-right .line { font-size: 60px; color: #00FF41; }
+  .arrow-right .label {
+    font-size: 12px; color: #00FF41; letter-spacing: 1px; text-transform: uppercase;
+    background: rgba(0,255,65,0.1); padding: 4px 12px; border-radius: 4px;
+  }
+  .result {
+    width: 340px; border: 2px solid #00FF41; border-radius: 12px;
+    padding: 28px; box-shadow: 0 0 40px rgba(0,255,65,0.1);
+  }
+  .result-label { color: #00FF41; }
+  .result-title { font-size: 20px; color: #00FF41; font-weight: 700; margin-bottom: 20px; text-align: center; }
+  .route { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid rgba(0,255,65,0.1); font-size: 13px; }
+  .route-condition { color: #558855; flex: 1; }
+  .route-arrow { color: #00FF41; font-size: 18px; }
+  .route-file { color: #00FF41; font-weight: 600; }
+  @keyframes popIn { to { opacity: 1; transform: scale(1); } }
+
+  .watermark {
+    position: absolute;
+    top: 24px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 14px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.12);
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    z-index: 100;
+    pointer-events: none;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="watermark">Lập trình là cuộc sống</div>
+  <div class="wrapper">
+    <div class="repo-block">
+      <div class="block-label repo-label">Large Codebase</div>
+      <div class="repo">
+        <div class="repo-file">src/auth/auth.module.ts</div>
+        <div class="repo-file">src/auth/auth.service.ts</div>
+        <div class="repo-file">src/auth/auth.controller.ts</div>
+        <div class="repo-file">src/auth/strategies/jwt.strategy.ts</div>
+        <div class="repo-file">src/auth/guards/jwt-auth.guard.ts</div>
+        <div class="repo-file">src/users/users.module.ts</div>
+        <div class="repo-file">src/users/users.service.ts</div>
+        <div class="repo-file">src/users/users.controller.ts</div>
+        <div class="repo-file">src/users/repositories/...</div>
+        <div class="repo-file">src/common/filters/...</div>
+        <div class="repo-file">src/common/pipes/...</div>
+        <div class="repo-file">src/common/interceptors/...</div>
+        <div class="repo-file">src/config/...</div>
+        <div class="repo-file">src/database/...</div>
+        <div class="repo-file">src/roles/...</div>
+        <div class="repo-file">src/permissions/...</div>
+        <div class="repo-file">test/...</div>
+        <div class="repo-file">prisma/...</div>
+        <div class="repo-file">...</div>
+        <div class="repo-file">...</div>
+        <div class="repo-count">500+<span>files</span></div>
+      </div>
+    </div>
+    <div class="arrow-wrong">
+      <div class="line">✕</div>
+      <div class="label">Đổ hết vào prompt</div>
+    </div>
+    <div class="window-block">
+      <div class="block-label window-label">Context Window</div>
+      <div class="window">
+        <div class="window-size">128K<span>tokens</span></div>
+        <div class="window-note">Không chứa nổi toàn bộ.<br>Phần giữa bị mờ<br>(Lost in the Middle)</div>
+      </div>
+    </div>
+    <div class="arrow-right">
+      <div class="line">→</div>
+      <div class="label">AGENTS.md chỉ đường</div>
+    </div>
+    <div class="result-block">
+      <div class="block-label result-label">Conditional Reading</div>
+      <div class="result">
+        <div class="result-title">AGENTS.md</div>
+        <div class="route"><span class="route-condition">Đổi module?</span><span class="route-arrow">→</span><span class="route-file">architecture.md</span></div>
+        <div class="route"><span class="route-condition">Đổi model?</span><span class="route-arrow">→</span><span class="route-file">database-schema.md</span></div>
+        <div class="route"><span class="route-condition">Tạo feature?</span><span class="route-arrow">→</span><span class="route-file">SKILL.md</span></div>
+        <div class="route"><span class="route-condition">Query DB?</span><span class="route-arrow">→</span><span class="route-file">MCP tool</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function scale() {
+  const c = document.querySelector('.canvas');
+  const s = Math.min(window.innerWidth / 1920, window.innerHeight / 1080);
+  c.style.transform = 'scale(' + s + ')';
+}
+window.addEventListener('resize', scale);
+scale();
+</script>
+</body>
+</html>

@@ -1,10 +1,10 @@
-# NestJS #08 — Role và Permission khác nhau thế nào?
+# NestJS #08 — Role, Permission và quan hệ many-to-many
 
 - **Series:** Học NestJS bằng AI — tập 8/29
-- **Recording status:** CHƯA READY — script hiện mới có Role/Permission; phải merge phần relations trong `merged-from-09/`.
-- **Target runtime:** 8–10 phút (650–800 từ thoại)
-- **Outcome:** Hoàn thiện model, repository, service nội bộ và seed cho Role/Permission; chưa expose API quản trị trước khi có PermissionGuard.
-- **Pain mở EP09:** User, Role và Permission vẫn là các bảng rời, chưa có quan hệ N–N.
+- **Recording status:** READY
+- **Target runtime:** 9–10 phút (~875 từ thoại + khoảng nghỉ review)
+- **Outcome:** Hoàn thiện Role, Permission, UserRole và RolePermission cùng audit metadata; chưa expose API quản trị trước PermissionGuard.
+- **Pain mở EP09:** Database đã biểu diễn quyền, nhưng route chưa thực thi chính sách đó.
 
 ---
 
@@ -22,7 +22,9 @@ Role giống chức danh trong công ty. Permission là hành động cụ thể
 
 `admin` và `member` là role. `users.read` hoặc `roles.assign` là permission.
 
-Controller sau này nên yêu cầu hành động, không hỏi tên chức danh. Tổ chức đổi role vẫn không phải sửa route. Nhưng controller quản trị chưa xuất hiện trong tập này: nếu expose CRUD trước PermissionGuard, bất kỳ user đã đăng nhập nào cũng có thể sửa chính sách quyền.
+Controller sau này nên yêu cầu hành động, không hỏi chức danh. Tổ chức đổi role vẫn không phải sửa route.
+
+Controller quản trị chưa xuất hiện. Nếu expose CRUD trước PermissionGuard, user đăng nhập nào cũng có thể sửa chính sách quyền.
 
 Mình dùng Agent Skill từ tập trước để scaffold `roles` và `permissions` trong `modules/access-control`.
 
@@ -50,7 +52,9 @@ Repository contract cũng không sao chép mọi option Prisma. Roles cần `fin
 
 Adapter có thể giống nhau ở mechanics, nhưng contract vẫn nói bằng ngôn ngữ của từng domain.
 
-Mình approve. Agent tạo service rõ rule và adapter Prisma 8 ở database layer. Các use case được gọi từ seed và test nội bộ; HTTP boundary sẽ chỉ được thêm sau khi PermissionGuard tồn tại.
+Mình approve. Agent tạo service rõ rule và adapter Prisma 8 ở database layer.
+
+Seed và test nội bộ gọi các use case. HTTP boundary chỉ xuất hiện sau khi PermissionGuard tồn tại.
 
 Đến phần tự gõ, mình thêm `normalizeRoleName`. Nó trim, lowercase và thay khoảng trắng liên tiếp bằng dấu gạch ngang.
 
@@ -68,13 +72,39 @@ Seed tạo permission `tasks.create` thành công. Test đổi code của permis
 
 Test xóa permission hệ thống nhận conflict. Permission thường có thể bị xóa khi chưa có quan hệ sử dụng.
 
-Hai service có các thao tác gần giống CRUD, nhưng đường logic không giống nhau. Đó chính là lý do chúng cần service riêng. Việc chưa có endpoint quản trị ở đây là một quyết định bảo mật, không phải phần còn thiếu bị quên.
+Hai service có thao tác gần giống CRUD, nhưng logic không giống nhau. Đó là lý do chúng cần service riêng.
 
-Hiện tại User, Role và Permission vẫn đứng cạnh nhau như ba danh bạ chưa có số liên lạc.
+Giờ tới quan hệ. `UserRole` nối user với role. `RolePermission` nối role với permission.
 
-Tập sau, ta nối chúng bằng explicit join table và giữ cả dữ liệu audit trên chính quan hệ.
+Mình không dùng implicit many-to-many. Quan hệ này cần `assignedAt` và `assignedById` để audit.
 
-Đừng abstract chỉ để AI gõ ít hơn. AI không ngại gõ; người maintain mới phải trả giá để hiểu. Mình là Richard. Lập trình là cuộc sống.
+Mỗi join model dùng composite primary key. Cùng một cặp ID không thể được gán hai lần.
+
+AI đề xuất nested write theo tutorial Prisma cũ. Mình dừng lại và đối chiếu tài liệu Prisma 8.
+
+Assignment service nằm trong AccessControl, không nằm trong UsersService. User không nên sở hữu policy phân quyền.
+
+Service kiểm tra hai đầu quan hệ tồn tại. Duplicate assignment được map thành conflict, không rơi xuống lỗi năm-trăm.
+
+Use case `setPermissions` chạy trong transaction. Mọi query bên trong callback đi qua `tx.orm`.
+
+Mình dùng `Set` để tính effective permission. Một permission đi qua hai role vẫn chỉ xuất hiện một lần.
+
+Contract emit và migration đều xanh. DDL có đủ composite key cùng foreign key đã review.
+
+Test gán hai role cho một user. Query relation trả đúng audit metadata và danh sách permission đã loại trùng.
+
+Test cố tình lỗi giữa `setPermissions`. Toàn bộ thay đổi rollback.
+
+Database bây giờ kể được chính sách truy cập. Nhưng controller vẫn chưa đọc câu chuyện đó.
+
+Tập này không mở route assign hoặc revoke. Route quản trị chỉ xuất hiện sau khi PermissionGuard bảo vệ được nó.
+
+Tập sau, `@RequirePermissions` biến dữ liệu này thành quyết định bốn-không-ba.
+
+Đừng abstract chỉ để AI gõ ít hơn. Quan hệ có metadata cũng không còn là đường nối vô danh. Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
+
+Mình là Richard. Lập trình là cuộc sống.
 
 ---
 
@@ -82,22 +112,20 @@ Tập sau, ta nối chúng bằng explicit join table và giữ cả dữ liệu
 
 | # | Type | Nội dung quay | Thời lượng |
 |---|---|---|---:|
-| 1 | [DIAGRAM] | Hai user login nhưng hệ thống chưa có policy quyền | 30s |
-| 2 | [DIAGRAM] | Role là chức danh; Permission là hành động | 45s |
-| 3 | [IDE] | Dùng Agent Skill scaffold access-control, không tạo controller | 55s |
-| 4 | [IDE] | Model Role và Permission cạnh nhau | 55s |
-| 5 | [DIAGRAM] | Permission naming: resource.action | 40s |
-| 6 | [IDE] | Prompt AI lập bảng business rule | 55s |
-| 7 | [IDE] | AI đề xuất BaseCrudService và hooks | 55s |
-| 8 | [IDE] | Review hai service explicit | 70s |
-| 9 | [IDE] | Review repository contracts theo domain | 55s |
-| 10 | [IDE] | Host tự gõ normalize role và system delete rule | 65s |
-| 11 | [TERM] | Contract emit, migration plan, mở DDL, kiểm tra unique indexes | 55s |
-| 12 | [TERM]+[IDE] | Integration test Role create/duplicate/update/delete | 60s |
-| 13 | [TERM]+[IDE] | Seed Permission, test immutable code và system delete | 65s |
-| 14 | [B-ROLL]+[DIAGRAM] | Ba bảng rời, teaser join tables | 25s |
+| 1 | [DIAGRAM] | Hai user login nhưng chưa có policy; Role khác Permission | 35s |
+| 2 | [IDE] | Submit yêu cầu; AI plan Roles/Permissions bằng Skill, tua nhanh khi xử lý | 45s |
+| 3 | [IDE] | Review và loại BaseCrudService; approve service explicit | 50s |
+| 4 | [IDE] | Model Role/Permission, naming resource.action và system rule | 50s |
+| 5 | [IDE] | Host tự gõ normalize role và immutable permission code | 40s |
+| 6 | [DIAGRAM] | UserRole và RolePermission là entity có audit metadata | 40s |
+| 7 | [IDE] | Review explicit junction, composite key và assignment service | 50s |
+| 8 | [IDE] | Review transaction `setPermissions` và `tx.orm` | 45s |
+| 9 | [TERM] | Contract emit, migration plan và DDL composite keys | 50s |
+| 10 | [TERM] | Seed admin/member; test duplicate assignment và rollback | 50s |
+| 11 | [IDE] | Tính effective permission bằng Set, loại quyền trùng | 40s |
+| 12 | [DIAGRAM] | Database có policy nhưng route chưa thực thi; teaser PermissionGuard | 25s |
 
-**Tổng: 730 giây ≈ 12:10.** Hiện hai service side-by-side; dùng IDE tối và font 18px.
+**Tổng: 520 giây ≈ 8:40; cộng khoảng nghỉ review thành 9–10 phút.** One Dark Pro, JetBrains Mono tối thiểu 18px; ẩn minimap.
 
 ### Schema cốt lõi
 
@@ -165,13 +193,18 @@ Before implementation, compare their business rules in a table.
 
 ### 4a. Titles
 
-1. Role và Permission trong NestJS khác nhau thế nào? — EP08
-2. Xây RolesModule và PermissionsModule trong NestJS — EP08
-3. Thiết kế Role và Permission với Prisma 8 — EP08
-4. Vì sao không nên dùng BaseCrudService quá sớm? — EP08
-5. Thiết kế mã quyền users.read và tasks.create — EP08
+1. Role và Permission chưa đủ nếu thiếu quan hệ — EP08 | Lập trình là cuộc sống
+2. Join Table không chỉ để nối hai ID — EP08 | Lập trình là cuộc sống
+3. Thiết kế RBAC bằng Prisma 8 — EP08 | Lập trình là cuộc sống
+4. Vì sao BaseCrudService phá business rule? — EP08 | Lập trình là cuộc sống
+5. Một Composite Key chặn quyền bị gán hai lần — EP08 | Lập trình là cuộc sống
+6. UserRole và RolePermission nên là Entity thật — EP08 | Lập trình là cuộc sống
+7. Permission `users.read` hoạt động thế nào? — EP08 | Lập trình là cuộc sống
+8. AI chọn sai Many-to-Many, tôi dừng migration — EP08 | Lập trình là cuộc sống
+9. RBAC không bắt đầu từ decorator — EP08 | Lập trình là cuộc sống
+10. Database kể được ai có quyền gì — EP08 | Lập trình là cuộc sống
 
-**Khuyên dùng:** Đăng Title 1. A/B test thêm Title 2 cho search và Title 4 cho bài học kiến trúc.
+**Khuyên dùng:** Title 1; A/B với Title 2 cho hook join table.
 
 ### 4b. SEO Description
 

@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-User báo lỗi task, nhưng TaskFlow không cho họ đính kèm ảnh.
+User báo lỗi task, nhưng User Management không cho họ đính kèm ảnh.
 
 Mình thêm upload. Năm phút sau, một file tên `error.jpg` đi thẳng vào storage.
 
@@ -91,11 +91,13 @@ Upload không chỉ là nhận một buffer. Nó là một chuỗi trust boundar
 
 Mỗi lần hệ thống nhận dữ liệu, mình phải quyết định phần nào đáng tin.
 
-TaskFlow đã nhận được file. Bây giờ năm nghìn task lại kéo response xuống đáy.
+User Management đã nhận được file. Bây giờ năm nghìn task lại kéo response xuống đáy.
 
 Tập sau, mình sẽ phân trang bằng cursor ổn định, không chỉ cắt mảng cho đẹp.
 
 Nếu bạn muốn xây những boundary production ít ai nhắc, hãy đồng hành cùng series này.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -187,7 +189,7 @@ Plan secure task attachments for the current NestJS API.
 ### 4b. SEO Description
 
 ```text
-Extension và MIME type đều là lời khai của client. Tập 16 xây attachment cho TaskFlow mà không tin chiếc đuôi .jpg.
+Extension và MIME type đều là lời khai của client. Tập 16 xây attachment cho nestjs-base-with-ai mà không tin chiếc đuôi .jpg.
 
 ✅ Nhận multipart bằng FileInterceptor
 ✅ Chặn file quá dung lượng
@@ -215,7 +217,7 @@ Extension và MIME type đều là lời khai của client. Tập 16 xây attach
 ### 4c. Keywords / Tags
 
 ```text
-nestjs file upload, multer nestjs, secure file upload nodejs, magic bytes file validation, fake jpg upload, nestjs object storage, s3 signed url nestjs, attachment api nestjs, parse file pipe nestjs, file size validator nestjs, path traversal upload, upload ownership authorization, taskflow nestjs, học nestjs bằng ai, nestjs tập 16, typescript backend, lập trình là cuộc sống
+nestjs file upload, multer nestjs, secure file upload nodejs, magic bytes file validation, fake jpg upload, nestjs object storage, s3 signed url nestjs, attachment api nestjs, parse file pipe nestjs, file size validator nestjs, path traversal upload, upload ownership authorization, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 16, typescript backend, lập trình là cuộc sống
 ```
 
 ---

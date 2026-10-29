@@ -17,7 +17,7 @@ Bước ngoặt là coi join table như entity thật. Nó không chỉ nối ha
 
 Mô hình chuẩn có `UserRole` và `RolePermission`. Permission của user được suy ra qua những role đang sở hữu.
 
-TaskFlow bắt đầu với RBAC chuẩn: permission của user được suy ra qua Role. `UserPermission` trực tiếp chưa được thêm chỉ để sơ đồ trông cân đối. Nếu sau này nghiệp vụ thật cần ngoại lệ, model đó phải có `ALLOW` hoặc `DENY` và precedence được chốt trước khi migrate.
+User Management bắt đầu với RBAC chuẩn: permission của user được suy ra qua Role. `UserPermission` trực tiếp chưa được thêm chỉ để sơ đồ trông cân đối. Nếu sau này nghiệp vụ thật cần ngoại lệ, model đó phải có `ALLOW` hoặc `DENY` và precedence được chốt trước khi migrate.
 
 Mỗi join model dùng composite primary key. Cùng một cặp ID không thể được gán hai lần.
 

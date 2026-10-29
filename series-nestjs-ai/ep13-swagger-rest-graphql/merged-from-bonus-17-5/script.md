@@ -137,7 +137,7 @@ const request = context.getType<string>() === 'graphql'
 ### Prompt cho AI
 
 ```text
-Plan a code-first GraphQL transport for the existing TaskFlow services.
+Plan a code-first GraphQL transport for the existing nestjs-base-with-ai services.
 - Treat resolvers as transport boundaries; do not copy business rules or query Prisma directly.
 - Reuse the same TasksService use case used by REST.
 - Adapt authentication and permission guards through GqlExecutionContext.
@@ -199,7 +199,7 @@ Thêm GraphQL không có nghĩa là thêm một bộ business logic. Bonus 17.5 
 ### 4c. Keywords / Tags
 
 ```text
-nestjs graphql, rest vs graphql nestjs, graphql resolver service nestjs, gql execution context, graphql auth guard nestjs, graphql permission guard, nestjs code first graphql, avoid n+1 graphql, reuse business logic api, transport boundary nestjs, taskflow nestjs, học nestjs bằng ai, graphql tiếng việt, typescript backend, lập trình là cuộc sống
+nestjs graphql, rest vs graphql nestjs, graphql resolver service nestjs, gql execution context, graphql auth guard nestjs, graphql permission guard, nestjs code first graphql, avoid n+1 graphql, reuse business logic api, transport boundary nestjs, nestjs-base-with-ai nestjs, học nestjs bằng ai, graphql tiếng việt, typescript backend, lập trình là cuộc sống
 ```
 
 ---

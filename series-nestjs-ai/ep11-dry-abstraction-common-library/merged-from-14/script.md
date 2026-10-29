@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-TaskFlow đã có validation pipe, exception filter và pagination helper ổn định.
+User Management đã có validation pipe, exception filter và pagination helper ổn định.
 
 Một dự án NestJS mới cũng cần những thứ đó.
 
@@ -27,7 +27,7 @@ Mình yêu cầu AI lập bảng dependency cho từng file.
 
 Validation pipe phụ thuộc Nest và class-validator. Exception filter phụ thuộc Nest, còn pagination helper chỉ cần TypeScript.
 
-Permission decorator gắn AccessControl policy. CurrentUser decorator lại dựa vào Auth contract của TaskFlow.
+Permission decorator gắn AccessControl policy. CurrentUser decorator lại dựa vào Auth contract của User Management.
 
 Ba file đầu có khả năng portable. Hai file cuối vẫn gắn business domain.
 
@@ -53,21 +53,21 @@ NestJS nên là peer dependency để consumer dùng cùng một runtime.
 
 Library không được import module User, Task hoặc AccessControl.
 
-TaskFlow và một Nest app sạch cùng phụ thuộc `@coding-for-life/nest-common`.
+User Management và một Nest app sạch cùng phụ thuộc `@coding-for-life/nest-common`.
 
 Mũi tên chỉ đi từ ứng dụng tới library.
 
-Nếu library phải import TaskFlow, ranh giới đã bị đảo ngược.
+Nếu library phải import User Management, ranh giới đã bị đảo ngược.
 
 Mình chuyển pagination helper trước vì nó ít dependency nhất.
 
 Sau đó, mình export validation pipe và exception filter.
 
-TaskFlow đổi import sang package mới rồi chạy toàn bộ test.
+User Management đổi import sang package mới rồi chạy toàn bộ test.
 
 Tiếp theo, mình tạo một Nest app sạch làm consumer thứ hai.
 
-App này đăng ký pipe và filter mà không biết TaskFlow tồn tại.
+App này đăng ký pipe và filter mà không biết User Management tồn tại.
 
 Hai consumer build được mới chứng minh library thật sự portable.
 
@@ -87,7 +87,7 @@ Private package cũng cần cách thông báo thay đổi cho các team.
 
 Không chỉnh package âm thầm rồi hy vọng mọi repo vẫn build.
 
-TaskFlow và app sạch cùng dùng một validation pipe.
+User Management và app sạch cùng dùng một validation pipe.
 
 Fix một lỗi trong library, nâng version và cập nhật hai consumer.
 
@@ -97,7 +97,7 @@ CurrentUser vẫn nằm trong AuthModule vì nó dựa vào contract của ứng
 
 Chúng ta tái sử dụng cross-cutting mechanics, không phát tán business policy.
 
-Nhưng TaskFlow giờ đã có middleware, guard, pipe, interceptor và filter.
+Nhưng User Management giờ đã có middleware, guard, pipe, interceptor và filter.
 
 Một request trả lỗi trước controller. Breakpoint trong handler không bao giờ dừng.
 
@@ -117,7 +117,7 @@ Mình là Richard. Lập trình là cuộc sống.
 | 4 | [IDE] | Tạo package và public `index.ts` | 85s |
 | 5 | [DIAGRAM] | Hai consumer phụ thuộc một chiều vào library | 55s |
 | 6 | [IDE] | Chuyển helper, pipe và filter | 90s |
-| 7 | [TERMINAL] | Build TaskFlow và Nest app sạch | 85s |
+| 7 | [TERMINAL] | Build nestjs-base-with-ai và Nest app sạch | 85s |
 | 8 | [DIAGRAM] | Patch, minor, major và migration note | 65s |
 | 9 | [IDE] | Giữ PermissionGuard ngoài package | 55s |
 | 10 | [B-ROLL] | Một request chạy qua middleware, guard, pipe, interceptor và filter | 30s |

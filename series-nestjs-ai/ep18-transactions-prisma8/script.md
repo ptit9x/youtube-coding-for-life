@@ -91,11 +91,13 @@ Transaction không làm code hết lỗi. Nó làm lỗi không để lại nử
 
 Trong production, dữ liệu nửa đúng thường khó sửa hơn request thất bại rõ ràng.
 
-TaskFlow đã nhất quán, nhưng dashboard đang query cùng một graph liên tục.
+User Management đã nhất quán, nhưng dashboard đang query cùng một graph liên tục.
 
 Tập sau, Redis sẽ làm nó nhanh hơn, rồi cố tình cho ta thấy cache cũ nguy hiểm thế nào.
 
 Nếu bạn muốn biến nhiều write thành một lời hứa, hãy đồng hành cùng series này.
+
+Link Git của nhánh này nằm trong description. Bạn có thể comment phần còn khó hiểu.
 
 Mình là Richard. Lập trình là cuộc sống.
 
@@ -218,7 +220,7 @@ Mỗi câu lệnh có thể đúng nhưng cả business operation vẫn sai. T�
 ### 4c. Keywords / Tags
 
 ```text
-prisma 8 transaction, db transaction tx orm, nestjs database transaction, prisma 8 rollback, transaction boundary service, partial write database, race condition postgres, composite key conflict, createAll prisma 8, prisma 7 vs prisma 8 transaction, task label transaction, failure injection test, taskflow nestjs, học nestjs bằng ai, nestjs tập 18, lập trình là cuộc sống
+prisma 8 transaction, db transaction tx orm, nestjs database transaction, prisma 8 rollback, transaction boundary service, partial write database, race condition postgres, composite key conflict, createAll prisma 8, prisma 7 vs prisma 8 transaction, task label transaction, failure injection test, nestjs-base-with-ai nestjs, học nestjs bằng ai, nestjs tập 18, lập trình là cuộc sống
 ```
 
 ---

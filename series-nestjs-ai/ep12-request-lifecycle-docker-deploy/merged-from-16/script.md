@@ -9,7 +9,7 @@
 
 ## PART 1 — SCRIPT
 
-TaskFlow đã có auth, RBAC, ownership, test và config.
+User Management đã có auth, RBAC, ownership, test và config.
 
 Mình gửi repo cho một người khác. Họ thiếu đúng phiên bản Node và PostgreSQL.
 
@@ -83,7 +83,7 @@ Login trả token. User tạo task và chỉ đọc task của mình.
 
 Chúng ta bắt đầu Season 1 bằng một mảng dữ liệu trong RAM.
 
-Bây giờ, TaskFlow có PostgreSQL, auth, refresh rotation, RBAC và ownership.
+Bây giờ, User Management có PostgreSQL, auth, refresh rotation, RBAC và ownership.
 
 AI đã scaffold, review và gợi ý. Con người vẫn quyết định boundary cùng business rule.
 
@@ -204,7 +204,7 @@ Plan a production Docker deployment for the current NestJS and Prisma 8 project.
 ### 4b. SEO Description
 
 ```text
-Mười lăm tập code vẫn chỉ chạy trên máy mình. Tập kết Season 1 đóng gói TaskFlow bằng Docker và đưa API lên public URL.
+Mười lăm tập code vẫn chỉ chạy trên máy mình. Tập kết Season 1 đóng gói nestjs-base-with-ai bằng Docker và đưa API lên public URL.
 
 ✅ Phân biệt Dockerfile, image và container
 ✅ Viết Dockerfile multi-stage

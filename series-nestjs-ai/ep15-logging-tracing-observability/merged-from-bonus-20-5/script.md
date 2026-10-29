@@ -44,7 +44,7 @@ Mình có thể gửi OTLP tới nhiều backend hoặc collector do mình vận
 
 Sự linh hoạt đó đi kèm nhiều quyết định hơn về instrumentation, collector, storage và dashboard.
 
-Mình đưa AI requirement của TaskFlow, không đưa tên công cụ yêu thích.
+Mình đưa AI requirement của User Management, không đưa tên công cụ yêu thích.
 
 Requirement gồm một service NestJS, team nhỏ và lỗi production cần điều tra nhanh.
 
@@ -82,7 +82,7 @@ Mình cũng kiểm tra pricing và data retention tại ngày ra quyết định
 
 Những con số đó thay đổi. Không đóng băng chúng trong kiến trúc bằng trí nhớ cũ.
 
-Cuối cùng, mình chọn một stack cho TaskFlow và ghi lại lý do trong ADR.
+Cuối cùng, mình chọn một stack cho User Management và ghi lại lý do trong ADR.
 
 ADR là bản ghi quyết định kiến trúc, gồm bối cảnh, lựa chọn và tradeoff đã chấp nhận.
 
@@ -130,7 +130,7 @@ Build an evidence-backed decision matrix for NestJS Observe, Sentry and OpenTele
 - Compare setup time, NestJS-level visibility, error workflow, portability, operations and current cost model.
 - Run the same three scenarios: service exception, slow external call and failed BullMQ job.
 - Treat OpenTelemetry as a telemetry standard and SDK ecosystem, not a dashboard product.
-- Do not install all three agents in TaskFlow.
+- Do not install all three agents in nestjs-base-with-ai.
 - Do not freeze pricing or retention numbers; link the current pages and date the decision.
 - Recommend one starting point for this project's actual team and requirements.
 - Produce a short ADR with context, decision, alternatives and tradeoffs.
@@ -161,7 +161,7 @@ Build an evidence-backed decision matrix for NestJS Observe, Sentry and OpenTele
 ### 4b. SEO Description
 
 ```text
-Ba công cụ không tạo ra ba lần hiểu biết. Bonus 20.5 dùng cùng một lỗi và một request chậm để chọn observability stack cho TaskFlow.
+Ba công cụ không tạo ra ba lần hiểu biết. Bonus 20.5 dùng cùng một lỗi và một request chậm để chọn observability stack cho nestjs-base-with-ai.
 
 ✅ So sánh NestJS Observe, Sentry và OpenTelemetry
 ✅ Phân biệt APM platform với telemetry standard
